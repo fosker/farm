@@ -4,7 +4,7 @@ namespace common\models\factory;
 
 use Yii;
 use yii\db\ActiveRecord;
-
+use common\models\Factory;
 /**
  * This is the model class for table "factory_products".
  *
@@ -17,9 +17,10 @@ use yii\db\ActiveRecord;
  */
 class Product extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+
+    public $imageFile;
+    public $thumbFile;
+
     public static function tableName()
     {
         return 'factory_products';
@@ -31,6 +32,8 @@ class Product extends ActiveRecord
     public function rules()
     {
         return [
+            [['title', 'factory_id'], 'required'],
+            [['title', 'description'], 'string']
         ];
     }
 
@@ -40,6 +43,14 @@ class Product extends ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id' => 'ID',
+            'title' => 'Название продукта',
+            'description' => 'Описание',
+            'image' => 'Изображение',
+            'thumbnail' => 'Превью',
+            'imageFile' => 'Изображение',
+            'thumbFile' => 'Превью',
+            'factory_id' => 'Фабрика'
         ];
     }
 
@@ -62,7 +73,54 @@ class Product extends ActiveRecord
 
     public function getThumbnailPath()
     {
-        return Yii::getAlias('@uploads_view/factories/products/thumbnail/'.$this->thumbnail);
+        return Yii::getAlias('@uploads_view/factories/products/thumbs/'.$this->thumbnail);
+    }
+
+    public function getFactory()
+    {
+        return $this->hasOne(Factory::className(),['id'=>'factory_id']);
+    }
+
+    public function loadImage() {
+        if($this->imageFile) {
+            $path = Yii::getAlias('@uploads/factories/products/');
+            if($this->image && file_exists($path . $this->image))
+                @unlink($path . $this->image);
+            $filename = Yii::$app->getSecurity()->generateRandomString() . time() . '.' . $this->imageFile->extension;
+            $path = $path . $filename;
+            $this->imageFile->saveAs($path);
+            $this->image = $filename;
+            Image::thumbnail($path, 1000, 500)
+                ->save(Yii::getAlias('@uploads/factories/products/').$this->image, ['quality' => 80]);
+        }
+    }
+
+    public function loadThumb() {
+        if($this->thumbFile) {
+            $path = Yii::getAlias('@uploads/factories/products/thumbs/');
+            if($this->thumbnail && file_exists($path . $this->thumbnail))
+                @unlink($path . $this->thumbnail);
+            $filename = Yii::$app->getSecurity()->generateRandomString() . time() . '.' . $this->thumbFile->extension;
+            $path = $path . $filename;
+            $this->thumbFile->saveAs($path);
+            $this->thumbnail = $filename;
+            Image::thumbnail($path, 200, 300)
+                ->save(Yii::getAlias('@uploads/factories/products/thumbs/').$this->thumbnail, ['quality' => 80]);
+        }
+    }
+
+    public function beforeSave($insert) {
+        if(parent::beforeSave($insert)) {
+            $this->loadImage();
+            $this->loadThumb();
+            return true;
+        } else return false;
+    }
+
+    public function afterDelete() {
+        if($this->image) @unlink(Yii::getAlias('@uploads/factories/products/'.$this->image));
+        if($this->thumbnail) @unlink(Yii::getAlias('@uploads/factories/products/thumbs/'.$this->thumbnail));
+        parent::afterDelete();
     }
 
 }

@@ -3,23 +3,21 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\factory\Product */
 
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="product-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Список', ['index'],['class'=>'btn btn-info']) ?>
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Удалить продукт?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,11 +27,23 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
+            [
+                'attribute'=>'image',
+                'value'=>Html::img($model->imagePath, ['alt' => 'Изображение', 'width' => '50%', 'height' => '200px']),
+                'format'=>'html',
+            ],
+            [
+                'attribute'=>'thumbnail',
+                'value'=>Html::img($model->thumbnailPath, ['alt' => 'Превью', 'width' => '50%', 'height' => '200px']),
+                'format'=>'html',
+            ],
             'title',
-            'description:ntext',
-            'image',
-            'thumbnail',
-            'factory_id',
+            [
+                'attribute'=>'factory_id',
+                'value'=>Html::a($model->factory->title,['/factory/view','id'=>$model->factory_id]),
+                'format'=>'html',
+            ],
+            'description:html',
         ],
     ]) ?>
 

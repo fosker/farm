@@ -2,35 +2,57 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use kartik\widgets\Select2;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\factory\product\Search */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Products';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Продукты';
 ?>
 <div class="product-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Product', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить продукт', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'title',
-            'description:ntext',
-            'image',
-            'thumbnail',
-            // 'factory_id',
-
+            [
+                'attribute' => 'id',
+                'contentOptions'=>['style'=>'width: 100px;'],
+            ],
+            [
+                'attribute'=>'title',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $titles,
+                    'attribute'=>'title',
+                    'options' => [
+                        'placeholder' => 'Выберите товар ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '350px',
+                    ],
+                ])
+            ],
+            [
+                'attribute'=>'factory_id',
+                'value'=>'factory.title',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $factories,
+                    'attribute'=>'factory_id',
+                    'options' => [
+                        'placeholder' => 'Выберите фабрику ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '350px',
+                    ],
+                ])
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

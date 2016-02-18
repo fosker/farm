@@ -63,6 +63,7 @@ class StockController extends Controller
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
             ]);
         }
     }
@@ -78,6 +79,7 @@ class StockController extends Controller
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
             ]);
         }
     }

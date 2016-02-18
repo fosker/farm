@@ -3,12 +3,8 @@
 use yii\helpers\Html;
 
 
-/* @var $this yii\web\View */
-/* @var $model common\models\factory\Product */
+$this->title = 'Добавить продукт';
 
-$this->title = 'Create Product';
-$this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-create">
 
@@ -16,6 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'factories' => $factories,
     ]) ?>
 
 </div>
