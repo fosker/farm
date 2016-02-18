@@ -11,6 +11,7 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\Factory;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 
 class ProductController extends Controller
 {
@@ -22,6 +23,19 @@ class ProductController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'user'=>'admin',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->admin->identity->can($action);
+                        }
+                    ],
                 ],
             ],
         ];

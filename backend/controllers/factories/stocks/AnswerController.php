@@ -8,6 +8,7 @@ use backend\models\factory\answer\Search;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
 
 /**
  * AnswerController implements the CRUD actions for Reply model.
@@ -24,6 +25,19 @@ class AnswerController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'user'=>'admin',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->admin->identity->can($action);
+                        }
+                    ],
                 ],
             ],
         ];

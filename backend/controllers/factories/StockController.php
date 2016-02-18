@@ -13,6 +13,7 @@ use common\models\Factory;
 use common\models\location\City;
 use common\models\agency\Firm;
 use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 
 class StockController extends Controller
 {
@@ -24,6 +25,19 @@ class StockController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'user'=>'admin',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->admin->identity->can($action);
+                        }
+                    ],
                 ],
             ],
         ];

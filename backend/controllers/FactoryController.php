@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 
 
 class FactoryController extends Controller
@@ -22,6 +23,19 @@ class FactoryController extends Controller
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'user'=>'admin',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->admin->identity->can($action);
+                        }
+                    ],
                 ],
             ],
         ];
