@@ -51,7 +51,7 @@ class Presentation extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'points', 'imageFile', 'thumbFile'], 'required'],
+            [['title', 'points'], 'required'],
             [['description'], 'string'],
             ['points', 'integer']
         ];
