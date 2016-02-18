@@ -5,6 +5,8 @@ namespace common\models\factory;
 use Yii;
 use yii\db\ActiveRecord;
 use common\models\Factory;
+use yii\imagine\Image;
+
 /**
  * This is the model class for table "factory_products".
  *
@@ -15,6 +17,7 @@ use common\models\Factory;
  * @property string $thumbnail
  * @property integer $factory_id
  */
+
 class Product extends ActiveRecord
 {
 
@@ -26,9 +29,6 @@ class Product extends ActiveRecord
         return 'factory_products';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
@@ -37,9 +37,6 @@ class Product extends ActiveRecord
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
@@ -122,5 +119,4 @@ class Product extends ActiveRecord
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/factories/products/thumbs/'.$this->thumbnail));
         parent::afterDelete();
     }
-
 }
