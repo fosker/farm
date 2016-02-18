@@ -3,12 +3,7 @@
 use yii\helpers\Html;
 
 
-/* @var $this yii\web\View */
-/* @var $model common\models\factory\Stock */
-
-$this->title = 'Create Stock';
-$this->params['breadcrumbs'][] = ['label' => 'Stocks', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Добавить акцию';
 ?>
 <div class="stock-create">
 
@@ -16,6 +11,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= $this->render('_form', [
         'model' => $model,
+        'factories' => $factories,
     ]) ?>
 
 </div>

@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 use common\models\factory\Product;
 use common\models\factory\Stock;
+use yii\imagine\Image;
 
 /**
  * This is the model class for table "factories".
@@ -31,6 +32,7 @@ class Factory extends ActiveRecord
     {
         return [
             ['title', 'required'],
+            [['description', 'title'], 'string']
         ];
     }
 
@@ -66,6 +68,13 @@ class Factory extends ActiveRecord
             $this->loadLogo();
             return true;
         } else return false;
+    }
+
+    public function afterDelete()
+    {
+        if($this->image) @unlink(Yii::getAlias('@uploads/factories/'.$this->image));
+        if($this->logo) @unlink(Yii::getAlias('@uploads/factories/logos'.$this->logo));
+        parent::afterDelete();
     }
 
     public function loadImage()

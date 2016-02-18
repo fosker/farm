@@ -2,34 +2,99 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use kartik\widgets\Select2;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\factory\stock\Search */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Stocks';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Акции';
 ?>
 <div class="stock-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <p>
-        <?= Html::a('Create Stock', ['create'], ['class' => 'btn btn-success']) ?>
+        <?= Html::a('Добавить акцию', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
-
-            'id',
-            'factory_id',
-            'title',
-            'description:ntext',
-            'image',
-            // 'status',
+            [
+                'attribute' => 'id',
+                'contentOptions'=>['style'=>'width: 100px;'],
+            ],
+            [
+                'attribute'=>'factory_id',
+                'value'=>'factory.title',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $factories,
+                    'attribute'=>'factory_id',
+                    'options' => [
+                        'placeholder' => 'Выберите фабрику ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '175px',
+                    ],
+                ])
+            ],
+            [
+                'attribute'=>'title',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $titles,
+                    'attribute'=>'title',
+                    'options' => [
+                        'placeholder' => 'Выберите акцию ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '175px',
+                    ],
+                ])
+            ],
+            [
+                'label' => 'Для городов',
+                'value'=>'citiesView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $cities,
+                    'attribute'=>'city_id',
+                    'options' => [
+                        'placeholder' => 'Выберите города ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '175px'
+                    ],
+                ]),
+            ],
+            [
+                'label' => 'Для фирм',
+                'value'=>'firmsView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $firms,
+                    'attribute'=>'firm_id',
+                    'options' => [
+                        'placeholder' => 'Выберите фирмы ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '175px'
+                    ],
+                ])
+            ],
+            [
+                'attribute'=>'status',
+                'value'=>function($model) {
+                    return $model::getStatusList()[$model->status];
+                },
+                'filter'=>$searchModel::getStatusList(),
+                'contentOptions'=>['style'=>'width: 125px;'],
+            ],
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

@@ -3,9 +3,6 @@
 use yii\helpers\Html;
 
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Factory */
-
 $this->title = 'Добавить фабрику';
 ?>
 <div class="factory-create">

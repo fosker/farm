@@ -6,44 +6,33 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\factory\Stock;
+use common\models\factory\City;
+use common\models\factory\Pharmacy;
 
-/**
- * Search represents the model behind the search form about `common\models\factory\Stock`.
- */
 class Search extends Stock
 {
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
             [['id', 'factory_id', 'status'], 'integer'],
-            [['title', 'description', 'image'], 'safe'],
+            ['title', 'string'],
+            [['city_id', 'firm_id'], 'safe'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
+    public function attributes() {
+        return array_merge(parent::attributes(),['city_id', 'firm_id']);
+    }
+
     public function search($params)
     {
         $query = Stock::find();
-
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -52,22 +41,26 @@ class Search extends Stock
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'factory_id' => $this->factory_id,
             'status' => $this->status,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'image', $this->image]);
+        $cities = City::find()->select('stock_id')->andFilterWhere(['in', 'city_id', $this->getAttribute('city_id')]);
+        $firms = Pharmacy::find()->select('stock_id')->andFilterWhere(['in', 'firm_id', $this->getAttribute('firm_id')])
+            ->joinWith('pharmacy');
 
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['in', Stock::tableName().'.id', $cities])
+            ->andFilterWhere(['in', Stock::tableName().'.id', $firms]);
+
+        $query->groupBy(Stock::tableName().'.id');
+        
         return $dataProvider;
     }
 }

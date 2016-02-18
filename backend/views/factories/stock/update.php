@@ -2,13 +2,9 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\factory\Stock */
 
-$this->title = 'Update Stock: ' . ' ' . $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Stocks', 'url' => ['index']];
-$this->params['breadcrumbs'][] = ['label' => $model->title, 'url' => ['view', 'id' => $model->id]];
-$this->params['breadcrumbs'][] = 'Update';
+$this->title = 'Редактирование данных: ' . ' ' . $model->title;
+
 ?>
 <div class="stock-update">
 
@@ -16,6 +12,7 @@ $this->params['breadcrumbs'][] = 'Update';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'factories' => $factories,
     ]) ?>
 
 </div>

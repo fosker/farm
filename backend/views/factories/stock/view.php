@@ -3,23 +3,20 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\factory\Stock */
-
 $this->title = $model->title;
-$this->params['breadcrumbs'][] = ['label' => 'Stocks', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+
 ?>
 <div class="stock-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
+        <?= Html::a('Список', ['index'],['class'=>'btn btn-info']) ?>
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
+        <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
+                'confirm' => 'Удалить акцию?',
                 'method' => 'post',
             ],
         ]) ?>
@@ -29,11 +26,22 @@ $this->params['breadcrumbs'][] = $this->title;
         'model' => $model,
         'attributes' => [
             'id',
-            'factory_id',
+            [
+                'attribute'=>'image',
+                'value'=>Html::img($model->imagePath, ['alt' => 'Изображение', 'width' => '50%', 'height' => '200px']),
+                'format'=>'html',
+            ],
             'title',
-            'description:ntext',
-            'image',
-            'status',
+            [
+                'attribute'=>'factory_id',
+                'value'=>Html::a($model->factory->title,['/factory/view','id'=>$model->factory_id]),
+                'format'=>'html',
+            ],
+            'description:html',
+            [
+                'attribute'=>'status',
+                'value'=>$model::getStatusList()[$model->status],
+            ],
         ],
     ]) ?>
 
