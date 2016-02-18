@@ -100,7 +100,8 @@ class Item extends ActiveRecord
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
             ->andWhere(['status'=>static::STATUS_ACTIVE])
-            ->orderBy(["priority"=>SORT_DESC,static::tableName().".id"=>SORT_DESC]);
+            ->orderBy(["priority"=>SORT_DESC,static::tableName().".id"=>SORT_DESC])
+            ->groupBy(static::tableName().'.id');
     }
 
     public static function getOneForCurrentUser($id)

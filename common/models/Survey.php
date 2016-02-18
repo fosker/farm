@@ -106,7 +106,8 @@ class Survey extends ActiveRecord
                 View::findByCurrentUser()
                     ->andWhere(View::tableName().'.survey_id='.static::tableName().'.id')
             ])
-            ->orderBy(['id'=>SORT_DESC]);
+            ->orderBy(['id'=>SORT_DESC])
+            ->groupBy(static::tableName().'.id');
     }
 
     public static function getOneForCurrentUser($id)

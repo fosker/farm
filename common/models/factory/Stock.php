@@ -75,7 +75,8 @@ class Stock extends ActiveRecord
             ->joinWith('pharmacies')
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
-            ->orderBy(['id'=>SORT_DESC]);
+            ->orderBy(['id'=>SORT_DESC])
+            ->groupBy(static::tableName().'.id');
     }
 
     public static function getOneForCurrentUser($id)

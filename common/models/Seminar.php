@@ -99,7 +99,8 @@ class Seminar extends \yii\db\ActiveRecord
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
             ->andWhere(['status'=>static::STATUS_ACTIVE])
-            ->orderBy(['id'=>SORT_DESC]);
+            ->orderBy(['id'=>SORT_DESC])
+            ->groupBy(static::tableName().'.id');
     }
 
     public static function getOneForCurrentUser($id)
@@ -124,7 +125,7 @@ class Seminar extends \yii\db\ActiveRecord
     }
 
     public function isSignedByCurrentUser() {
-        return Entry::findOne(['seminar_id'=>$this->id, 'user_id'=>Yii::$app->user->id]) == null;
+        return Entry::findOne(['seminar_id'=>$this->id, 'user_id'=>Yii::$app->user->id]) !== null;
     }
 
     public static function getStatusList()
