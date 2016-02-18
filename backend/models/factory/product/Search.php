@@ -1,16 +1,16 @@
 <?php
 
-namespace backend\models\stock;
+namespace backend\models\factory\product;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\factory\Stock;
+use common\models\factory\Product;
 
 /**
- * Search represents the model behind the search form about `common\models\factory\Stock`.
+ * Search represents the model behind the search form about `common\models\factory\Product`.
  */
-class Search extends Stock
+class Search extends Product
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class Search extends Stock
     public function rules()
     {
         return [
-            [['id', 'factory_id', 'status'], 'integer'],
-            [['title', 'description', 'image'], 'safe'],
+            [['id', 'factory_id'], 'integer'],
+            [['title', 'description', 'image', 'thumbnail'], 'safe'],
         ];
     }
 
@@ -41,7 +41,7 @@ class Search extends Stock
      */
     public function search($params)
     {
-        $query = Stock::find();
+        $query = Product::find();
 
         // add conditions that should always apply here
 
@@ -61,12 +61,12 @@ class Search extends Stock
         $query->andFilterWhere([
             'id' => $this->id,
             'factory_id' => $this->factory_id,
-            'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'description', $this->description])
-            ->andFilterWhere(['like', 'image', $this->image]);
+            ->andFilterWhere(['like', 'image', $this->image])
+            ->andFilterWhere(['like', 'thumbnail', $this->thumbnail]);
 
         return $dataProvider;
     }

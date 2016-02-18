@@ -1,16 +1,16 @@
 <?php
 
-namespace backend\models\report;
+namespace backend\models\factory\stock;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\Report;
+use common\models\factory\Stock;
 
 /**
- * Search represents the model behind the search form about `common\models\Report`.
+ * Search represents the model behind the search form about `common\models\factory\Stock`.
  */
-class Search extends Report
+class Search extends Stock
 {
     /**
      * @inheritdoc
@@ -18,8 +18,8 @@ class Search extends Report
     public function rules()
     {
         return [
-            [['factory_id','period', 'type_id', 'status'], 'integer'],
-            [['title','factory.title'], 'safe'],
+            [['id', 'factory_id', 'status'], 'integer'],
+            [['title', 'description', 'image'], 'safe'],
         ];
     }
 
@@ -32,10 +32,6 @@ class Search extends Report
         return Model::scenarios();
     }
 
-    public function attributes() {
-        return array_merge(parent::attributes(), ['factory.title','factory_id']);
-    }
-
     /**
      * Creates data provider instance with search query applied
      *
@@ -45,7 +41,7 @@ class Search extends Report
      */
     public function search($params)
     {
-        $query = Report::find()->joinWith('factory');
+        $query = Stock::find();
 
         // add conditions that should always apply here
 
@@ -53,27 +49,25 @@ class Search extends Report
             'query' => $query,
         ]);
 
-        $dataProvider->sort->attributes['factory.title'] = [
-            'asc' => ['factory.title' => SORT_ASC],
-            'desc' => ['factory.title' => SORT_DESC],
-        ];
-
         $this->load($params);
 
         if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1');
             return $dataProvider;
         }
 
         // grid filtering conditions
         $query->andFilterWhere([
+            'id' => $this->id,
             'factory_id' => $this->factory_id,
-            'period' => $this->period,
-            'type_id' => $this->type_id,
             'status' => $this->status,
         ]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
-        ->andFilterWhere(['like', 'report_factory.title', $this->getAttribute('factory.title')]);
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'image', $this->image]);
+
         return $dataProvider;
     }
 }

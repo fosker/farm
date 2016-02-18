@@ -1,14 +1,14 @@
 <?php
 
-namespace backend\models\report\factory;
+namespace backend\models\factory;
 
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use common\models\report\Factory;
+use common\models\Factory;
 
 /**
- * Search represents the model behind the search form about `common\models\report\Factory`.
+ * Search represents the model behind the search form about `common\models\Factory`.
  */
 class Search extends Factory
 {
@@ -19,7 +19,7 @@ class Search extends Factory
     {
         return [
             [['id'], 'integer'],
-            [['title'], 'string'],
+            [['title', 'description', 'image', 'logo'], 'safe'],
         ];
     }
 
@@ -28,7 +28,7 @@ class Search extends Factory
      */
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
+        // bypass scenarios() implementation in the parent class 
         return Model::scenarios();
     }
 
@@ -43,7 +43,7 @@ class Search extends Factory
     {
         $query = Factory::find();
 
-        // add conditions that should always apply here
+        // add conditions that should always apply here 
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
@@ -52,16 +52,21 @@ class Search extends Factory
         $this->load($params);
 
         if (!$this->validate()) {
+            // uncomment the following line if you do not want to return any records when validation fails
+            // $query->where('0=1'); 
             return $dataProvider;
         }
 
-        // grid filtering conditions
+        // grid filtering conditions 
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
 
-        $query->andFilterWhere(['like', 'title', $this->title]);
+        $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['like', 'description', $this->description])
+            ->andFilterWhere(['like', 'image', $this->image])
+            ->andFilterWhere(['like', 'logo', $this->logo]);
 
         return $dataProvider;
     }
-}
+} 

@@ -82,10 +82,12 @@ AppAsset::register($this);
                             ['label'=>'Ответы', 'url'=>['/presentations/answer']],
                         ],
                     ],
-                    ['label'=>'Акции',
+                    ['label'=>'Фабрики',
                         'items'=>[
-                            ['label'=>'Акции', 'url'=>['/stock']],
-                            ['label'=>'Ответы', 'url'=>['/stocks/answer']],
+                            ['label'=>'Фабрики', 'url'=>['/factory']],
+                            ['label'=>'Акции', 'url'=>['/factories/stock']],
+                            ['label'=>'Продукты', 'url'=>['/factories/product']],
+                            ['label'=>'Ответы', 'url'=>['/factories/stocks/answer']],
                         ],
                     ],
 
