@@ -103,7 +103,7 @@ class Factory extends ActiveRecord
             $this->logoFile->saveAs($path);
             $this->logo = $filename;
             Image::thumbnail($path, 300, 300)
-                ->save(Yii::getAlias('@uploads/factories/logos').$this->logo, ['quality' => 80]);
+                ->save(Yii::getAlias('@uploads/factories/logos/').$this->logo, ['quality' => 80]);
         }
     }
 
