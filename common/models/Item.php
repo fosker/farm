@@ -51,7 +51,7 @@ class Item extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'imageFile', 'thumbFile'], 'required'],
+            [['title'], 'required'],
             [['title', 'description'], 'string'],
             [['points', 'priority', 'vendor_id'], 'integer']
         ];

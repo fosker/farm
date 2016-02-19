@@ -37,7 +37,7 @@ class Reply extends ActiveRecord
             [['stock_id'],function($model,$attr) {
                 if (!$this->hasErrors()) {
                     if (Stock::getOneForCurrentUser($this->$attr)) {
-                        $this->addError($attr, 'Вы нем ожете учавствовать в этой акции');
+                        $this->addError($attr, 'Вы нем можете учавствовать в этой акции');
                     }
                 }
             }],

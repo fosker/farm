@@ -88,8 +88,6 @@ class PresentController extends Controller
     {
         $model = $this->findModel($id);
 
-        $model->loadCities();
-
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');

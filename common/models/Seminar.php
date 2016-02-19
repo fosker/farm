@@ -48,7 +48,7 @@ class Seminar extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'imageFile', 'thumbFile'], 'required'],
+            [['title'], 'required'],
             [['title', 'description'], 'string'],
             ['email', 'email'],
         ];

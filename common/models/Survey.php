@@ -50,7 +50,7 @@ class Survey extends ActiveRecord
     {
         return [
             [['points'], 'integer'],
-            [['title', 'imageFile', 'thumbFile'], 'required'],
+            [['title'], 'required'],
             [['title', 'description'], 'string']
 
         ];

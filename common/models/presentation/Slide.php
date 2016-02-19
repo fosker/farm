@@ -34,7 +34,7 @@ class Slide extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_index', 'imageFile'], 'required'],
+            [['order_index'], 'required'],
             [['description'], 'string']
        ];
     }

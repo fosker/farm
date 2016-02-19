@@ -7,6 +7,7 @@ use yii\db\ActiveRecord;
 
 use common\models\factory\Product;
 use common\models\factory\Stock;
+use yii\imagine\Image;
 
 /**
  * This is the model class for table "factories".
@@ -19,29 +20,32 @@ use common\models\factory\Stock;
  */
 class Factory extends ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    public $imageFile;
+    public $logoFile;
+
     public static function tableName()
     {
         return 'factories';
     }
 
-    /**
-     * @inheritdoc
-     */
     public function rules()
     {
         return [
+            ['title', 'required'],
+            [['description', 'title'], 'string']
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
+            'id' => 'ID',
+            'title' => 'Название фабрики',
+            'description' => 'Описание',
+            'image' => 'Изображение',
+            'logo' => 'Лого',
+            'logoFile' => 'Лого',
+            'imageFile' => 'Изображение'
         ];
     }
 
@@ -55,6 +59,52 @@ class Factory extends ActiveRecord
         return [
             'description','image'=>'imagePath','products','stocks'
         ];
+    }
+
+    public function beforeSave($insert)
+    {
+        if(parent::beforeSave($insert)) {
+            $this->loadImage();
+            $this->loadLogo();
+            return true;
+        } else return false;
+    }
+
+    public function afterDelete()
+    {
+        if($this->image) @unlink(Yii::getAlias('@uploads/factories/'.$this->image));
+        if($this->logo) @unlink(Yii::getAlias('@uploads/factories/logos'.$this->logo));
+        parent::afterDelete();
+    }
+
+    public function loadImage()
+    {
+        if($this->imageFile) {
+            $path = Yii::getAlias('@uploads/factories/');
+            if($this->image && file_exists($path . $this->image))
+                @unlink($path . $this->image);
+            $filename = Yii::$app->getSecurity()->generateRandomString() . time() . '.' . $this->imageFile->extension;
+            $path = $path . $filename;
+            $this->imageFile->saveAs($path);
+            $this->image = $filename;
+            Image::thumbnail($path, 1000, 500)
+                ->save(Yii::getAlias('@uploads/factories/').$this->image, ['quality' => 80]);
+        }
+    }
+
+    public function loadLogo()
+    {
+        if($this->logoFile) {
+            $path = Yii::getAlias('@uploads/factories/logos/');
+            if($this->logo && file_exists($path . $this->logo))
+                @unlink($path . $this->logo);
+            $filename = Yii::$app->getSecurity()->generateRandomString() . time() . '.' . $this->logoFile->extension;
+            $path = $path . $filename;
+            $this->logoFile->saveAs($path);
+            $this->logo = $filename;
+            Image::thumbnail($path, 300, 300)
+                ->save(Yii::getAlias('@uploads/factories/logos/').$this->logo, ['quality' => 80]);
+        }
     }
 
     public function getProducts()

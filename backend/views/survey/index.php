@@ -58,7 +58,7 @@ $this->title = 'Анкеты';
                 ]),
             ],
             [
-                'label' => 'Для городов',
+                'label' => 'Для фирм',
                 'value'=>'firmsView',
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
