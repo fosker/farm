@@ -18,6 +18,9 @@ $this->title = 'Добавить подарок';
         'model' => $model,
         'vendors'=>$vendors,
         'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'item_cities' => $item_cities,
+        'item_pharmacies' => $item_pharmacies
     ]) ?>
 
 </div>

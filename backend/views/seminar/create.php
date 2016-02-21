@@ -14,6 +14,10 @@ $this->title = 'Добавить семинар';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'seminar_cities' => $seminar_cities,
+        'seminar_pharmacies' => $seminar_pharmacies
     ]) ?>
 
 </div>

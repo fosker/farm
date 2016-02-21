@@ -271,9 +271,33 @@ class Presentation extends ActiveRecord
         } else return false;
     }
 
-    public function afterDelete() {
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (!$insert) {
+            City::deleteAll(['presentation_id'=>$this->id]);
+            Pharmacy::deleteAll(['presentation_id'=>$this->id]);
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+            $city = new City();
+            $city->city_id = Yii::$app->request->post('cities')[$i];
+            $city->presentation_id = $this->id;
+            $city->save();
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+            $pharmacies = new Pharmacy();
+            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+            $pharmacies->presentation_id = $this->id;
+            $pharmacies->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function afterDelete()
+    {
         foreach($this->questions as $question)
             $question->delete();
+        City::deleteAll(['presentation_id'=>$this->id]);
+        Pharmacy::deleteAll(['presentation_id'=>$this->id]);
         Slide::deleteAll(['presentation_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/presentations/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/presentations/thumbs/'.$this->thumbnail));

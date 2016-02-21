@@ -9,8 +9,11 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
-use common\models\location\City;
 use common\models\shop\Vendor;
+use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\shop\City as Item_City;
+use common\models\shop\Pharmacy as Item_Pharmacy;
 use common\models\agency\Firm;
 use common\models\Item;
 use backend\models\present\Search;
@@ -68,6 +71,8 @@ class PresentController extends Controller
     public function actionCreate()
     {
         $model = new Item();
+        $item_cities = new Item_City();
+        $item_pharmacies = new Item_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -75,18 +80,28 @@ class PresentController extends Controller
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+                'vendors'=>ArrayHelper::map(Vendor::find()->asArray()->all(), 'id','name'),
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'item_cities' => $item_cities,
+                'item_pharmacies' => $item_pharmacies
+            ]);
+
         }
 
-        return $this->render('create', [
-            'model' => $model,
-            'vendors'=>ArrayHelper::map(Vendor::find()->asArray()->all(), 'id','name'),
-            'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
-        ]);
     }
 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $item_cities = new Item_City();
+        $item_pharmacies = new Item_Pharmacy();
+
+        $old_cities = Item_City::find()->select('city_id')->where(['item_id' => $id])->asArray()->all();
+        $old_pharmacies = Item_Pharmacy::find()->select('pharmacy_id')->where(['item_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -94,13 +109,19 @@ class PresentController extends Controller
             if ($model->save()) {
                 return $this->redirect(['view', 'id' => $model->id]);
             }
-        }
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'vendors'=>ArrayHelper::map(Vendor::find()->asArray()->all(), 'id','name'),
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'item_cities' => $item_cities,
+                'item_pharmacies' => $item_pharmacies,
+                'old_cities' => $old_cities,
+                'old_pharmacies' => $old_pharmacies
+            ]);
 
-        return $this->render('update', [
-            'model' => $model,
-            'vendors'=>ArrayHelper::map(Vendor::find()->asArray()->all(), 'id','name'),
-            'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
-        ]);
+        }
     }
 
     public function actionDelete($id)
@@ -115,7 +136,7 @@ class PresentController extends Controller
         if (($model = Item::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('РЎС‚СЂР°РЅРёС†Р° РЅРµ РЅР°Р№РґРµРЅР°.');
         }
     }
 

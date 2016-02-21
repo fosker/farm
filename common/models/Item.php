@@ -51,7 +51,7 @@ class Item extends ActiveRecord
     public function rules()
     {
         return [
-            [['title'], 'required'],
+            [['title','vendor_id','points'], 'required'],
             [['title', 'description'], 'string'],
             [['points', 'priority', 'vendor_id'], 'integer']
         ];
@@ -212,6 +212,28 @@ class Item extends ActiveRecord
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/presents/thumbs/'.$this->thumbnail));
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        if (!$insert) {
+            City::deleteAll(['item_id'=>$this->id]);
+            Pharmacy::deleteAll(['item_id'=>$this->id]);
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+            $city = new City();
+            $city->city_id = Yii::$app->request->post('cities')[$i];
+            $city->item_id = $this->id;
+            $city->save();
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+            $pharmacies = new Pharmacy();
+            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+            $pharmacies->item_id = $this->id;
+            $pharmacies->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
     public function loadImage() {
         if($this->imageFile) {
             $path = Yii::getAlias('@uploads/presents/');
@@ -239,29 +261,4 @@ class Item extends ActiveRecord
                 ->save(Yii::getAlias('@uploads/presents/thumbs/').$this->thumbnail, ['quality' => 80]);
         }
     }
-
-    /*
-    public function updateCities()
-    {
-        if(!$this->isNewRecord && !empty($this->citiesModel))
-            foreach($this->cities as $city) {
-                if (!in_array($city->city_id, $this->citiesModel))
-                    $city->delete();
-                $this->citiesModel = array_diff($this->citiesModel, [$city->city_id]);
-            }
-        foreach($this->citiesModel as $city) {
-            City::add([
-                'city_id'=>$city,
-                'item_id'=>$this->id,
-            ]);
-        }
-    }
-
-    public function loadCities()
-    {
-        $this->citiesModel = ArrayHelper::map($this->cities,'id','city_id');
-    }
-
-
-    */
 }

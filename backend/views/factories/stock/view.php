@@ -37,6 +37,14 @@ $this->title = $model->title;
                 'value'=>Html::a($model->factory->title,['/factory/view','id'=>$model->factory_id]),
                 'format'=>'html',
             ],
+            [
+                'label'=>'Для городов',
+                'value'=>$model->getCitiesView(true)
+            ],
+            [
+                'label'=>'Для фирм',
+                'value'=>$model->getFirmsView(true)
+            ],
             'description:html',
             [
                 'attribute'=>'status',

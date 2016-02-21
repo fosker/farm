@@ -211,11 +211,33 @@ class Seminar extends \yii\db\ActiveRecord
         parent::afterDelete();
         Comment::deleteAll(['seminar_id'=>$this->id]);
         Entry::deleteAll(['seminar_id'=>$this->id]);
+        City::deleteAll(['seminar_id'=>$this->id]);
+        Pharmacy::deleteAll(['seminar_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/seminars/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/seminars/thumbs/'.$this->thumbnail));
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
 
+        if (!$insert) {
+            City::deleteAll(['seminar_id'=>$this->id]);
+            Pharmacy::deleteAll(['seminar_id'=>$this->id]);
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+            $city = new City();
+            $city->city_id = Yii::$app->request->post('cities')[$i];
+            $city->seminar_id = $this->id;
+            $city->save();
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+            $pharmacies = new Pharmacy();
+            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+            $pharmacies->seminar_id = $this->id;
+            $pharmacies->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
 
     public function loadImage() {
         if($this->imageFile) {

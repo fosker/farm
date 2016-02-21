@@ -11,6 +11,9 @@ use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use common\models\Factory;
 use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\factory\City as Stock_City;
+use common\models\factory\Pharmacy as Stock_Pharmacy;
 use common\models\agency\Firm;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
@@ -69,6 +72,8 @@ class StockController extends Controller
     public function actionCreate()
     {
         $model = new Stock();
+        $stock_cities = new Stock_City();
+        $stock_pharmacies = new Stock_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -78,6 +83,10 @@ class StockController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'stock_cities' => $stock_cities,
+                'stock_pharmacies' => $stock_pharmacies
             ]);
         }
     }
@@ -85,6 +94,11 @@ class StockController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $stock_cities = new Stock_City();
+        $stock_pharmacies = new Stock_Pharmacy();
+
+        $old_cities = Stock_City::find()->select('city_id')->where(['stock_id' => $id])->asArray()->all();
+        $old_pharmacies = Stock_Pharmacy::find()->select('pharmacy_id')->where(['stock_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -94,6 +108,12 @@ class StockController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'stock_cities' => $stock_cities,
+                'stock_pharmacies' => $stock_pharmacies,
+                'old_cities' => $old_cities,
+                'old_pharmacies' => $old_pharmacies
             ]);
         }
     }

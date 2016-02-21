@@ -13,6 +13,10 @@ $this->title = 'Добавить презентацию';
 
     <?= $this->render('_form', [
         'model' => $model,
+        'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'presentation_cities' => $presentation_cities,
+        'presentation_pharmacies' => $presentation_pharmacies
     ]) ?>
 
 </div>

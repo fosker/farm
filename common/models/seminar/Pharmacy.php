@@ -12,9 +12,8 @@ use Yii;
  */
 class Pharmacy extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    public $pharmacies = [];
+
     public static function tableName()
     {
         return 'seminar_for_pharmacies';
@@ -36,6 +35,7 @@ class Pharmacy extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'pharmacies' => 'Аптеки'
 
         ];
     }

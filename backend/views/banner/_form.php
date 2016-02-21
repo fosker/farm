@@ -6,7 +6,6 @@ use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use yii\helpers\Url;
 use yii\web\JsExpression;
-use yii\helpers\ArrayHelper;
 use common\models\location\Region;
 use common\models\agency\Firm;
 use backend\components\CheckWidget;

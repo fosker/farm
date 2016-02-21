@@ -10,8 +10,11 @@ use yii\filters\VerbFilter;
 use yii\web\UploadedFile;
 use yii\helpers\ArrayHelper;
 use common\models\Seminar;
-use common\models\agency\Firm;
 use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\seminar\City as Seminar_City;
+use common\models\seminar\Pharmacy as Seminar_Pharmacy;
+use common\models\agency\Firm;
 use common\models\User;
 use backend\models\seminar\Search;
 
@@ -67,33 +70,50 @@ class SeminarController extends Controller
     public function actionCreate()
     {
         $model = new Seminar();
+        $seminar_cities = new Seminar_City();
+        $seminar_pharmacies = new Seminar_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'seminar_cities' => $seminar_cities,
+                'seminar_pharmacies' => $seminar_pharmacies
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $seminar_cities = new Seminar_City();
+        $seminar_pharmacies = new Seminar_Pharmacy();
+
+        $old_cities = Seminar_City::find()->select('city_id')->where(['seminar_id' => $id])->asArray()->all();
+        $old_pharmacies = Seminar_Pharmacy::find()->select('pharmacy_id')->where(['seminar_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
             if ($model->save())
                 return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'seminar_cities' => $seminar_cities,
+                'seminar_pharmacies' => $seminar_pharmacies,
+                'old_cities' => $old_cities,
+                'old_pharmacies' => $old_pharmacies
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
     }
 
     public function actionDelete($id)
@@ -108,7 +128,7 @@ class SeminarController extends Controller
         if (($model = Seminar::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('РЎС‚СЂР°РЅРёС†Р° РЅРµ РЅР°Р№РґРµРЅР°.');
         }
     }
 

@@ -108,7 +108,7 @@ class BannerController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if($model->save(false)) {
+            if ($model->save(false)) {
                 $model->hide();
                 return $this->redirect(['view', 'id' => $model->id]);
             }

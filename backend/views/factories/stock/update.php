@@ -13,6 +13,12 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->tit
     <?= $this->render('_form', [
         'model' => $model,
         'factories' => $factories,
+        'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'stock_cities' => $stock_cities,
+        'stock_pharmacies' => $stock_pharmacies,
+        'old_cities' => $old_cities,
+        'old_pharmacies' => $old_pharmacies
     ]) ?>
 
 </div>

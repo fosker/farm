@@ -12,9 +12,8 @@ use Yii;
  */
 class City extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    public $cities = [];
+
     public static function tableName()
     {
         return 'seminar_for_cities';
@@ -36,7 +35,7 @@ class City extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-
+            'cities' => 'Города'
         ];
     }
 

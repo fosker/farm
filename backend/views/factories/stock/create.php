@@ -12,6 +12,10 @@ $this->title = 'Добавить акцию';
     <?= $this->render('_form', [
         'model' => $model,
         'factories' => $factories,
+        'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'stock_cities' => $stock_cities,
+        'stock_pharmacies' => $stock_pharmacies
     ]) ?>
 
 </div>

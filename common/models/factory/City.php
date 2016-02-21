@@ -12,9 +12,8 @@ use Yii;
  */
 class City extends \yii\db\ActiveRecord
 {
-    /**
-     * @inheritdoc
-     */
+    public $cities = [];
+
     public static function tableName()
     {
         return 'factory_stock_for_cities';
@@ -35,6 +34,7 @@ class City extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
+            'cities' => 'Города'
         ];
     }
 

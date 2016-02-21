@@ -305,41 +305,28 @@ class Banner extends ActiveRecord
         } else return false;
     }
 
-    public function afterSave($insert, $changedAttributes){
-        parent::afterSave($insert, $changedAttributes);
-        if(!$this->isNewRecord) {
+    public function afterSave($insert, $changedAttributes)
+    {
+
+        if (!$insert) {
             City::deleteAll(['banner_id'=>$this->id]);
             Pharmacy::deleteAll(['banner_id'=>$this->id]);
-            for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
-                $banner_cities = new City();
-                $banner_cities->city_id = Yii::$app->request->post('cities')[$i];
-                $banner_cities->banner_id = $this->id;
-                $banner_cities->save();
-            }
-
-            for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
-                $banner_pharmacies = new Pharmacy();
-                $banner_pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
-                $banner_pharmacies->banner_id = $this->id;
-                $banner_pharmacies->save();
-            }
-        } else
-        {
-            for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
-                $banner_cities = new City();
-                $banner_cities->city_id = Yii::$app->request->post('cities')[$i];
-                $banner_cities->banner_id = $this->getPrimaryKey();
-                $banner_cities->save();
-            }
-            for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
-                $banner_pharmacies = new Pharmacy();
-                $banner_pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
-                $banner_pharmacies->banner_id = $this->getPrimaryKey();
-                $banner_pharmacies->save();
-            }
         }
-
+        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+            $city = new City();
+            $city->city_id = Yii::$app->request->post('cities')[$i];
+            $city->banner_id = $this->id;
+            $city->save();
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+            $pharmacies = new Pharmacy();
+            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+            $pharmacies->banner_id = $this->id;
+            $pharmacies->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
     }
+
     public function afterDelete()
     {
         City::deleteAll(['banner_id'=>$this->id]);

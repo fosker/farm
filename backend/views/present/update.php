@@ -17,6 +17,11 @@ $this->title = 'Редактировать подарок: ' . ' ' . $model->tit
         'model' => $model,
         'vendors'=>$vendors,
         'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'item_cities' => $item_cities,
+        'item_pharmacies' => $item_pharmacies,
+        'old_cities' => $old_cities,
+        'old_pharmacies' => $old_pharmacies
     ]) ?>
 
 </div>

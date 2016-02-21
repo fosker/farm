@@ -15,6 +15,9 @@ use common\models\presentation\Option;
 use common\models\Presentation;
 use common\models\agency\Firm;
 use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\presentation\City as Presentation_City;
+use common\models\presentation\Pharmacy as Presentation_Pharmacy;
 use backend\models\presentation\Search;
 
 
@@ -73,22 +76,34 @@ class PresentationController extends Controller
     {
         $model = new Presentation();
 
+        $presentation_cities = new Presentation_City();
+        $presentation_pharmacies = new Presentation_Pharmacy();
+
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model,'thumbFile');
             if($model->save(false)) {
                 return $this->redirect(['view','id'=>$model->id]);
             }
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'presentation_cities' => $presentation_cities,
+                'presentation_pharmacies' => $presentation_pharmacies
+            ]);
         }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
     }
 
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $presentation_cities = new Presentation_City();
+        $presentation_pharmacies = new Presentation_Pharmacy();
+
+        $old_cities = Presentation_City::find()->select('city_id')->where(['presentation_id' => $id])->asArray()->all();
+        $old_pharmacies = Presentation_Pharmacy::find()->select('pharmacy_id')->where(['presentation_id' => $id])->asArray()->all();
 
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
@@ -97,11 +112,17 @@ class PresentationController extends Controller
             {
                 return $this->redirect(['view','id'=>$model->id]);
             }
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'presentation_cities' => $presentation_cities,
+                'presentation_pharmacies' => $presentation_pharmacies,
+                'old_cities' => $old_cities,
+                'old_pharmacies' => $old_pharmacies
+            ]);
         }
-
-        return $this->render('update', [
-            'model' => $model,
-        ]);
 
     }
 

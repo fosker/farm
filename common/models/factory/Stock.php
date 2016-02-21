@@ -175,6 +175,27 @@ class Stock extends ActiveRecord
         return $string;
     }
 
+    public function afterSave($insert, $changedAttributes)
+    {
+        if (!$insert) {
+            City::deleteAll(['stock_id' => $this->id]);
+            Pharmacy::deleteAll(['stock_id' => $this->id]);
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+            $city = new City();
+            $city->city_id = Yii::$app->request->post('cities')[$i];
+            $city->stock_id = $this->id;
+            $city->save();
+        }
+        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+            $pharmacies = new Pharmacy();
+            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+            $pharmacies->stock_id = $this->id;
+            $pharmacies->save();
+        }
+        parent::afterSave($insert, $changedAttributes);
+    }
+
     public function beforeSave($insert)
     {
         if(parent::beforeSave($insert)) {
@@ -186,6 +207,8 @@ class Stock extends ActiveRecord
     public function afterDelete()
     {
         if($this->image) @unlink(Yii::getAlias('@uploads/stocks/'.$this->image));
+        City::deleteAll(['stock_id'=>$this->id]);
+        Pharmacy::deleteAll(['stock_id'=>$this->id]);
         parent::afterDelete();
     }
 

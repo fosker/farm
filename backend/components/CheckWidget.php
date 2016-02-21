@@ -33,7 +33,6 @@ class CheckWidget extends InputWidget
         }
 
     }
-
     public function run()
     {
         echo '<div>';
