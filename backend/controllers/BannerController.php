@@ -12,6 +12,9 @@ use yii\web\UploadedFile;
 use common\models\Block;
 use common\models\Item;
 use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\banner\City as Banner_City;
+use common\models\banner\Pharmacy as Banner_Pharmacy;
 use common\models\profile\Education;
 use common\models\Report;
 use common\models\Seminar;
@@ -74,6 +77,8 @@ class BannerController extends Controller
     public function actionCreate()
     {
         $model = new Banner();
+        $banner_cities = new Banner_City();
+        $banner_pharmacies = new Banner_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -84,8 +89,10 @@ class BannerController extends Controller
             return $this->render('create', [
                 'model' => $model,
                 'education' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
-                'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
-                'educations' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'banner_cities' => $banner_cities,
+                'banner_pharmacies' => $banner_pharmacies
             ]);
         }
     }
@@ -93,12 +100,15 @@ class BannerController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
+        $banner_cities = new Banner_City();
+        $banner_pharmacies = new Banner_Pharmacy();
 
-        $model->loadCities();
+        $old_cities = Banner_City::find()->select('city_id')->where(['banner_id' => $id])->asArray()->all();
+        $old_pharmacies = Banner_Pharmacy::find()->select('pharmacy_id')->where(['banner_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if($model->save()) {
+            if($model->save(false)) {
                 $model->hide();
                 return $this->redirect(['view', 'id' => $model->id]);
             }
@@ -106,7 +116,12 @@ class BannerController extends Controller
             return $this->render('update', [
                 'model' => $model,
                 'education' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
-                'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'banner_cities' => $banner_cities,
+                'banner_pharmacies' => $banner_pharmacies,
+                'old_cities' => $old_cities,
+                'old_pharmacies' => $old_pharmacies
             ]);
         }
     }

@@ -305,6 +305,41 @@ class Banner extends ActiveRecord
         } else return false;
     }
 
+    public function afterSave($insert, $changedAttributes){
+        parent::afterSave($insert, $changedAttributes);
+        if(!$this->isNewRecord) {
+            City::deleteAll(['banner_id'=>$this->id]);
+            Pharmacy::deleteAll(['banner_id'=>$this->id]);
+            for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+                $banner_cities = new City();
+                $banner_cities->city_id = Yii::$app->request->post('cities')[$i];
+                $banner_cities->banner_id = $this->id;
+                $banner_cities->save();
+            }
+
+            for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+                $banner_pharmacies = new Pharmacy();
+                $banner_pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+                $banner_pharmacies->banner_id = $this->id;
+                $banner_pharmacies->save();
+            }
+        } else
+        {
+            for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
+                $banner_cities = new City();
+                $banner_cities->city_id = Yii::$app->request->post('cities')[$i];
+                $banner_cities->banner_id = $this->getPrimaryKey();
+                $banner_cities->save();
+            }
+            for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
+                $banner_pharmacies = new Pharmacy();
+                $banner_pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
+                $banner_pharmacies->banner_id = $this->getPrimaryKey();
+                $banner_pharmacies->save();
+            }
+        }
+
+    }
     public function afterDelete()
     {
         City::deleteAll(['banner_id'=>$this->id]);
@@ -313,51 +348,4 @@ class Banner extends ActiveRecord
         if($this->image) @unlink(Yii::getAlias('@uploads/banners/'.$this->image));
         parent::afterDelete();
     }
-//
-/*
-
-
-    public function updateCities()
-    {
-        if(!$this->isNewRecord && !empty($this->citiesModel))
-            foreach($this->cities as $city) {
-                if (!in_array($city->city_id, $this->citiesModel))
-                    $city->delete();
-                $this->citiesModel = array_diff($this->citiesModel, [$city->city_id]);
-            }
-        if(!empty($this->citiesModel)) foreach($this->citiesModel as $city) {
-            City::add([
-                'city_id'=>$city,
-                'banner_id'=>$this->id,
-            ]);
-        }
-    }
-
-    public function updatePharmacies()
-    {
-        if(!$this->isNewRecord && !empty($this->pharmaciesModel))
-            foreach($this->pharmacies as $pharmacy) {
-                if (!in_array($pharmacy->pharmacy_id, $this->pharmaciesModel))
-                    $pharmacy->delete();
-                $this->pharmaciesModel = array_diff($this->pharmaciesModel, [$pharmacy->pharmacy_id]);
-            }
-        if(!empty($this->pharmaciesModel)) foreach($this->pharmaciesModel as $pharmacy) {
-            Pharmacy::add([
-                'pharmacy_id'=>$pharmacy,
-                'banner_id'=>$this->id,
-            ]);
-        }
-    }
-
-    public function loadCities()
-    {
-        $this->citiesModel = ArrayHelper::map($this->cities,'id','city_id');
-    }
-
-    public function loadPharmacies()
-    {
-        $this->pharmaciesModel = ArrayHelper::map($this->pharmacies,'id','pharmacy_id');
-    }
-
-   */
 }

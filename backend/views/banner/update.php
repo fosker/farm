@@ -17,6 +17,11 @@ $this->title = 'Редактировать баннер: ' . ' ' . $model->title
         'model' => $model,
         'education'=>$education,
         'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'banner_cities' => $banner_cities,
+        'banner_pharmacies' => $banner_pharmacies,
+        'old_cities' => $old_cities,
+        'old_pharmacies' => $old_pharmacies
     ]) ?>
 
 </div>

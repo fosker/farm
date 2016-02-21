@@ -12,6 +12,7 @@ use Yii;
  */
 class Pharmacy extends \yii\db\ActiveRecord
 {
+    public $pharmacies = [];
 
     public static function tableName()
     {
@@ -28,7 +29,7 @@ class Pharmacy extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-
+            'pharmacies' => 'Аптеки'
         ];
     }
 

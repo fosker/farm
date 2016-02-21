@@ -5,12 +5,12 @@ return [
     'components' => [
         'db' => [
             'class' => 'yii\db\Connection',
-            'dsn' => 'mysql:host=localhost;dbname=shop4uby_farm',
-            'username' => 'shop4uby_farm',
-            'password' => 'Bosingwa',
-//            'dsn' => 'mysql:host=localhost;dbname=farm',
-//            'username' => 'root',
-//            'password' => '',
+//            'dsn' => 'mysql:host=localhost;dbname=shop4uby_farm',
+//            'username' => 'shop4uby_farm',
+//            'password' => 'Bosingwa',
+            'dsn' => 'mysql:host=localhost;dbname=farm',
+            'username' => 'root',
+            'password' => '',
             'charset' => 'utf8',
         ],
         'cache' => [

@@ -12,6 +12,9 @@ $this->title = 'Добавить баннер';
         'model' => $model,
         'education'=>$education,
         'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'banner_cities' => $banner_cities,
+        'banner_pharmacies' => $banner_pharmacies
     ]) ?>
 
 </div>
