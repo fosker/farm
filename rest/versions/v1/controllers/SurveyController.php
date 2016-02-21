@@ -60,7 +60,7 @@ class SurveyController extends Controller
             $answers = Answer::filterModels($answers);
             if(Answer::validateMultiple($answers,['question_id','value'])) {
                 View::addByCurrentUser($answers);
-                Yii::$app->user->identity->answerSurvey($answers[0]->question->survey);
+                Yii::$app->user->identity->answerSurvey(reset($answers)->question->survey);
                 return ['success'=>true];
             }
         }
