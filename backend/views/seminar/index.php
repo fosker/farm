@@ -36,7 +36,7 @@ $this->title = 'Семинары';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '150px'
+                        'width' => '200px'
                     ],
                 ]),
             ],
@@ -52,7 +52,7 @@ $this->title = 'Семинары';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '200px'
+                        'width' => '150px'
                     ],
                 ]),
                 'format' => 'email',

@@ -50,8 +50,8 @@ class Survey extends ActiveRecord
     {
         return [
             [['points'], 'integer'],
-            [['title'], 'required'],
-            [['title', 'description'], 'string']
+            [['title', 'description', 'points'], 'required'],
+            [['imageFile', 'thumbFile'], 'required', 'on' => 'create']
 
         ];
     }
@@ -59,6 +59,13 @@ class Survey extends ActiveRecord
     /**
      * @inheritdoc
      */
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'description', 'points', 'imageFile', 'thumbFile'];
+        return $scenarios;
+    }
+
     public function attributeLabels()
     {
         return [
@@ -260,25 +267,53 @@ class Survey extends ActiveRecord
         parent::afterDelete();
     }
 
-/*
-
-
-
-    public static function isAnsweredByUser($id, $user_id)
+    public function loadCities($cities)
     {
-        return Answer::FindBySurveyAndUser($id, $user_id)->exists();
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->survey_id = $this->id;
+                $city->save();
+            }
+        }
     }
 
-    public static function getQuestionsId($survey_id)
+    public function loadPharmacies($pharmacies)
     {
-        return ArrayHelper::map(Question::find()->select('id')->where(['survey_id'=>$survey_id])->asArray()->all(),'id','id');
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->survey_id = $this->id;
+                $pharmacy->save();
+            }
+        }
     }
 
-    public static function findByQuestionId($question_id)
+    public function updateCities($cities)
     {
-        $question = Question::findOne($question_id);
-        return $question->survey;
+        if($cities) {
+            City::deleteAll(['survey_id' => $this->id]);
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->survey_id = $this->id;
+                $city->save();
+            }
+        }
     }
 
-*/
+    public function updatePharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            Pharmacy::deleteAll(['survey_id' => $this->id]);
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->survey_id = $this->id;
+                $pharmacy->save();
+            }
+        }
+    }
 }

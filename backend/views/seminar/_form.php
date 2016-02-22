@@ -9,13 +9,15 @@ use backend\components\CheckWidget;
 use common\models\location\Region;
 use common\models\agency\Firm;
 
+$this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
-
 <div class="seminar-form">
+
+
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?
+    <?php
     $regions = Region::find()->asArray()->all();
     $firms = Firm::find()->asArray()->all();
 

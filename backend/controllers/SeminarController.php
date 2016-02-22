@@ -70,14 +70,18 @@ class SeminarController extends Controller
     public function actionCreate()
     {
         $model = new Seminar();
+        $model->scenario = 'create';
         $seminar_cities = new Seminar_City();
         $seminar_pharmacies = new Seminar_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
-            if ($model->save())
+            if ($model->save()) {
+                $model->loadCities(Yii::$app->request->post('cities'));
+                $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -101,8 +105,11 @@ class SeminarController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
-            if ($model->save())
+            if ($model->save()) {
+                $model->updateCities(Yii::$app->request->post('cities'));
+                $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,

@@ -11,14 +11,15 @@ use common\models\agency\Firm;
 use backend\components\CheckWidget;
 use yii\bootstrap\Modal;
 
+$this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 $url = Url::to(['/banner/link-list']);
 ?>
 
 <div class="banner-form">
 
-    <? $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
+    <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
-    <?
+    <?php
         $regions = Region::find()->asArray()->all();
         $firms = Firm::find()->asArray()->all();
 
@@ -53,6 +54,19 @@ $url = Url::to(['/banner/link-list']);
                 'relation' => 'firm_id'
 
             ]);
+        Modal::end();
+
+        Modal::begin([
+            'header' => '<h2>Выберите образования</h2>',
+            'toggleButton' => ['label' => 'Для образований', 'class' => 'btn btn-primary'],
+        ]);
+
+        echo $form->field($banner_education, 'education')->widget(CheckWidget::className(), [
+            'parent_title' => 'education',
+            'parent' => $education,
+            'update' => $old_education,
+            'height' => '10px'
+        ]);
         Modal::end();
     ?>
 

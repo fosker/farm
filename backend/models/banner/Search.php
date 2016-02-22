@@ -42,7 +42,8 @@ class Search extends Banner
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'position'=>SORT_ASC,
+                    'status' => SORT_ASC,
+                    'id' => SORT_DESC
                 ],
             ],
         ]);
@@ -60,18 +61,19 @@ class Search extends Banner
             'status' => $this->status,
         ]);
 
-        $cities = City::find()->select('banner_id')->andFilterWhere(['in', 'city_id', $this->getAttribute('city_id')]);
-        $firms = Pharmacy::find()->select('banner_id')->andFilterWhere(['in', 'firm_id', $this->getAttribute('firm_id')])
-            ->joinWith('pharmacy');
-        $education = Education::find()->select('banner_id')->andFilterWhere(['in', 'education_id', $this->getAttribute('education_id')]);
+        if($this->getAttribute('city_id'))
+            $cities = City::find()->select('banner_id')->where(['in', 'city_id', $this->getAttribute('city_id')]);
+        if($this->getAttribute('firm_id'))
+            $firms = Pharmacy::find()->select('banner_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
+                ->joinWith('pharmacy');
+        if($this->getAttribute('education_id'))
+            $education = Education::find()->select('banner_id')->andFilterWhere(['in', 'education_id', $this->getAttribute('education_id')]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'link', $this->link])
             ->andFilterWhere(['in', Banner::tableName().'.id', $education])
             ->andFilterWhere(['in', Banner::tableName().'.id', $cities])
             ->andFilterWhere(['in', Banner::tableName().'.id', $firms]);
-
-        $query->groupBy(Banner::tableName().'.id');
 
         return $dataProvider;
     }

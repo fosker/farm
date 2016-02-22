@@ -1,11 +1,13 @@
 <?php
 
 use yii\helpers\Html;
+use common\models\Presentation;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\presentation\Question */
-
-$this->title = 'Добавить вопрос';
+$this->title = 'Добавление вопроса';
+$this->params['breadcrumbs'][] = ['label' => Presentation::findOne(
+    ['id' => Yii::$app->request->get('presentation_id')])->title,
+    'url' => ['/presentation/view', 'id' => Yii::$app->request->get('presentation_id')]];
+$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="question-create">
 

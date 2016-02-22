@@ -96,7 +96,15 @@ $this->title = 'Акции';
                 'contentOptions'=>['style'=>'width: 125px;'],
             ],
 
-            ['class' => 'yii\grid\ActionColumn'],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{view} {approve} {update} {delete}',
+                'buttons'=>[
+                    'approve'=>function ($url, $model, $key) {
+                        return Html::a($model->status == $model::STATUS_HIDDEN ? '<i class="glyphicon glyphicon-ok"></i>' : '<i class="glyphicon glyphicon-remove"></i>', [$model->status == $model::STATUS_HIDDEN ? 'approve' : 'hide', 'id'=>$model->id]);
+                    },
+                ],
+            ],
         ],
     ]); ?>
 </div>

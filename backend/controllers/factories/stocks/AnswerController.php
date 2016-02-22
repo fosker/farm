@@ -9,6 +9,9 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use common\models\User;
+use common\models\factory\Stock;
+use yii\helpers\ArrayHelper;
 
 /**
  * AnswerController implements the CRUD actions for Reply model.
@@ -55,6 +58,8 @@ class AnswerController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'logins' => ArrayHelper::map(User::find()->asArray()->all(),'login','login'),
+            'stocks' => ArrayHelper::map(Stock::find()->asArray()->all(),'title','title'),
         ]);
     }
 

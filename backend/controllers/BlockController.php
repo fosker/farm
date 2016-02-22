@@ -63,6 +63,7 @@ class BlockController extends Controller
     public function actionCreate()
     {
         $model = new Block();
+        $model->scenario = 'create';
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');

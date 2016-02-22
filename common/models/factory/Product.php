@@ -32,9 +32,16 @@ class Product extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'factory_id'], 'required'],
-            [['title', 'description'], 'string']
+            [['title', 'description', 'factory_id'], 'required'],
+            [['imageFile','thumbFile'], 'required', 'on' => 'create'],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'description', 'factory_id', 'imageFile','thumbFile'];
+        return $scenarios;
     }
 
     public function attributeLabels()

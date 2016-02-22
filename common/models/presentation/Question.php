@@ -32,7 +32,8 @@ class Question extends ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'order_index'], 'required']
+            [['question', 'order_index'], 'required'],
+            ['order_index', 'integer']
         ];
     }
 

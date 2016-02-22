@@ -40,7 +40,8 @@ class Search extends Item
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'priority'=>SORT_DESC,
+                    'status' => SORT_ASC,
+                    'id' => SORT_DESC
                 ],
             ],
         ]);

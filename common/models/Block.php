@@ -30,9 +30,16 @@ class Block extends \yii\db\ActiveRecord
     {
         return [
             [['title', 'description'], 'required'],
-            ['imageFile', 'safe']
+            ['imageFile', 'required', 'on' => 'create']
 
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'description', 'imageFile'];
+        return $scenarios;
     }
 
     public function attributeLabels()

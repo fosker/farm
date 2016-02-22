@@ -2,12 +2,6 @@
 
 use yii\helpers\Html;
 
-
-/* @var $this yii\web\View */
-/* @var $model common\models\Survey */
-/* @var $questions array */
-/* @var $options array */
-
 $this->title = 'Добавить анкету';
 ?>
 <div class="survey-create">
@@ -18,6 +12,10 @@ $this->title = 'Добавить анкету';
         'model' => $model,
         'questions'=>$questions,
         'options'=>$options,
+        'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'survey_cities' => $survey_cities,
+        'survey_pharmacies' => $survey_pharmacies
     ]) ?>
 
 </div>

@@ -14,6 +14,7 @@ use common\models\profile\Education as E;
 use common\models\location\City as C;
 use common\models\agency\Pharmacy as P;
 use common\models\agency\Firm;
+use common\models\factory\Stock;
 
 /**
  * This is the model class for table "banners".
@@ -41,8 +42,16 @@ class Banner extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'position'], 'required']
+            [['title', 'position', 'link'], 'required'],
+            ['imageFile', 'required', 'on' => 'create']
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'position', 'link', 'imageFile'];
+        return $scenarios;
     }
 
     public function attributeLabels()
@@ -117,7 +126,7 @@ class Banner extends ActiveRecord
             'present'=>'Подарки',
             'survey'=>'Анкеты',
             'seminar'=>'Семинары',
-            'report'=>'Отчеты',
+            'stock'=>'Акции',
             'presentation'=>'Презентации',
         ];
     }
@@ -167,6 +176,10 @@ class Banner extends ActiveRecord
             case 'seminar':
                 $item = Seminar::findOne($path[1]);
                 $name = 'Семинар: ';
+                break;
+            case 'stock':
+                $item = Stock::findOne($path[1]);
+                $name = 'Акция: ';
                 break;
             case 'presentation':
                 $item = Presentation::findOne($path[1]);
@@ -305,26 +318,80 @@ class Banner extends ActiveRecord
         } else return false;
     }
 
-    public function afterSave($insert, $changedAttributes)
+    public function loadCities($cities)
     {
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->banner_id = $this->id;
+                $city->save();
+            }
+        }
+    }
 
-        if (!$insert) {
-            City::deleteAll(['banner_id'=>$this->id]);
-            Pharmacy::deleteAll(['banner_id'=>$this->id]);
+
+    public function loadPharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->banner_id = $this->id;
+                $pharmacy->save();
+            }
         }
-        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
-            $city = new City();
-            $city->city_id = Yii::$app->request->post('cities')[$i];
-            $city->banner_id = $this->id;
-            $city->save();
+    }
+
+    public function loadEducation($educations)
+    {
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->banner_id = $this->id;
+                $education->save();
+            }
         }
-        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
-            $pharmacies = new Pharmacy();
-            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
-            $pharmacies->banner_id = $this->id;
-            $pharmacies->save();
+    }
+
+    public function updateEducation($educations)
+    {
+        if($educations) {
+            Education::deleteAll(['banner_id' => $this->id]);
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->banner_id = $this->id;
+                $education->save();
+            }
         }
-        parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function updateCities($cities)
+    {
+        if($cities) {
+            City::deleteAll(['banner_id' => $this->id]);
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->banner_id = $this->id;
+                $city->save();
+            }
+        }
+    }
+
+    public function updatePharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            Pharmacy::deleteAll(['banner_id' => $this->id]);
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->banner_id = $this->id;
+                $pharmacy->save();
+            }
+        }
     }
 
     public function afterDelete()

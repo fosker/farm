@@ -36,6 +36,12 @@ class Search extends Seminar
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'status' => SORT_ASC,
+                    'id' => SORT_DESC
+                ],
+            ],
         ]);
 
         $this->load($params);
@@ -49,16 +55,16 @@ class Search extends Seminar
             'status' => $this->status,
         ]);
 
-        $cities = City::find()->select('seminar_id')->andFilterWhere(['in', 'city_id', $this->getAttribute('city_id')]);
-        $firms = Pharmacy::find()->select('seminar_id')->andFilterWhere(['in', 'firm_id', $this->getAttribute('firm_id')])
-            ->joinWith('pharmacy');
+        if($this->getAttribute('city_id'))
+            $cities = City::find()->select('seminar_id')->where(['in', 'city_id', $this->getAttribute('city_id')]);
+        if($this->getAttribute('firm_id'))
+            $firms = Pharmacy::find()->select('seminar_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
+                ->joinWith('pharmacy');
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'email', $this->email])
             ->andFilterWhere(['in', Seminar::tableName().'.id', $cities])
             ->andFilterWhere(['in', Seminar::tableName().'.id', $firms]);
-
-        $query->groupBy(Seminar::tableName().'.id');
 
         return $dataProvider;
     }

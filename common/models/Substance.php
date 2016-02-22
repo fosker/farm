@@ -23,8 +23,7 @@ class Substance extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            ['cyrillic', 'required'],
-            [['name', 'description', 'cyrillic'], 'string']
+            [['cyrillic', 'name', 'description'], 'required'],
         ];
     }
 

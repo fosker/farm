@@ -54,7 +54,6 @@ class Search extends Mark
             'sort'=> [
                 'defaultOrder'=>[
                     'date_add'=>SORT_ASC,
-                    'id' => SORT_DESC
                 ],
             ],
         ]);

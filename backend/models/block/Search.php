@@ -45,6 +45,11 @@ class Search extends Block
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'id' => SORT_DESC
+                ],
+            ],
         ]);
 
         $dataProvider->sort->attributes['comment_count'] = [

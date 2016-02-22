@@ -75,15 +75,17 @@ class PresentationController extends Controller
     public function actionCreate()
     {
         $model = new Presentation();
-
+        $model->scenario = 'create';
         $presentation_cities = new Presentation_City();
         $presentation_pharmacies = new Presentation_Pharmacy();
 
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model,'thumbFile');
-            if($model->save(false)) {
-                return $this->redirect(['view','id'=>$model->id]);
+            if ($model->save(false)) {
+                $model->loadCities(Yii::$app->request->post('cities'));
+                $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             return $this->render('create', [
@@ -108,9 +110,10 @@ class PresentationController extends Controller
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model,'thumbFile');
-            if($model->save())
-            {
-                return $this->redirect(['view','id'=>$model->id]);
+            if ($model->save()) {
+                $model->updateCities(Yii::$app->request->post('cities'));
+                $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
+                return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             return $this->render('update', [
@@ -158,6 +161,7 @@ class PresentationController extends Controller
 
     public function actionAddSlide($presentation_id) {
         $model = new Slide();
+        $model->scenario = 'create';
 
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
@@ -257,7 +261,7 @@ class PresentationController extends Controller
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->question_id = $question_id;
             if($model->save())
-                return $this->redirect(['view-option','question_id'=>$question_id]);
+                return $this->redirect(['view-option','question_id'=>$question_id,'presentation_id'=>$presentation_id]);
         }
 
         return $this->render('question/option/create', [
@@ -269,7 +273,7 @@ class PresentationController extends Controller
         $model = $this->findOptionModel($id);
 
         if($model->load(Yii::$app->request->getBodyParams()) && $model->save()) {
-            return $this->redirect(['view-option','question_id'=>$model->question_id]);
+            return $this->redirect(['view-option','question_id'=>$model->question_id,'presentation_id'=>$presentation_id]);
         }
 
         return $this->render('question/option/update', [
@@ -280,7 +284,7 @@ class PresentationController extends Controller
     public function actionDeleteOption($id) {
         $model = $this->findOptionModel($id);
         $model->delete();
-        return $this->redirect(['view-option','question_id'=>$model->question_id]);
+        return $this->redirect(['view-option','question_id'=>$model->question_id,'presentation_id'=>$presentation_id]);
     }
 
     public function findOptionModel($id) {

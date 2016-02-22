@@ -38,7 +38,7 @@ class Search extends Answer
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'id' => SORT_DESC
+                    'view.added' => SORT_DESC
                 ],
             ],
         ]);

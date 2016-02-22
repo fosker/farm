@@ -15,6 +15,12 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->tit
         'model' => $model,
         'questions'=>$questions,
         'options'=>$options,
+        'cities'=>$cities,
+        'pharmacies'=>$pharmacies,
+        'survey_cities' => $survey_cities,
+        'survey_pharmacies' => $survey_pharmacies,
+        'old_cities' => $old_cities,
+        'old_pharmacies' => $old_pharmacies
     ]) ?>
 
 </div>

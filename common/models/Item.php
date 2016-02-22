@@ -51,10 +51,17 @@ class Item extends ActiveRecord
     public function rules()
     {
         return [
-            [['title','vendor_id','points'], 'required'],
-            [['title', 'description'], 'string'],
-            [['points', 'priority', 'vendor_id'], 'integer']
+            [['title', 'description', 'vendor_id', 'points', 'priority'], 'required'],
+            [['points', 'priority'], 'integer'],
+            [['imageFile','thumbFile'], 'required', 'on' => 'create'],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'description', 'vendor_id', 'points', 'priority', 'imageFile','thumbFile'];
+        return $scenarios;
     }
 
     /**
@@ -212,26 +219,54 @@ class Item extends ActiveRecord
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/presents/thumbs/'.$this->thumbnail));
     }
 
-    public function afterSave($insert, $changedAttributes)
+    public function loadCities($cities)
     {
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->item_id = $this->id;
+                $city->save();
+            }
+        }
+    }
 
-        if (!$insert) {
-            City::deleteAll(['item_id'=>$this->id]);
-            Pharmacy::deleteAll(['item_id'=>$this->id]);
+    public function loadPharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->item_id = $this->id;
+                $pharmacy->save();
+            }
         }
-        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
-            $city = new City();
-            $city->city_id = Yii::$app->request->post('cities')[$i];
-            $city->item_id = $this->id;
-            $city->save();
+    }
+
+    public function updateCities($cities)
+    {
+        if($cities) {
+            City::deleteAll(['item_id' => $this->id]);
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->item_id = $this->id;
+                $city->save();
+            }
         }
-        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
-            $pharmacies = new Pharmacy();
-            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
-            $pharmacies->item_id = $this->id;
-            $pharmacies->save();
+    }
+
+    public function updatePharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            Pharmacy::deleteAll(['item_id' => $this->id]);
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->item_id = $this->id;
+                $pharmacy->save();
+            }
         }
-        parent::afterSave($insert, $changedAttributes);
     }
 
     public function loadImage() {
