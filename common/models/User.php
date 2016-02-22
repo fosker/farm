@@ -414,11 +414,6 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
         $this->save(false);
     }
 
-    public function sendReport($report) {
-        $this->points += $report->points;
-        $this->save(false);
-    }
-
     public function pay($amount) {
         if($amount > $this->points) return false;
         $this->points -= $amount;

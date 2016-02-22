@@ -80,7 +80,7 @@ class PresentationController extends Controller
             $answers = Answer::filterModels($answers);
             if(Answer::validateMultiple($answers,['question_id','value'])) {
                 View::addByCurrentUser($answers);
-                Yii::$app->user->identity->viewPresentation($answers[0]->question->presentation);
+                Yii::$app->user->identity->viewPresentation(reset($answers)->question->presentation);
                 return ['success'=>true];
             }
         }
