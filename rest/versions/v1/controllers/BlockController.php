@@ -83,4 +83,13 @@ class BlockController extends Controller
             return ['success'=>true];
         } else return $mark;
     }
+
+    public function actionDeleteComment($id) {
+        if($comment = Comment::findOne(['id'=>$id,'user_id'=>Yii::$app->user->id])) {
+            $comment->delete();
+            return ['success'=>true];
+        } else {
+            return ['success'=>false];
+        }
+    }
 }

@@ -76,6 +76,7 @@ return [
                 'GET v1/block/comments/<block_id>' => 'v1/block/comments',
                 'GET v1/block/comment/<id>' => 'v1/block/comment',
                 'POST v1/block/comment' => 'v1/block/add-comment',
+                'DELETE v1/block/comment/<id>' => 'v1/block/delete-comment',
                 'GET v1/block/mark/<block_id>' => 'v1/block/is-mark-exists',
                 'POST v1/block/mark' => 'v1/block/add-mark',
 
@@ -92,6 +93,7 @@ return [
                 'GET v1/presentation/is-viewed/<id>' => 'v1/presentation/is-presentation-viewed',
                 'GET v1/presentation/comments/<presentation_id>' => 'v1/presentation/comments',
                 'GET v1/presentation/comment/<id>' => 'v1/presentation/comment',
+                'DELETE v1/presentation/comment/<id>' => 'v1/presentation/delete-comment',
                 'POST v1/presentation/comment' => 'v1/presentation/add-comment',
 
                 'GET v1/shop' => 'v1/shop/index',
@@ -112,6 +114,7 @@ return [
                 'GET v1/seminar/comments/<seminar_id>' => 'v1/seminar/comments',
                 'GET v1/seminar/comment/<id>' => 'v1/seminar/comment',
                 'POST v1/seminar/comment' => 'v1/seminar/add-comment',
+                'DELETE v1/seminar/comment/<id>' => 'v1/seminar/delete-comment',
                 'POST v1/seminar' => 'v1/seminar/entry',
 
                 'GET v1/factories' => 'v1/factory/index',

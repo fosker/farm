@@ -106,4 +106,13 @@ class PresentationController extends Controller
             return ['success'=>true];
         } else return $comment;
     }
+
+    public function actionDeleteComment($id) {
+        if($comment = Comment::findOne(['id'=>$id,'user_id'=>Yii::$app->user->id])) {
+            $comment->delete();
+            return ['success'=>true];
+        } else {
+            return ['success'=>false];
+        }
+    }
 }
