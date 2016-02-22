@@ -253,8 +253,8 @@ class Seminar extends \yii\db\ActiveRecord
 
     public function updateCities($cities)
     {
+        City::deleteAll(['seminar_id' => $this->id]);
         if($cities) {
-            City::deleteAll(['seminar_id' => $this->id]);
             for ($i = 0; $i < count($cities); $i++) {
                 $city = new City();
                 $city->city_id = $cities[$i];
@@ -266,8 +266,8 @@ class Seminar extends \yii\db\ActiveRecord
 
     public function updatePharmacies($pharmacies)
     {
+        Pharmacy::deleteAll(['seminar_id' => $this->id]);
         if($pharmacies) {
-            Pharmacy::deleteAll(['seminar_id' => $this->id]);
             for ($i = 0; $i < count($pharmacies); $i++) {
                 $pharmacy = new Pharmacy();
                 $pharmacy->pharmacy_id = $pharmacies[$i];

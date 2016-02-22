@@ -245,8 +245,8 @@ class Item extends ActiveRecord
 
     public function updateCities($cities)
     {
+        City::deleteAll(['item_id' => $this->id]);
         if($cities) {
-            City::deleteAll(['item_id' => $this->id]);
             for ($i = 0; $i < count($cities); $i++) {
                 $city = new City();
                 $city->city_id = $cities[$i];
@@ -258,8 +258,8 @@ class Item extends ActiveRecord
 
     public function updatePharmacies($pharmacies)
     {
+        Pharmacy::deleteAll(['item_id' => $this->id]);
         if($pharmacies) {
-            Pharmacy::deleteAll(['item_id' => $this->id]);
             for ($i = 0; $i < count($pharmacies); $i++) {
                 $pharmacy = new Pharmacy();
                 $pharmacy->pharmacy_id = $pharmacies[$i];

@@ -304,8 +304,8 @@ class Presentation extends ActiveRecord
 
     public function updateCities($cities)
     {
+        City::deleteAll(['presentation_id' => $this->id]);
         if($cities) {
-            City::deleteAll(['presentation_id' => $this->id]);
             for ($i = 0; $i < count($cities); $i++) {
                 $city = new City();
                 $city->city_id = $cities[$i];
@@ -317,8 +317,8 @@ class Presentation extends ActiveRecord
 
     public function updatePharmacies($pharmacies)
     {
+        Pharmacy::deleteAll(['presentation_id' => $this->id]);
         if($pharmacies) {
-            Pharmacy::deleteAll(['presentation_id' => $this->id]);
             for ($i = 0; $i < count($pharmacies); $i++) {
                 $pharmacy = new Pharmacy();
                 $pharmacy->pharmacy_id = $pharmacies[$i];
