@@ -120,7 +120,7 @@ return [
                 'GET v1/factory/stock/<id>' => 'v1/factory/stock',
                 'POST v1/factory/stock' => 'v1/factory/reply',
                 'GET v1/factory/products/<factory_id>' => 'v1/factory/products',
-                'GET v1/factory/product/<product_id>' => 'v1/factory/product',
+                'GET v1/factory/product/<id>' => 'v1/factory/product',
 
                 'GET v1/substances' => 'v1/substance/index',
                 'GET v1/substance/<id>' => 'v1/substance/view',
