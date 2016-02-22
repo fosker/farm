@@ -79,7 +79,7 @@ class BannerController extends Controller
     public function actionCreate()
     {
         $model = new Banner();
-        //$model->scenario = 'create';
+        $model->scenario = 'create';
         $banner_cities = new Banner_City();
         $banner_pharmacies = new Banner_Pharmacy();
         $banner_education = new Banner_Education();
