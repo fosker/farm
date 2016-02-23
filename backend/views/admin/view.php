@@ -35,8 +35,8 @@ $this->title = $model->name;
     <table class="table">
         <tr><th>право</th><th>значение</th></tr>
 
-        <? foreach($model->rights as $right) : ?>
+        <?php foreach($model->rights as $right) : ?>
             <tr><td><?=$right->right->name?></td><td><?= $right->value ? 'да' : 'нет'; ?></td></tr>
-        <? endforeach; ?>
+        <?php endforeach; ?>
     </table>
 </div>

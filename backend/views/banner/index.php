@@ -18,7 +18,7 @@ $this->title = 'Баннеры';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            'id',
             [
                 'attribute'=>'title',
                 'value'=>'title',

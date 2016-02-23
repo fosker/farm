@@ -13,6 +13,7 @@ $this->title = $model->user->name .' приобрел "'.$model->item->title.'"'
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
+        <?= Html::a('Список', ['index'],['class'=>'btn btn-info']) ?>
         <?= $model->promo ? Html::a('Использовать', ['use', 'id' => $model->id], ['class' => 'btn btn-warning']) : ''; ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',

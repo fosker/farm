@@ -16,7 +16,7 @@ $buttons = [1 => 'да', 0 => 'нет'];
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?  foreach ($rights as $index => $right) {
+    <?php  foreach ($rights as $index => $right) {
         echo $form->field($right, "[$index]value")->label($right->right->name)->radioList($buttons);
     } ?>
 

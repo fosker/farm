@@ -14,7 +14,10 @@ $this->title = 'Оценки';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'attribute' => 'id',
+                'contentOptions'=>['style'=>'width: 150px;'],
+            ],
             [
                 'label'=>'Автор',
                 'attribute'=>'user.name',

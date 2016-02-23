@@ -14,7 +14,7 @@ $this->title = 'Подарки';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            'id',
             [
                 'label' => 'Логин',
                 'attribute'=>'user.login',

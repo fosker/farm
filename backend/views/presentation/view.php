@@ -78,7 +78,7 @@ $this->title = $model->title;
     <table class="table">
         <tr><th>Слайд</th><th>Описание слайда</th><th>Порядковый номер</th><th>Действия</th></tr>
 
-        <? foreach($model->slides as $slide) : ?>
+        <?php foreach($model->slides as $slide) : ?>
             <tr>
                 <td><?=Html::img($slide->imagePath, ['alt' => 'Изображение', 'width'=>'50%', 'height'=>'200px']);?></td>
                 <td><?= $slide->description; ?></td>
@@ -97,7 +97,7 @@ $this->title = $model->title;
                     );?>
                 </td>
             </tr>
-        <? endforeach; ?>
+        <?php endforeach; ?>
     </table>
 
     <h2>Вопросы
@@ -111,14 +111,14 @@ $this->title = $model->title;
     <table class="table">
         <tr><th>Вопрос</th><th>Варианты ответа</th><th>Порядковый номер</th><th>Действия</th></tr>
 
-        <? foreach($model->questions as $question) : ?>
+        <?php foreach($model->questions as $question) : ?>
             <tr>
                 <td><?=$question->question?></td>
                 <td>
                     <table>
-                        <?foreach($question->options as $option) :?>
+                        <?php foreach($question->options as $option) :?>
                             <tr><td><p class="text-info"><?=$option->value?></p></td></tr>
-                        <?endforeach; ?>
+                        <?php endforeach; ?>
                     </table>
                 </td>
                 <td><?=$question->order_index?></td>
@@ -138,7 +138,7 @@ $this->title = $model->title;
                     );?>
                 </td>
             </tr>
-        <? endforeach; ?>
+        <?php endforeach; ?>
     </table>
 
 </div>

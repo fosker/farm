@@ -30,7 +30,7 @@ $this->title = 'Администраторы';
                 'header'=>'Действия',
                 'buttons'=>[
                     'rights' => function ($url, $model, $key) {
-                        return Html::a('<i class="fa fa-users"></i> ', ['rights', 'id'=>$model->id], [
+                        return Html::a('<i class="fa fa-users"></i>', ['rights', 'id'=>$model->id], [
                             'title'=>'права',
                             'data-pjax'=>0,
                             'data-method'=>'post',

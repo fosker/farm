@@ -75,17 +75,17 @@ $this->title = $model->title;
 
     <table class="table">
         <tr><th>Вопрос</th><th>Варианты ответа</th></tr>
-        <? foreach($model->questions as $question) : ?>
+        <?php foreach($model->questions as $question) : ?>
             <tr><td><?=$question->question?></td>
                 <td>
                 <table>
-                    <?foreach($question->options as $option) :?>
+                    <?php foreach($question->options as $option) :?>
                         <tr><td><p class="text-info"><?=$option->value?></p></td></tr>
-                <?endforeach; ?>
+                <?php endforeach; ?>
                 </table>
                 </td>
             </tr>
-        <? endforeach; ?>
+        <?php endforeach; ?>
     </table>
 
 </div>

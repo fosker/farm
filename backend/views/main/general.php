@@ -30,15 +30,11 @@ endif;
 	
     <h1>Настройки</h1>
 
-    <h3 class="bg-warning">Страница на стадии разработки</h3>
-
-    <p>Это страница общих настроек приложения. Здесь будет раполагаться управление параметрами, такими, как, например, обратный адрес email-рассылок,  котнактные данные и пр.</p>
-
     <div class="settings-form">
 
 	    <?php $form = ActiveForm::begin(); ?>
 
-	  	<?  foreach ($settings as $index => $setting) {
+	  	<?php  foreach ($settings as $index => $setting) {
     		echo $form->field($setting, "[$index]value")->label($setting->name);
 		} ?>
 

@@ -10,12 +10,12 @@
 ?>
 <h1>Результаты по анкете "<?=$answers[0]->view->survey->title;?>"</h1>
 
-    <? $author = null;
+    <?php $author = null;
     foreach($answers as $answer) :
         if($author != $answer->view->user->name) : ?>
             <h3><?=$answer->view->user->name;?></h3>
-        <? endif; ?>
+        <?php endif; ?>
         <p><b><?=$answer->question->question;?></b> <?=$answer->value;?></p>
-    <?
+    <?php
         $author = $answer->view->user->name;
     endforeach; ?>

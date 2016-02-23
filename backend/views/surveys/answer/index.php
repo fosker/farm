@@ -15,7 +15,6 @@ $this->title = 'Ответы на анкеты';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             [
                 'label' => 'ID Анкеты',
                 'attribute'=>'view.survey.id',

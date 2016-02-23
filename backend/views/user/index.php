@@ -21,7 +21,7 @@ $this->title = 'Пользователи';
             }
         },
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            'attribute' => 'id',
             [
                 'label' => 'Имя',
                 'attribute' => 'name',
