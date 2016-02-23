@@ -51,7 +51,7 @@ class CommentController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'presentations'=>ArrayHelper::map(Presentation::find()->asArray()->all(),'id','title'),
-            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'name','name'),
+            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'id','name'),
         ]);
     }
 

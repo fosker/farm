@@ -14,13 +14,13 @@ class Search extends Comment
     public function rules()
     {
         return [
-            [['id', 'presentation_id'], 'integer'],
-            [['comment','user.name'], 'string'],
+            [['id', 'presentation_id', 'user.id'], 'integer'],
+            [['comment','user.name', 'date_add'], 'string'],
         ];
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['user.name']);
+        return array_merge(parent::attributes(), ['user.name', 'user.id', 'date_add']);
     }
 
     public function scenarios()
@@ -57,7 +57,8 @@ class Search extends Comment
         ]);
 
         $query->andFilterWhere(['like', 'comment', $this->comment])
-            ->andFilterWhere(['like', User::tableName().'.name', $this->getAttribute('user.name')]);
+            ->andFilterWhere(['like', 'date_add', $this->date_add])
+            ->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')]);
 
         return $dataProvider;
     }

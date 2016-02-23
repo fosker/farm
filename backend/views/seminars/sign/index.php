@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 
 $this->title = 'Записи на семинары';
 ?>
@@ -14,8 +15,6 @@ $this->title = 'Записи на семинары';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'label' => 'ID Семинара',
                 'attribute'=>'seminar_id',
@@ -31,9 +30,9 @@ $this->title = 'Записи на семинары';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'user.login',
+                    'attribute'=>'user.id',
                     'options' => [
-                        'placeholder' => 'Выберите логин пользователя ...',
+                        'placeholder' => 'Выберите пользователя ...',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -60,7 +59,18 @@ $this->title = 'Записи на семинары';
                     ],
                 ]),
             ],
-            'date_add:datetime',
+            [
+                'attribute' => 'date_add',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_add',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['date', 'php:Y-m-d'],
+                'contentOptions'=>['style'=>'width: 250px;'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {delete}',

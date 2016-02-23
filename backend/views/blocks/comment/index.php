@@ -16,10 +16,6 @@ $this->title = 'Комментарии';
         'filterModel' => $searchModel,
         'columns' => [
             [
-                'attribute' => 'id',
-                'contentOptions'=>['style'=>'width: 150px;'],
-            ],
-            [
                 'label' => 'Автор',
                 'attribute' => 'user.name',
                 'value'=>function($model) {
@@ -29,7 +25,7 @@ $this->title = 'Комментарии';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $users,
-                    'attribute'=>'user.name',
+                    'attribute'=>'user.id',
                     'options' => [
                         'placeholder' => 'Выберите пользователя ...',
                     ],
@@ -62,9 +58,20 @@ $this->title = 'Комментарии';
             [
                 'attribute' => 'comment',
                 'value' => 'comment',
-                'contentOptions'=>['style'=>'width: 400px;'],
+                'contentOptions'=>['style'=>'width: 300px;'],
             ],
-            'date_add:datetime',
+            [
+                'attribute' => 'date_add',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_add',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['date', 'php:Y-m-d'],
+                'contentOptions'=>['style'=>'width: 250px;'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{view} {delete}',

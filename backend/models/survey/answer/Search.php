@@ -15,13 +15,13 @@ class Search extends Answer
     public function rules()
     {
         return [
-            [['view.survey.id'], 'integer'],
-            [['view.survey.title', 'view.user.login'], 'string']
+            [['view.survey.id', 'view.user.id'], 'integer'],
+            [['view.survey.title', 'view.user.login', 'view.added'], 'string']
         ];
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['view.survey.title', 'view.survey.id', 'view.user.login', 'view.added']);
+        return array_merge(parent::attributes(), ['view.survey.title', 'view.survey.id', 'view.user.login', 'view.added', 'view.user.id']);
     }
     public function scenarios()
     {
@@ -74,7 +74,8 @@ class Search extends Answer
         ]);
 
         $query->andFilterWhere(['like', Survey::tableName().'.title', $this->getAttribute('view.survey.title')])
-            ->andFilterWhere(['like', User::tableName().'.login', $this->getAttribute('view.user.login')]);
+            ->andFilterWhere(['like', View::tableName().'.added', $this->getAttribute('view.added')])
+            ->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('view.user.id')]);
 
         return $dataProvider;
     }

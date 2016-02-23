@@ -14,8 +14,6 @@ $this->title = 'Ответы на акции';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
-
             [
                 'label' => 'ID Акции',
                 'attribute'=>'stock_id',
@@ -31,7 +29,7 @@ $this->title = 'Ответы на акции';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'user.login',
+                    'attribute'=>'user.id',
                     'options' => [
                         'placeholder' => 'Выберите логин пользователя ...',
                     ],

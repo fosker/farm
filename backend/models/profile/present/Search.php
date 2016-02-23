@@ -15,8 +15,8 @@ class Search extends Present
     public function rules()
     {
         return [
-            [['count'], 'integer'],
-            [['promo','item.title', 'user.login'], 'string'],
+            [['count', 'user.id'], 'integer'],
+            [['promo', 'item.title', 'user.login', 'date_buy'], 'string'],
         ];
     }
     public function scenarios()
@@ -26,7 +26,7 @@ class Search extends Present
 
     public function attributes()
     {
-        return array_merge(parent::attributes(),['user.name','item.title', 'user.login']);
+        return array_merge(parent::attributes(),['user.name','item.title', 'user.login', 'user.id']);
     }
 
     public function search($params)
@@ -64,7 +64,8 @@ class Search extends Present
         ]);
 
         $query->andFilterWhere(['like', 'promo', $this->promo])
-            ->andFilterWhere(['like', User::tableName().'.login', $this->getAttribute('user.login')])
+            ->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', Present::tableName().'.date_buy', $this->date_buy])
             ->andFilterWhere(['like', Item::tableName().'.title', $this->getAttribute('item.title')]);
 
         return $dataProvider;

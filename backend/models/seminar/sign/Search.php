@@ -14,8 +14,8 @@ class Search extends Entry
     public function rules()
     {
         return [
-            [['id', 'seminar_id'], 'integer'],
-            [['seminar.title', 'user.login'], 'string'],
+            [['id', 'seminar_id', 'user.id'], 'integer'],
+            [['seminar.title', 'user.login', 'date_add'], 'string'],
         ];
     }
 
@@ -25,7 +25,7 @@ class Search extends Entry
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['seminar.title', 'user.login']);
+        return array_merge(parent::attributes(), ['seminar.title', 'user.login', 'user.id']);
     }
 
     public function search($params)
@@ -62,7 +62,8 @@ class Search extends Entry
             'seminar_id' => $this->seminar_id,
         ]);
 
-        $query->andFilterWhere(['like', User::tableName().'.login', $this->getAttribute('user.login')])
+        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', 'date_add', $this->date_add])
             ->andFilterWhere(['like', Seminar::tableName().'.title', $this->getAttribute('seminar.title')]);
 
         return $dataProvider;

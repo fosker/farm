@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 
 
 $this->title = 'Ответы на презентации';
@@ -16,7 +17,6 @@ $this->title = 'Ответы на презентации';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             [
                 'label' => 'ID Презентации',
                 'attribute'=>'view.presentation.id',
@@ -37,7 +37,7 @@ $this->title = 'Ответы на презентации';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '300px'
+                        'width' => '250px'
                     ],
                 ]),
                 'format'=>'html',
@@ -51,18 +51,29 @@ $this->title = 'Ответы на презентации';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'view.user.login',
+                    'attribute'=>'view.user.id',
                     'options' => [
-                        'placeholder' => 'Выберите логин пользователя ...',
+                        'placeholder' => 'Выберите пользователя ...',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '300px'
+                        'width' => '250px'
                     ],
                 ]),
                 'format'=>'html',
             ],
-            'view.added:datetime',
+            [
+                'attribute' => 'view.added',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'view.added',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['date', 'php:Y-m-d'],
+                'contentOptions'=>['style'=>'width: 250px;'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {delete}',

@@ -49,7 +49,7 @@ class AnswerController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'logins' => ArrayHelper::map(User::find()->asArray()->all(), 'login','login'),
+            'logins' => ArrayHelper::map(User::find()->asArray()->all(), 'id','login'),
             'titles' => ArrayHelper::map(Presentation::find()->asArray()->all(), 'title','title'),
         ]);
     }

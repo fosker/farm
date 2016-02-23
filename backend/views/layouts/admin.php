@@ -4,6 +4,8 @@ use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use backend\assets\AppAsset;
 use yii\widgets\Breadcrumbs;
+use backend\models\admin\Right;
+use backend\models\Admin;
 /**
  * @var $content string
  */
@@ -35,75 +37,208 @@ AppAsset::register($this);
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     [
-                        'label'=>'Настройки',
+
+                        'label'=> 'Настройки',
                         'items'=> [
-                            ['label' => 'Статистика', 'url' => ['/main/index']],
-                            ['label' => 'Общие настройки', 'url' => ['/main/general']],
-                            ['label' => 'Администраторы', 'url' => ['/admin']],
+                            [
+                                'label' => 'Статистика',
+                                'url' => ['/main/index'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'main')
+                            ],
+                            [
+                                'label' => 'Общие настройки',
+                                'url' => ['/main/general']
+                            ],
+                            [
+                                'label' => 'Администраторы',
+                                'url' => ['/admin'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'admin')
+                            ],
                         ],
+                        'visible' => Admin::showMain(Yii::$app->admin->id)
                     ],
                     [
                         'label' => 'Списки',
                         'items' => [
-                            ['label'=>'Города' , 'url'=>['/city']],
-                            ['label'=>'Фирмы', 'url'=>['/firm']],
-                            ['label'=>'Аптеки', 'url'=>['/pharmacy']],
-                            ['label'=>'Образование', 'url'=>['/education']],
-                            ['label'=>'Должности', 'url'=>['/position']],
-                            ['label' => 'Баннеры', 'url' => ['/banner']],
-                            ['label' => 'Вещества', 'url' => ['/substance']],
-                            ['label' => 'Запросы', 'url' => ['/substances/request']],
+                            [
+                                'label'=>'Города' ,
+                                'url'=>['/city'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'city')
+                            ],
+                            [
+                                'label'=>'Фирмы',
+                                'url'=>['/firm'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'firm')
+                            ],
+                            [
+                                'label'=>'Аптеки',
+                                'url'=>['/pharmacy'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'pharmacy')
+                            ],
+                            [
+                                'label'=>'Образование',
+                                'url'=>['/education'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'education')
+                            ],
+                            [
+                                'label'=>'Должности',
+                                'url'=>['/position'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'position')
+                            ],
+                            [
+                                'label' => 'Баннеры',
+                                'url' => ['/banner'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'banner')
+                            ],
+                            [
+                                'label' => 'Вещества',
+                                'url' => ['/substance'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'substance')
+                            ],
+                            [
+                                'label' => 'Запросы',
+                                'url' => ['/substances/request'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'request')
+                            ],
                         ],
+                        'visible' => Admin::showLists(Yii::$app->admin->id)
                     ],
                     ['label' => 'Страницы',
                         'items'=>[
-                            ['label' => 'Страницы', 'url' => ['/block']],
-                            ['label' => 'Комментарии', 'url' => ['/blocks/comment']],
-                            ['label' => 'Оценки', 'url' => ['/blocks/mark']],
+                            [
+                                'label' => 'Страницы',
+                                'url' => ['/block'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'block')
+                            ],
+                            [
+                                'label' => 'Комментарии',
+                                'url' => ['/blocks/comment'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'blocks/comment')
+                            ],
+                            [
+                                'label' => 'Оценки',
+                                'url' => ['/blocks/mark'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'blocks/mark')
+                            ],
                         ],
+                        'visible' => Admin::showBlock(Yii::$app->admin->id)
                     ],
                     ['label' => 'Пользователи',
                         'items'=>[
-                            ['label' => 'Пользователи', 'url' => ['/user']],
-                            ['label' => 'Оповещения', 'url' => ['/user/push']],
-                            ['label' => 'Подарки', 'url' => ['/users/present']],
+                            [
+                                'label' => 'Пользователи',
+                                'url' => ['/user'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user')
+                            ],
+                            [
+                                'label' => 'Оповещения',
+                                'url' => ['/user/push'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push')
+                            ],
+                            [
+                                'label' => 'Подарки',
+                                'url' => ['/users/present'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/present')
+                            ],
                         ],
+                        'visible' => Admin::showUser(Yii::$app->admin->id)
                     ],
                     ['label'=>'Анкеты',
                         'items'=>[
-                            ['label'=>'Анкеты', 'url'=>['/survey']],
-                            ['label'=>'Ответы', 'url'=>['/surveys/answer']],
+                            [
+                                'label'=>'Анкеты',
+                                'url'=>['/survey'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'survey')
+                            ],
+                            [
+                                'label'=>'Ответы',
+                                'url'=>['/surveys/answer'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'surveys/answer')
+                            ],
                          ],
+                        'visible' => Admin::showSurvey(Yii::$app->admin->id)
                     ],
                     ['label'=>'Презентации',
                         'items'=>[
-                            ['label'=>'Презентации', 'url'=>['/presentation']],
-                            ['label'=>'Комментарии', 'url'=>['/presentations/comment']],
-                            ['label'=>'Ответы', 'url'=>['/presentations/answer']],
+                            [
+                                'label'=>'Презентации',
+                                'url'=>['/presentation'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentation')
+                            ],
+                            [
+                                'label'=>'Комментарии',
+                                'url'=>['/presentations/comment'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentations/comment')
+                            ],
+                            [
+                                'label'=>'Ответы',
+                                'url'=>['/presentations/answer'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentations/answer')
+                            ],
                         ],
+                        'visible' => Admin::showPresentation(Yii::$app->admin->id)
                     ],
                     ['label'=>'Фабрики',
                         'items'=>[
-                            ['label'=>'Фабрики', 'url'=>['/factory']],
-                            ['label'=>'Акции', 'url'=>['/factories/stock']],
-                            ['label'=>'Продукты', 'url'=>['/factories/product']],
-                            ['label'=>'Ответы', 'url'=>['/factories/stocks/answer']],
+                            [
+                                'label'=>'Фабрики',
+                                'url'=>['/factory'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factory')
+                            ],
+                            [
+                                'label'=>'Акции',
+                                'url'=>['/factories/stock'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/stock')
+                            ],
+                            [
+                                'label'=>'Продукты',
+                                'url'=>['/factories/product'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/product')
+                            ],
+                            [
+                                'label'=>'Ответы',
+                                'url'=>['/factories/stocks/answer'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/stocks/answer')
+                            ],
                         ],
+                        'visible' => Admin::showFactory(Yii::$app->admin->id)
                     ],
 
                     ['label'=>'Семинары',
                         'items'=>[
-                            ['label'=>'Семинары', 'url'=>['/seminar']],
-                            ['label'=>'Записи', 'url'=>['/seminars/sign']],
-                            ['label'=>'Комментарии', 'url'=>['/seminars/comment']],
+                            [
+                                'label'=>'Семинары',
+                                'url'=>['/seminar'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminar')
+                            ],
+                            [
+                                'label'=>'Записи',
+                                'url'=>['/seminars/sign'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminars/sign')
+                            ],
+                            [
+                                'label'=>'Комментарии',
+                                'url'=>['/seminars/comment'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminars/comment')
+                            ],
                         ],
+                        'visible' => Admin::showSeminar(Yii::$app->admin->id)
                     ],
 
                     ['label'=>'Подарки',
                         'items'=>[
-                            ['label'=>'Подарки', 'url'=>['/present']],
-                            ['label'=>'Поставщики', 'url'=>['/presents/vendor']],
+                            [
+                                'label'=>'Подарки',
+                                'url'=>['/present'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'present')
+                            ],
+                            [
+                                'label'=>'Поставщики',
+                                'url'=>['/presents/vendor'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presents/vendor')
+                            ],
                         ],
+                        'visible' => Admin::showPresent(Yii::$app->admin->id)
                     ],
                     ['label' => 'Выход', 'url' => ['/auth/logout']],
                 ],

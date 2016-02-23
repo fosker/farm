@@ -49,7 +49,7 @@ class CommentController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'seminars'=>ArrayHelper::map(Seminar::find()->asArray()->all(),'id','title'),
-            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'name','name'),
+            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'id','name'),
         ]);
     }
 

@@ -116,7 +116,7 @@ class AdminController extends Controller
      */
     public function actionRights($id)
     {
-
+        $model = $this->findModel($id);
         $rights = HasRight::find()->where(['admin_id'=>$id])->indexBy('id')->all();
 
         if (Model::loadMultiple($rights, Yii::$app->request->post()) && Model::validateMultiple($rights)) {
@@ -127,6 +127,7 @@ class AdminController extends Controller
         } else {
             return $this->render('rights', [
                 'rights' => $rights,
+                'model' => $model
             ]);
         }
     }

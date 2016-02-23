@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 
 $this->title = 'Подарки';
 ?>
@@ -14,7 +15,10 @@ $this->title = 'Подарки';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'id',
+            [
+                'attribute' => 'id',
+                'contentOptions'=>['style'=>'width: 150px;'],
+            ],
             [
                 'label' => 'Логин',
                 'attribute'=>'user.login',
@@ -25,13 +29,13 @@ $this->title = 'Подарки';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'user.login',
+                    'attribute'=>'user.id',
                     'options' => [
                         'placeholder' => 'Выберите логин ...',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '300px'
+                        'width' => '250px'
                     ],
                 ])
             ],
@@ -51,13 +55,24 @@ $this->title = 'Подарки';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '300px'
+                        'width' => '250px'
                     ],
                 ])
             ],
             'count',
             'promo',
-            'date_buy:datetime',
+            [
+                'attribute' => 'date_buy',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_buy',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['date', 'php:Y-m-d'],
+                'contentOptions'=>['style'=>'width: 250px;'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {use} {delete}',

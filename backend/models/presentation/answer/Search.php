@@ -16,13 +16,14 @@ class Search extends Answer
     public function rules()
     {
         return [
-            [['view.presentation.id'], 'integer'],
-            [['view.presentation.title', 'view.user.login'], 'string'],
+            [['view.presentation.id', 'view.user.id'], 'integer'],
+            [['view.presentation.title', 'view.user.login', 'view.added'], 'string'],
         ];
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['view.presentation.title','view.user.login', 'view.presentation.id', 'view.added']);
+        return array_merge(parent::attributes(), ['view.presentation.title', 'view.user.login', 'view.user.id',
+            'view.presentation.id', 'view.added']);
     }
 
     public function scenarios()
@@ -73,7 +74,8 @@ class Search extends Answer
             Presentation::tableName().'.id' => $this->getAttribute('view.presentation.id'),
         ]);
 
-        $query->andFilterWhere(['like', User::tableName().'.login', $this->getAttribute('view.user.login')])
+        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('view.user.id')])
+            ->andFilterWhere(['like', View::tableName().'.added', $this->getAttribute('view.added')])
             ->andFilterWhere(['like', Presentation::tableName().'.title', $this->getAttribute('view.presentation.title')]);
 
         return $dataProvider;

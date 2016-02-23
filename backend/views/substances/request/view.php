@@ -31,8 +31,16 @@ $this->title = $model->user->name." искал ".$model->substance->cyrillic;
             ],
             'user.education.name',
             'user.position.name',
-            'substance.cyrillic',
-            'substance.name',
+            [
+                'attribute' => 'substance.cyrillic',
+                'value'=>Html::a($model->substance->cyrillic,['/substance/view','id'=>$model->substance->id]),
+                'format' => 'html'
+            ],
+            [
+                'attribute' => 'substance.name',
+                'value'=>Html::a($model->substance->name,['/substance/view','id'=>$model->substance->id]),
+                'format' => 'html'
+            ],
             'date_request:datetime',
         ],
     ]) ?>

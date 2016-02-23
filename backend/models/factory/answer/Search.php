@@ -20,7 +20,7 @@ class Search extends Reply
     public function rules()
     {
         return [
-            [['id', 'stock_id'], 'integer'],
+            [['id', 'stock_id', 'user.id'], 'integer'],
             [['stock.title', 'user.login'], 'string'],
         ];
     }
@@ -35,7 +35,7 @@ class Search extends Reply
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['stock.title', 'user.login']);
+        return array_merge(parent::attributes(), ['stock.title', 'user.login', 'user.id']);
     }
 
     /**
@@ -83,7 +83,7 @@ class Search extends Reply
             'stock_id' => $this->stock_id,
         ]);
 
-        $query->andFilterWhere(['like', User::tableName().'.login', $this->getAttribute('user.login')])
+        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
             ->andFilterWhere(['like', Stock::tableName().'.title', $this->getAttribute('stock.title')]);
 
         return $dataProvider;

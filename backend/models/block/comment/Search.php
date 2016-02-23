@@ -14,13 +14,13 @@ class Search extends Comment
     public function rules()
     {
         return [
-            [['id', 'block_id'], 'integer'],
-            [['comment', 'user.name'], 'string'],
+            [['id', 'block_id', 'user.id'], 'integer'],
+            [['comment', 'date_add', 'user.name'], 'string'],
         ];
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['user.name']);
+        return array_merge(parent::attributes(), ['user.id', 'user.name']);
     }
 
     public function scenarios()
@@ -58,7 +58,8 @@ class Search extends Comment
             'block_id' => $this->block_id,
         ]);
 
-        $query->andFilterWhere(['like', 'user.name', $this->getAttribute('user.name')])
+        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', Comment::tableName().'.date_add', $this->date_add])
             ->andFilterWhere(['like', Comment::tableName().'.comment', $this->comment]);
 
         return $dataProvider;

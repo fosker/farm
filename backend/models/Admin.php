@@ -283,4 +283,121 @@ class Admin extends ActiveRecord  implements IdentityInterface
         else return false;
     }
 
+    public static function showLists($id)
+    {
+        $list = ['city', 'firm', 'pharmacy', 'education', 'position', 'banner', 'substance', 'request'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showBlock($id)
+    {
+        $list = ['block', 'blocks/comment', 'blocks/mark'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showUser($id)
+    {
+        $list = ['user', 'user/push', 'users/present'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showSurvey($id)
+    {
+        $list = ['survey', 'surveys/answer'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showPresentation($id)
+    {
+        $list = ['presentation', 'presentations/comment', 'presentations/answer'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showFactory($id)
+    {
+        $list = ['factory', 'factories/stock', 'factories/product', 'factories/stocks/answer'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showSeminar($id)
+    {
+        $list = ['seminar', 'seminars/sign', 'seminars/comment'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showPresent($id)
+    {
+        $list = ['present', 'presents/vendor'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
+    public static function showMain($id)
+    {
+        $list = ['main', 'admin'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            } else {
+                return false;
+            }
+        }
+    }
+
 }

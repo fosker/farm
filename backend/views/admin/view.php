@@ -33,7 +33,7 @@ $this->title = $model->name;
     ]) ?>
 
     <table class="table">
-        <tr><th>право</th><th>значение</th></tr>
+        <tr><th>Право</th><th>Значение</th></tr>
 
         <?php foreach($model->rights as $right) : ?>
             <tr><td><?=$right->right->name?></td><td><?= $right->value ? 'да' : 'нет'; ?></td></tr>

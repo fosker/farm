@@ -17,7 +17,6 @@ $this->title = 'Продукты';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
             [
                 'attribute' => 'id',
                 'contentOptions'=>['style'=>'width: 100px;'],

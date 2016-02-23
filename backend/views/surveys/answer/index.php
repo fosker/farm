@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use kartik\date\DatePicker;
 use kartik\widgets\Select2;
 
 $this->title = 'Ответы на анкеты';
@@ -18,7 +19,8 @@ $this->title = 'Ответы на анкеты';
             [
                 'label' => 'ID Анкеты',
                 'attribute'=>'view.survey.id',
-                'value'=>'view.survey.id'
+                'value'=>'view.survey.id',
+                'contentOptions'=>['style'=>'width: 150px;'],
             ],
             [
                 'attribute'=>'view.survey.title',
@@ -48,9 +50,9 @@ $this->title = 'Ответы на анкеты';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'view.user.login',
+                    'attribute'=>'view.user.id',
                     'options' => [
-                        'placeholder' => 'Выберите логин пользователя ...',
+                        'placeholder' => 'Выберите пользователя ...',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
@@ -59,7 +61,18 @@ $this->title = 'Ответы на анкеты';
                 ]),
                 'format'=>'html',
             ],
-            'view.added:datetime',
+            [
+                'attribute' => 'view.added',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'view.added',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['date', 'php:Y-m-d'],
+                'contentOptions'=>['style'=>'width: 150px;'],
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {delete}',

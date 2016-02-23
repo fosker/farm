@@ -56,7 +56,7 @@ class MarkController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'blocks'=>ArrayHelper::map(Block::find()->asArray()->all(),'id','title'),
-            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'name','name'),
+            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'id','name'),
         ]);
     }
 

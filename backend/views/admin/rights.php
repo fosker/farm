@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-$this->title = 'Редактивроание прав: ' . ' ' . $model->user->name;
+$this->title = 'Редактирование прав: ' . ' ' . $model->name;
 
 $buttons = [1 => 'да', 0 => 'нет'];
 
