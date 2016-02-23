@@ -114,7 +114,14 @@ class AnswerController extends Controller
         $sheet = $xls->getActiveSheet();
         $sheet->setTitle('Результаты по анкете');
         $sheet->setCellValue("A1",'Результаты по анкете "'.$answers[0]->question->survey->title.'"');
+        $sheet->setCellValue("C1",'Регион/город');
+        $sheet->setCellValue("D1",'Дата/время');
+        $sheet->setCellValue("E1",'Образование');
         $sheet->getColumnDimension('A')->setWidth(30);
+        $sheet->getColumnDimension('B')->setWidth(30);
+        $sheet->getColumnDimension('C')->setWidth(30);
+        $sheet->getColumnDimension('D')->setWidth(30);
+        $sheet->getColumnDimension('E')->setWidth(30);
         $sheet->mergeCells('A1:B1');
         $sheet->getStyle('A1')->getAlignment()->setHorizontal(
             PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
@@ -128,6 +135,18 @@ class AnswerController extends Controller
                 $sheet->setCellValueByColumnAndRow(
                     0,
                     $i, $answer->view->user->name
+                );
+                $sheet->setCellValueByColumnAndRow(
+                    2,
+                    $i, $answer->view->user->pharmacy->city->region->name . '/' . $answer->view->user->pharmacy->city->name
+                );
+                $sheet->setCellValueByColumnAndRow(
+                    3,
+                    $i, $answer->view->added
+                );
+                $sheet->setCellValueByColumnAndRow(
+                    4,
+                    $i, $answer->view->user->education->name
                 );
                 $i++;
             }

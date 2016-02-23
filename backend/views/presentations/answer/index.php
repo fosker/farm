@@ -19,19 +19,19 @@ $this->title = 'Ответы на презентации';
         'columns' => [
             [
                 'label' => 'ID Презентации',
-                'attribute'=>'view.presentation.id',
-                'value'=>'view.presentation.id',
+                'attribute'=>'presentation.id',
+                'value'=>'presentation.id',
                 'contentOptions'=>['style'=>'width: 150px;'],
             ],
             [
-                'attribute'=>'view.presentation.title',
+                'attribute'=>'presentation.title',
                 'value'=>function($model) {
-                    return Html::a($model->view->presentation->title, ['/presentation/view', 'id'=>$model->view->presentation->id]);
+                    return Html::a($model->presentation->title, ['/presentation/view', 'id'=>$model->presentation->id]);
                 },
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $titles,
-                    'attribute'=>'view.presentation.title',
+                    'attribute'=>'presentation.title',
                     'options' => [
                         'placeholder' => 'Выберите презентацию ...',
                     ],
@@ -44,14 +44,14 @@ $this->title = 'Ответы на презентации';
             ],
             [
                 'label' => 'Логин пользователя',
-                'attribute'=>'view.user.login',
+                'attribute'=>'user.login',
                 'value'=>function($model) {
-                    return Html::a($model->view->user->login, ['/user/view', 'id'=>$model->view->user->id]);
+                    return Html::a($model->user->login, ['/user/view', 'id'=>$model->user->id]);
                 },
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'view.user.id',
+                    'attribute'=>'user.id',
                     'options' => [
                         'placeholder' => 'Выберите пользователя ...',
                     ],
@@ -63,10 +63,10 @@ $this->title = 'Ответы на презентации';
                 'format'=>'html',
             ],
             [
-                'attribute' => 'view.added',
+                'attribute' => 'added',
                 'filter' => DatePicker::widget([
                     'model' => $searchModel,
-                    'attribute' => 'view.added',
+                    'attribute' => 'added',
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                     ]
@@ -79,12 +79,12 @@ $this->title = 'Ответы на презентации';
                 'template'=>'{view} {delete}',
                 'buttons'=> [
                     'view'=>function ($url, $model, $key) {
-                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i> ', ['view', 'user_id'=>$model->view->user->id, 'presentation_id'=>$model->view->presentation->id], [
+                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i> ', ['view', 'user_id'=>$model->user->id, 'presentation_id'=>$model->presentation->id], [
                             'title'=>'Просмотреть',
                         ]);
                     },
                     'delete'=>function ($url, $model, $key) {
-                        return Html::a('<i class="glyphicon glyphicon-trash"></i> ', ['delete', 'user_id'=>$model->view->user->id, 'presentation_id'=>$model->view->presentation->id], [
+                        return Html::a('<i class="glyphicon glyphicon-trash"></i> ', ['delete', 'user_id'=>$model->user->id, 'presentation_id'=>$model->presentation->id], [
                             'title'=>'Удалить',
                             'data-pjax'=>0,
                             'data-method'=>'post',

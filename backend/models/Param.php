@@ -49,6 +49,6 @@ class Param extends \yii\db\ActiveRecord
      * @return string
      */
     public static function getParam($name) {
-        return static::FindOne(['name'=>$name])->value;
+        return static::findOne(['name'=>$name])->value;
     }
 }

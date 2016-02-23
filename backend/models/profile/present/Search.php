@@ -15,7 +15,7 @@ class Search extends Present
     public function rules()
     {
         return [
-            [['count', 'user.id'], 'integer'],
+            [['id','count', 'user.id'], 'integer'],
             [['promo', 'item.title', 'user.login', 'date_buy'], 'string'],
         ];
     }
@@ -59,7 +59,7 @@ class Search extends Present
         }
 
         $query->andFilterWhere([
-            'id' => $this->id,
+            Present::tableName().'.id' => $this->id,
             'count' => $this->count,
         ]);
 

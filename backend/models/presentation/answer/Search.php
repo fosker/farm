@@ -7,23 +7,22 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\Presentation;
 use common\models\User;
-use common\models\presentation\Answer;
 use common\models\presentation\View;
 
-class Search extends Answer
+class Search extends View
 {
 
     public function rules()
     {
         return [
-            [['view.presentation.id', 'view.user.id'], 'integer'],
-            [['view.presentation.title', 'view.user.login', 'view.added'], 'string'],
+            [['presentation.id', 'user.id'], 'integer'],
+            [['presentation.title', 'user.login', 'added'], 'string'],
         ];
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(), ['view.presentation.title', 'view.user.login', 'view.user.id',
-            'view.presentation.id', 'view.added']);
+        return array_merge(parent::attributes(), ['presentation.title', 'user.login', 'user.id',
+            'presentation.id']);
     }
 
     public function scenarios()
@@ -32,34 +31,33 @@ class Search extends Answer
     }
     public function search($params)
     {
-        $query = Answer::find()->joinWith(['view','view.presentation', 'view.user']);
-        $query->groupBy('presentation_views.presentation_id, presentation_views.user_id');
+        $query = View::find()->joinWith(['presentation', 'user']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'view.added' => SORT_DESC
+                    'added' => SORT_DESC
                 ],
             ],
         ]);
 
-        $dataProvider->sort->attributes['view.presentation.title'] = [
+        $dataProvider->sort->attributes['presentation.title'] = [
             'asc' => [Presentation::tableName().'.title' => SORT_ASC],
             'desc' => [Presentation::tableName().'.title' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['view.presentation.id'] = [
+        $dataProvider->sort->attributes['presentation.id'] = [
             'asc' => [Presentation::tableName().'.id' => SORT_ASC],
             'desc' => [Presentation::tableName().'.id' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['view.user.login'] = [
+        $dataProvider->sort->attributes['user.login'] = [
             'asc' => [User::tableName().'.login' => SORT_ASC],
             'desc' => [User::tableName().'.login' => SORT_DESC],
         ];
 
-        $dataProvider->sort->attributes['view.added'] = [
+        $dataProvider->sort->attributes['added'] = [
             'asc' => [View::tableName().'.added' => SORT_ASC],
             'desc' => [View::tableName().'.added' => SORT_DESC],
         ];
@@ -71,12 +69,12 @@ class Search extends Answer
         }
 
         $query->andFilterWhere([
-            Presentation::tableName().'.id' => $this->getAttribute('view.presentation.id'),
+            Presentation::tableName().'.id' => $this->getAttribute('presentation.id'),
         ]);
 
-        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('view.user.id')])
-            ->andFilterWhere(['like', View::tableName().'.added', $this->getAttribute('view.added')])
-            ->andFilterWhere(['like', Presentation::tableName().'.title', $this->getAttribute('view.presentation.title')]);
+        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', View::tableName().'.added', $this->added])
+            ->andFilterWhere(['like', Presentation::tableName().'.title', $this->getAttribute('presentation.title')]);
 
         return $dataProvider;
     }

@@ -285,7 +285,7 @@ class Admin extends ActiveRecord  implements IdentityInterface
 
     public static function showLists($id)
     {
-        $list = ['city', 'firm', 'pharmacy', 'education', 'position', 'banner', 'substance', 'request'];
+        $list = ['city', 'firm', 'pharmacy', 'education', 'position', 'banner', 'substance', 'substances/request'];
         foreach($list as $item) {
             if (Right::HasAdmin($id, $item)) {
                 return true;

@@ -25,7 +25,7 @@ $this->title = 'Комментарии';
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $users,
-                    'attribute'=>'user.name',
+                    'attribute'=>'user.id',
                     'options' => [
                         'placeholder' => 'Выберите пользователя ...',
                     ],

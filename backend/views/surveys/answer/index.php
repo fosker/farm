@@ -18,72 +18,72 @@ $this->title = 'Ответы на анкеты';
         'columns' => [
             [
                 'label' => 'ID Анкеты',
-                'attribute'=>'view.survey.id',
-                'value'=>'view.survey.id',
+                'attribute'=>'survey.id',
+                'value'=>'survey.id',
                 'contentOptions'=>['style'=>'width: 150px;'],
             ],
             [
-                'attribute'=>'view.survey.title',
+                'attribute'=>'survey.title',
                 'value'=>function($model) {
-                    return Html::a($model->view->survey->title, ['/survey/view', 'id'=>$model->view->survey->id]);
+                    return Html::a($model->survey->title, ['/survey/view', 'id'=>$model->survey->id]);
                 },
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $surveys,
-                    'attribute'=>'view.survey.title',
+                    'attribute'=>'survey.title',
                     'options' => [
                         'placeholder' => 'Выберите анкету ...',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '300px'
+                        'width' => '250px'
                     ],
                 ]),
                 'format'=>'html',
             ],
             [
                 'label' => 'Логин пользователя',
-                'attribute'=>'view.user.login',
+                'attribute'=>'user.login',
                 'value'=>function($model) {
-                    return Html::a($model->view->user->login, ['/user/view', 'id'=>$model->view->user->id]);
+                    return Html::a($model->user->login, ['/user/view', 'id'=>$model->user->id]);
                 },
                 'filter'=>Select2::widget([
                     'model' => $searchModel,
                     'data' => $logins,
-                    'attribute'=>'view.user.id',
+                    'attribute'=>'user.id',
                     'options' => [
                         'placeholder' => 'Выберите пользователя ...',
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '300px'
+                        'width' => '250px'
                     ],
                 ]),
                 'format'=>'html',
             ],
             [
-                'attribute' => 'view.added',
+                'attribute' => 'added',
                 'filter' => DatePicker::widget([
                     'model' => $searchModel,
-                    'attribute' => 'view.added',
+                    'attribute' => 'added',
                     'pluginOptions' => [
                         'format' => 'yyyy-mm-dd',
                     ]
                 ]),
                 'format' => ['date', 'php:Y-m-d'],
-                'contentOptions'=>['style'=>'width: 150px;'],
+                'contentOptions'=>['style'=>'width: 250px;'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {delete}',
                 'buttons'=> [
                     'view'=>function ($url, $model, $key) {
-                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i> ', ['view', 'user_id'=>$model->view->user->id, 'survey_id'=>$model->view->survey->id], [
+                        return Html::a('<i class="glyphicon glyphicon-eye-open"></i> ', ['view', 'user_id'=>$model->user->id, 'survey_id'=>$model->survey->id], [
                             'title'=>'Просмотреть',
                         ]);
                     },
                     'delete'=>function ($url, $model, $key) {
-                        return Html::a('<i class="glyphicon glyphicon-trash"></i> ', ['delete', 'user_id'=>$model->view->user->id, 'survey_id'=>$model->view->survey->id], [
+                        return Html::a('<i class="glyphicon glyphicon-trash"></i> ', ['delete', 'user_id'=>$model->user->id, 'survey_id'=>$model->survey->id], [
                             'title'=>'Удалить',
                             'data-pjax'=>0,
                             'data-method'=>'post',

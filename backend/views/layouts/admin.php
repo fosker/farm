@@ -98,7 +98,7 @@ AppAsset::register($this);
                             [
                                 'label' => 'Запросы',
                                 'url' => ['/substances/request'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'request')
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'substances/request')
                             ],
                         ],
                         'visible' => Admin::showLists(Yii::$app->admin->id)
