@@ -2,10 +2,6 @@
 
 use yii\helpers\Html;
 
-
-/* @var $this yii\web\View */
-/* @var $model common\models\Seminar */
-
 $this->title = 'Добавить семинар';
 ?>
 <div class="seminar-create">

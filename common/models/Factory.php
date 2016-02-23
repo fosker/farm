@@ -31,9 +31,16 @@ class Factory extends ActiveRecord
     public function rules()
     {
         return [
-            ['title', 'required'],
-            [['description', 'title'], 'string']
+            [['title', 'description'], 'required'],
+            [['imageFile','logoFile'], 'required', 'on' => 'create'],
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'description', 'imageFile','logoFile'];
+        return $scenarios;
     }
 
     public function attributeLabels()

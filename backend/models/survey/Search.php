@@ -37,6 +37,12 @@ class Search extends Survey
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'status' => SORT_ASC,
+                    'id' => SORT_DESC
+                ],
+            ],
         ]);
 
         $this->load($params);
@@ -51,15 +57,15 @@ class Search extends Survey
             'points' => $this->points,
         ]);
 
-        $cities = City::find()->select('survey_id')->andFilterWhere(['in', 'city_id', $this->getAttribute('city_id')]);
-        $firms = Pharmacy::find()->select('survey_id')->andFilterWhere(['in', 'firm_id', $this->getAttribute('firm_id')])
-            ->joinWith('pharmacy');
+        if($this->getAttribute('city_id'))
+            $cities = City::find()->select('survey_id')->where(['in', 'city_id', $this->getAttribute('city_id')]);
+        if($this->getAttribute('firm_id'))
+            $firms = Pharmacy::find()->select('survey_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
+                ->joinWith('pharmacy');
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['in', Survey::tableName().'.id', $cities])
             ->andFilterWhere(['in', Survey::tableName().'.id', $firms]);
-
-        $query->groupBy(Survey::tableName().'.id');
 
         return $dataProvider;
     }

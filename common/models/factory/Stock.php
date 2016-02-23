@@ -43,8 +43,8 @@ class Stock extends ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'factory_id'], 'required'],
-            [['description', 'title'], 'string']
+            [['title', 'description', 'factory_id'], 'required'],
+            ['imageFile', 'required', 'on' => 'create'],
         ];
     }
 
@@ -62,6 +62,13 @@ class Stock extends ActiveRecord
             'imageFile' => 'Изображение',
             'status' => 'Статус'
         ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['title', 'description', 'factory_id', 'imageFile'];
+        return $scenarios;
     }
 
     public function fields()
@@ -175,25 +182,54 @@ class Stock extends ActiveRecord
         return $string;
     }
 
-    public function afterSave($insert, $changedAttributes)
+    public function loadCities($cities)
     {
-        if (!$insert) {
-            City::deleteAll(['stock_id' => $this->id]);
-            Pharmacy::deleteAll(['stock_id' => $this->id]);
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->stock_id = $this->id;
+                $city->save();
+            }
         }
-        for ($i = 0; $i < count(Yii::$app->request->post('cities')); $i++) {
-            $city = new City();
-            $city->city_id = Yii::$app->request->post('cities')[$i];
-            $city->stock_id = $this->id;
-            $city->save();
+    }
+
+    public function loadPharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->stock_id = $this->id;
+                $pharmacy->save();
+            }
         }
-        for ($i = 0; $i < count(Yii::$app->request->post('pharmacies')); $i++) {
-            $pharmacies = new Pharmacy();
-            $pharmacies->pharmacy_id = Yii::$app->request->post('pharmacies')[$i];
-            $pharmacies->stock_id = $this->id;
-            $pharmacies->save();
+    }
+
+    public function updateCities($cities)
+    {
+        City::deleteAll(['stock_id' => $this->id]);
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->stock_id = $this->id;
+                $city->save();
+            }
         }
-        parent::afterSave($insert, $changedAttributes);
+    }
+
+    public function updatePharmacies($pharmacies)
+    {
+        Pharmacy::deleteAll(['stock_id' => $this->id]);
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->stock_id = $this->id;
+                $pharmacy->save();
+            }
+        }
     }
 
     public function beforeSave($insert)
@@ -210,6 +246,16 @@ class Stock extends ActiveRecord
         City::deleteAll(['stock_id'=>$this->id]);
         Pharmacy::deleteAll(['stock_id'=>$this->id]);
         parent::afterDelete();
+    }
+
+    public function approve() {
+        $this->status = static::STATUS_ACTIVE;
+        $this->save(false);
+    }
+
+    public function hide() {
+        $this->status = static::STATUS_HIDDEN;
+        $this->save(false);
     }
 
     public function loadImage()

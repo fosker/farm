@@ -14,20 +14,24 @@ class CheckWidget extends InputWidget
     public $parent_title;
     public $child_title;
 
-    //'region_id', 'firm_id'
     public $relation;
 
     public $update = [];
 
     private $values = [];
 
+    public $height;
+
     public function init()
     {
         parent::init();
+        if (!isset($this->height)) {
+            $this->height = '200px';
+        }
         if (isset($this->update)) {
-            foreach($this->update as $cities) {
-                foreach($cities as $city) {
-                    $this->values[] = $city;
+            foreach($this->update as $items) {
+                foreach($items as $item) {
+                    $this->values[] = $item;
                 }
             }
         }
@@ -41,19 +45,15 @@ class CheckWidget extends InputWidget
         'label' => 'Все',
         ]);
 
+
+        echo '<div>';
         foreach($this->parent as $parent) {
-            echo "<li class='list-group-item'><ul class = 'list-group'>" . Html::checkbox($this->parent_title.'[]', false, [
+            $checked = in_array($parent['id'], $this->values);
+            echo "<li class='list-group-item'><ul class = 'list-group'>" . Html::checkbox($this->parent_title.'[]', $checked, [
                     'value' => $parent['id'],
                     'label' => $parent['name'],
-                    'onchange'=>"js:
-                    for (i = 0; i < this.parentElement.nextElementSibling.children.length; i++) {
-                        if (this.checked) {
-                            this.parentElement.nextElementSibling.children[i].children[0].children[0].checked = true;
-                        } else
-                        this.parentElement.nextElementSibling.children[i].children[0].children[0].checked = false;
-                    }"
                 ]);
-            echo "<div style='height: 200px; overflow: auto'>";
+            echo "<div style='height: $this->height; overflow: auto'>";
 
             foreach($this->child as $child) {
                 if($child[$this->relation] == $parent['id']) {
@@ -63,15 +63,12 @@ class CheckWidget extends InputWidget
                             , [
                             'value' => $child['id'],
                             'label' => $child['name'],
-                            'onchange'=>"js:
-                            if (this.checked) {
-                                this.parentNode.parentNode.parentNode.previousElementSibling.children[0].checked = true
-                            }"
                         ]) . '</li>';
                 }
             };
             echo '</div></ul></li>';
         }
+        echo '</div>';
 
         echo '</ul>';
         echo '</div>';

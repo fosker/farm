@@ -71,6 +71,7 @@ class PresentController extends Controller
     public function actionCreate()
     {
         $model = new Item();
+        $model->scenario = 'create';
         $item_cities = new Item_City();
         $item_pharmacies = new Item_Pharmacy();
 
@@ -78,6 +79,8 @@ class PresentController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
             if ($model->save()) {
+                $model->loadCities(Yii::$app->request->post('cities'));
+                $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -107,6 +110,8 @@ class PresentController extends Controller
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
             if ($model->save()) {
+                $model->updateCities(Yii::$app->request->post('cities'));
+                $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {

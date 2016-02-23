@@ -14,8 +14,11 @@ use yii\web\UploadedFile;
 use common\models\Survey;
 use common\models\survey\Question;
 use common\models\survey\Option;
-use common\models\agency\Firm;
 use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\survey\City as Survey_City;
+use common\models\survey\Pharmacy as Survey_Pharmacy;
+use common\models\agency\Firm;
 use backend\models\survey\Search;
 use backend\base\Model;
 
@@ -71,6 +74,11 @@ class SurveyController extends Controller
     public function actionCreate()
     {
         $model = new Survey();
+        $model->scenario = 'create';
+
+        $survey_cities = new Survey_City();
+        $survey_pharmacies = new Survey_Pharmacy();
+
         $questions = [new Question];
         $options = [[new Option]];
 
@@ -94,6 +102,8 @@ class SurveyController extends Controller
 
             if ($valid) {
                 if ($this->saveSurvey($model,$questions,$options)) {
+                    $model->loadCities(Yii::$app->request->post('cities'));
+                    $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
                     return $this->redirect(['view', 'id'=>$model->id]);
                 }
             }
@@ -104,6 +114,10 @@ class SurveyController extends Controller
             'model' => $model,
             'questions' => (empty($questions)) ? [new Question] : $questions,
             'options' => (empty($options)) ? [new Option] : $options,
+            'cities'=>City::find()->asArray()->all(),
+            'pharmacies'=>Pharmacy::find()->asArray()->all(),
+            'survey_cities' => $survey_cities,
+            'survey_pharmacies' => $survey_pharmacies
         ]);
     }
 
@@ -112,6 +126,12 @@ class SurveyController extends Controller
 
         // retrieve existing Deposit data
         $model = $this->findModel($id);
+
+        $survey_cities = new Survey_City();
+        $survey_pharmacies = new Survey_Pharmacy();
+
+        $old_cities = Survey_City::find()->select('city_id')->where(['survey_id' => $id])->asArray()->all();
+        $old_pharmacies = Survey_Pharmacy::find()->select('pharmacy_id')->where(['survey_id' => $id])->asArray()->all();
 
         // retrieve existing Question data
         $oldQuestionIds = Question::find()->select('id')
@@ -166,6 +186,8 @@ class SurveyController extends Controller
             // save deposit data
             if ($valid) {
                 if ($this->saveSurvey($model,$questions,$options)) {
+                    $model->updateCities(Yii::$app->request->post('cities'));
+                    $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
                     return $this->redirect(['view', 'id'=>$model->id]);
                 }
             }
@@ -175,6 +197,12 @@ class SurveyController extends Controller
             'model' => $model,
             'questions' => (empty($questions)) ? [new Question] : $questions,
             'options' => (empty($options)) ? [new Option] : $options,
+            'cities'=>City::find()->asArray()->all(),
+            'pharmacies'=>Pharmacy::find()->asArray()->all(),
+            'survey_cities' => $survey_cities,
+            'survey_pharmacies' => $survey_pharmacies,
+            'old_cities' => $old_cities,
+            'old_pharmacies' => $old_pharmacies
         ]);
 
     }

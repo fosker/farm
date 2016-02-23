@@ -34,9 +34,17 @@ class Slide extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['order_index'], 'required'],
-            [['description'], 'string']
+            [['description', 'order_index'], 'required'],
+            [['order_index'], 'integer'],
+            ['imageFile', 'required', 'on' => 'create'],
        ];
+    }
+
+    public function scenarios()
+    {
+        $scenarios = parent::scenarios();
+        $scenarios['create'] = ['description', 'order_index', 'imageFile'];
+        return $scenarios;
     }
 
     public function attributeLabels()

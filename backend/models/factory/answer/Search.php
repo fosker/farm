@@ -6,6 +6,8 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\factory\Reply;
+use common\models\factory\Stock;
+use common\models\User;
 
 /**
  * Search represents the model behind the search form about `common\models\factory\Reply`.
@@ -18,8 +20,8 @@ class Search extends Reply
     public function rules()
     {
         return [
-            [['id', 'stock_id', 'user_id'], 'integer'],
-            [['photo'], 'safe'],
+            [['id', 'stock_id'], 'integer'],
+            [['stock.title', 'user.login'], 'string'],
         ];
     }
 
@@ -32,6 +34,10 @@ class Search extends Reply
         return Model::scenarios();
     }
 
+    public function attributes() {
+        return array_merge(parent::attributes(), ['stock.title', 'user.login']);
+    }
+
     /**
      * Creates data provider instance with search query applied
      *
@@ -41,13 +47,27 @@ class Search extends Reply
      */
     public function search($params)
     {
-        $query = Reply::find();
+        $query = Reply::find()->joinWith(['user','stock']);;
 
-        // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'stock_id'=>SORT_DESC,
+                ],
+            ],
         ]);
+
+        $dataProvider->sort->attributes['user.login'] = [
+            'asc' => [User::tableName().'.login' => SORT_ASC],
+            'desc' => [User::tableName().'.login' => SORT_DESC],
+        ];
+
+        $dataProvider->sort->attributes['stock.title'] = [
+            'asc' => [Stock::tableName().'.title' => SORT_ASC],
+            'desc' => [Stock::tableName().'.title' => SORT_DESC],
+        ];
 
         $this->load($params);
 
@@ -61,10 +81,10 @@ class Search extends Reply
         $query->andFilterWhere([
             'id' => $this->id,
             'stock_id' => $this->stock_id,
-            'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'photo', $this->photo]);
+        $query->andFilterWhere(['like', User::tableName().'.login', $this->getAttribute('user.login')])
+            ->andFilterWhere(['like', Stock::tableName().'.title', $this->getAttribute('stock.title')]);
 
         return $dataProvider;
     }

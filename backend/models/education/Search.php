@@ -28,6 +28,11 @@ class Search extends Education
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'id' => SORT_DESC
+                ],
+            ],
         ]);
 
         $this->load($params);

@@ -37,6 +37,12 @@ class Search extends Presentation
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'status' => SORT_ASC,
+                    'id' => SORT_DESC
+                ],
+            ],
         ]);
 
         $this->load($params);
@@ -50,15 +56,15 @@ class Search extends Presentation
             'status' => $this->status,
         ]);
 
-        $cities = City::find()->select('presentation_id')->andFilterWhere(['in', 'city_id', $this->getAttribute('city_id')]);
-        $firms = Pharmacy::find()->select('presentation_id')->andFilterWhere(['in', 'firm_id', $this->getAttribute('firm_id')])
-            ->joinWith('pharmacy');
+        if($this->getAttribute('city_id'))
+            $cities = City::find()->select('presentation_id')->where(['in', 'city_id', $this->getAttribute('city_id')]);
+        if($this->getAttribute('firm_id'))
+            $firms = Pharmacy::find()->select('presentation_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
+                ->joinWith('pharmacy');
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['in', Presentation::tableName().'.id', $cities])
             ->andFilterWhere(['in', Presentation::tableName().'.id', $firms]);
-
-        $query->groupBy(Presentation::tableName().'.id');
 
         return $dataProvider;
     }

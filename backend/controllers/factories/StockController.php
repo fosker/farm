@@ -72,13 +72,17 @@ class StockController extends Controller
     public function actionCreate()
     {
         $model = new Stock();
+        $model->scenario = 'create';
         $stock_cities = new Stock_City();
         $stock_pharmacies = new Stock_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if($model->save())
+            if ($model->save()) {
+                $model->loadCities(Yii::$app->request->post('cities'));
+                $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -102,8 +106,11 @@ class StockController extends Controller
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
-            if($model->save())
+            if ($model->save()) {
+                $model->updateCities(Yii::$app->request->post('cities'));
+                $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
                 return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
@@ -133,5 +140,19 @@ class StockController extends Controller
         } else {
             throw new NotFoundHttpException('Страница не найдена');
         }
+    }
+
+    public function actionApprove($id)
+    {
+        $this->findModel($id)->approve();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionHide($id)
+    {
+        $this->findModel($id)->hide();
+
+        return $this->redirect(['index']);
     }
 }

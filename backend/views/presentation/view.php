@@ -123,9 +123,9 @@ $this->title = $model->title;
                 </td>
                 <td><?=$question->order_index?></td>
                 <td>
-                    <?=Html::a('<span class="glyphicon glyphicon-list"></span>',['view-option', 'question_id'=>$question->id],['class'=>'btn btn-warning btn-xs']);?>
+                    <?=Html::a('<span class="glyphicon glyphicon-list"></span>',['view-option', 'question_id'=>$question->id, 'presentation_id'=>$model->id],['class'=>'btn btn-warning btn-xs']);?>
 
-                    <?=Html::a('<span class="glyphicon glyphicon-pencil"></span>',['edit-question', 'id'=>$question->id],['class'=>'btn btn-primary btn-xs']);?>
+                    <?=Html::a('<span class="glyphicon glyphicon-pencil"></span>',['edit-question', 'id'=>$question->id, 'presentation_id'=>$model->id],['class'=>'btn btn-primary btn-xs']);?>
 
                     <?=Html::a('<span class="glyphicon glyphicon-trash"></span>',
                         ['delete-question', 'id'=>$question->id],

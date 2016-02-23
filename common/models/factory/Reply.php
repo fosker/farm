@@ -5,6 +5,8 @@ namespace common\models\factory;
 use Yii;
 use yii\db\ActiveRecord;
 use yii\imagine\Image;
+use common\models\User;
+use common\models\factory\Stock;
 
 /**
  * This is the model class for table "factory_stock_replies".
@@ -77,6 +79,14 @@ class Reply extends ActiveRecord
         return [
             'stock_id','image'
         ];
+    }
+
+    public function getUser() {
+        return $this->hasOne(User::className(),['id'=>'user_id']);
+    }
+
+    public function getStock() {
+        return $this->hasOne(Stock::className(),['id'=>'stock_id']);
     }
 
 }

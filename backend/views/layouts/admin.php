@@ -3,7 +3,7 @@ use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
 use backend\assets\AppAsset;
-
+use yii\widgets\Breadcrumbs;
 /**
  * @var $content string
  */
@@ -112,6 +112,15 @@ AppAsset::register($this);
         ?>
 
         <div class="container">
+        <?=
+        Breadcrumbs::widget([
+            'homeLink' => [
+                'label' => 'Презентации',
+                'url' => ['/presentation'],
+            ],
+            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+        ]);
+        ?>
             <?= $content ?>
         </div>
     </div>

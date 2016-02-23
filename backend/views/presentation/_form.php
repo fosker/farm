@@ -8,13 +8,14 @@ use backend\components\CheckWidget;
 use common\models\location\Region;
 use common\models\agency\Firm;
 use yii\bootstrap\Modal;
+$this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
 ?>
 
 <div class="presentation-form">
 
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data', 'id'=>'presentation-form']]); ?>
 
-    <?
+    <?php
     $regions = Region::find()->asArray()->all();
     $firms = Firm::find()->asArray()->all();
 

@@ -14,7 +14,8 @@ $this->title = 'Добавить баннер';
         'cities'=>$cities,
         'pharmacies'=>$pharmacies,
         'banner_cities' => $banner_cities,
-        'banner_pharmacies' => $banner_pharmacies
+        'banner_pharmacies' => $banner_pharmacies,
+        'banner_education' => $banner_education
     ]) ?>
 
 </div>
