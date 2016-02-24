@@ -287,13 +287,13 @@ class Admin extends ActiveRecord  implements IdentityInterface
     {
         $list = ['city', 'firm', 'pharmacy', 'education', 'position', 'banner', 'substance', 'substances/request'];
         foreach($list as $item) {
-            if (Right::HasAdmin($id, $item)) {
+            if (Right::HasAdmin($id, $item) == true) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showBlock($id)
@@ -303,10 +303,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showUser($id)
@@ -316,10 +316,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showSurvey($id)
@@ -329,10 +329,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showPresentation($id)
@@ -342,10 +342,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showFactory($id)
@@ -355,10 +355,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showSeminar($id)
@@ -368,10 +368,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showPresent($id)
@@ -381,10 +381,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
     public static function showMain($id)
@@ -394,10 +394,10 @@ class Admin extends ActiveRecord  implements IdentityInterface
             if (Right::HasAdmin($id, $item)) {
                 return true;
                 break;
-            } else {
-                return false;
             }
         }
+
+        return false;
     }
 
 }
