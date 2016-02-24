@@ -78,7 +78,7 @@ class UserController extends Controller
         if (($model = User::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Ñòğàíèöà íå íàéäåíà. ');
+            throw new NotFoundHttpException('ĞŸĞ¾Ğ»ÑŒĞ·Ğ¾Ğ²Ğ°Ñ‚ĞµĞ»Ñ Ğ½Ğµ ÑÑƒÑ‰ĞµÑÑ‚Ğ²ÑƒĞµÑ‚.');
         }
     }
 
@@ -95,6 +95,18 @@ class UserController extends Controller
     }
 
     public function actionPush() {
+
+        $push_tokens = ['a9fcd33d25b6334608c8e51cb8ddd2e98b5c88d64d76be4fc185f0bef7a66383'];
+
+        $message = 'HELLO FROM THE OTHER SIDE!';
+
+        Yii::$app->apns->sendMulti($push_tokens, $message, [], [
+            'sound' => 'default',
+            'badge' => 1
+        ]);
+
+        Yii::$app->gcm->sendMulti($push_tokens, $message);
+
         return $this->render('push');
     }
 }

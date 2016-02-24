@@ -16,7 +16,7 @@
         "kartik-v/yii2-widget-datepicker": "@dev",
         "kartik-v/yii2-field-range": "*",
         "fzaninotto/faker": "^1.5",
-        "qwant50/mailer": "^3.0"
+        "bryglen/yii2-apns-gcm": "1.0.3"
     },
     "require-dev": {
         "yiisoft/yii2-debug": "*",
