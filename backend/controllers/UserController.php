@@ -9,12 +9,15 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
-use common\models\profile\Position;
+use backend\models\Push;
 use common\models\agency\Firm;
 use common\models\agency\Pharmacy;
 use common\models\User;
 use common\models\location\City;
 use backend\models\profile\Search;
+use common\models\profile\Device;
+use common\models\profile\Education;
+
 
 class UserController extends Controller
 {
@@ -82,31 +85,68 @@ class UserController extends Controller
         }
     }
 
-    public function actionAccept($id) {
+    public function actionAccept($id)
+    {
         $this->findModel($id)->verified();
 
         return $this->redirect(['index']);
     }
 
-    public function actionBan($id) {
+    public function actionBan($id)
+    {
         $this->findModel($id)->ban();
 
         return $this->redirect(['index']);
     }
 
-    public function actionPush() {
 
-        $push_tokens = ['a9fcd33d25b6334608c8e51cb8ddd2e98b5c88d64d76be4fc185f0bef7a66383'];
+    public function actionPushGroups()
+    {
+        $model = new Push();
 
-        $message = 'HELLO FROM THE OTHER SIDE!';
+        if(Yii::$app->request->post()) {
+            $cities = Yii::$app->request->post('cities') ?  Yii::$app->request->post('cities') : [];
+            $educations = Yii::$app->request->post('education') ?  Yii::$app->request->post('education') : [];
+            $pharmacies = Yii::$app->request->post('pharmacies') ?  Yii::$app->request->post('pharmacies') : [];
+            $model->load(Yii::$app->request->post());
 
-        Yii::$app->apns->sendMulti($push_tokens, $message, [], [
-            'sound' => 'default',
-            'badge' => 1
-        ]);
+            $users = ArrayHelper::map(User::find()->select(User::tableName().'.id')->andWhere(['in', 'education_id', $educations])
+                ->andWhere(['in', 'pharmacy_id', $pharmacies])
+                ->join('LEFT JOIN', Pharmacy::tableName(),
+                    User::tableName().'.pharmacy_id = '.Pharmacy::tableName().'.id')
+                ->andWhere(['in', 'city_id', $cities])
+                ->asArray()
+                ->all(), 'id', 'id');
 
-        Yii::$app->gcm->sendMulti($push_tokens, $message);
+            $android_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $users])
+                ->andWhere(['not',['push_token' => null]])
+                ->andWhere(['type' => 1])
+                ->asArray()
+                ->all(), 'id', 'push_token');
 
-        return $this->render('push');
+            $ios_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $users])
+                ->andWhere(['not',['push_token' => null]])
+                ->andWhere(['type' => 2])
+                ->asArray()
+                ->all(), 'id', 'push_token');
+
+            $android_tokens = array_filter(array_unique($android_tokens));
+            $ios_tokens = array_filter(array_unique($ios_tokens));
+            Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
+                'sound' => 'default',
+                'badge' => 1
+            ]);
+
+            Yii::$app->gcm->sendMulti($android_tokens, $model->message);
+            Yii::$app->session->setFlash('PushMessage', 'Push-уведомление успешно отправлено. ');
+            return $this->redirect(['index']);
+        } else {
+            return $this->render('push_groups', [
+                'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'education' => Education::find()->asArray()->all()
+            ]);
+        }
     }
 }

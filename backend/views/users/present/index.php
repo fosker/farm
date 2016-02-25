@@ -23,7 +23,7 @@ $this->title = 'Подарки';
                 'label' => 'Логин',
                 'attribute'=>'user.login',
                 'value'=>function($model) {
-                    return Html::a($model->user->login, ['/user/view', 'id'=>$model->user->login]);
+                    return Html::a($model->user->login, ['/user/view', 'id'=>$model->user->id]);
                 },
                 'format'=>'html',
                 'filter'=>Select2::widget([

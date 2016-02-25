@@ -131,9 +131,14 @@ AppAsset::register($this);
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user')
                             ],
                             [
-                                'label' => 'Оповещения',
-                                'url' => ['/user/push'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push')
+                                'label' => 'Оповещения группам',
+                                'url' => ['/user/push-groups'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push-groups')
+                            ],
+                            [
+                                'label' => 'Оповещения пользователям',
+                                'url' => ['/user/push-users'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push-users')
                             ],
                             [
                                 'label' => 'Подарки',

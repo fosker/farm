@@ -11,7 +11,7 @@ $this->title = $model->title;
 
     <p>
         <?= Html::a('Список', ['index'],['class'=>'btn btn-info']) ?>
-        <?= Html::a('Ответы ('.$model->answersCount.')', ['presentations/answer/index', 'Search[view.presentation.id]' => $model->id], ['class' => 'btn btn-warning']) ?>
+        <?= Html::a('Ответы ('.$model->answersCount.')', ['presentations/answer/index', 'Search[presentation.id]' => $model->id], ['class' => 'btn btn-warning']) ?>
 
 
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
