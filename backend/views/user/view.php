@@ -12,9 +12,9 @@ $this->title = 'Пользователь: '.$model->name;
     <h1><?= Html::encode($this->title) ?></h1>
 
     <p>
-        <?= Html::a('Список', ['index'],['class'=>'btn btn-info']) ?>
+        <?= Html::a('Список', ['index'],['class'=>'btn btn-primary']) ?>
         <?= $model->status == User::STATUS_VERIFY ? Html::a('Верифицировать', ['accept', 'id' => $model->id], [
-            'class' => 'btn btn-info',
+            'class' => 'btn btn-success',
             'data' => [
                 'confirm' => 'Вы уверены, что хотите подтвердить пользователя?',
                 'method' => 'post',
@@ -27,6 +27,9 @@ $this->title = 'Пользователь: '.$model->name;
                 'method' => 'post',
             ],
         ]); ?>
+        <?= Html::a('Редактировать', ['update', 'id' => $model->id], [
+            'class' => 'btn btn-info',
+        ]) ?>
         <?= Html::a('Удалить', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
             'data' => [

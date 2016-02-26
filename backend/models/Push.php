@@ -19,14 +19,15 @@ class Push extends Model
             'cities' => 'Города',
             'pharmacies' => 'Аптеки',
             'education' => 'Образования',
-            'message' => 'Сообщение'
+            'message' => 'Сообщение',
+            'users' => 'Пользователи'
         ];
     }
 
     public function rules()
     {
         return [
-            [['message'], 'required'],
+            [['message', 'users'], 'required'],
         ];
     }
 

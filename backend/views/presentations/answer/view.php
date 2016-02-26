@@ -4,12 +4,13 @@ use yii\helpers\Html;
 use yii\helpers\HtmlPurifier;
 
 
-$this->title = Html::a($answers[0]->view->user->name,['/user/view','id'=>$answers[0]->view->user->id]).' ответил на "'.Html::a($answers[0]->view->presentation->title,['/presentation/view','id'=>$answers[0]->view->presentation->id]).'"';
+$this->title = 'Ответ презентации';
+$title = Html::a($answers[0]->view->user->name,['/user/view','id'=>$answers[0]->view->user->id]).' ответил на "'.Html::a($answers[0]->view->presentation->title,['/presentation/view','id'=>$answers[0]->view->presentation->id]).'"';
 ?>
 <div class="answer-view">
 
 
-    <h1><?= HtmlPurifier::process($this->title) ?></h1>
+    <h1><?= HtmlPurifier::process($title) ?></h1>
 
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-info']) ?>

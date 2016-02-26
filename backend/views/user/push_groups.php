@@ -1,26 +1,16 @@
 <?php
 
-use common\models\User;
 use yii\helpers\Html;
-use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use backend\components\CheckWidget;
 use kartik\form\ActiveForm;
 use common\models\location\Region;
 use common\models\agency\Firm;
-use kartik\widgets\Select2;
-use common\models\location\City;
-use common\models\agency\Pharmacy;
-use yii\helpers\ArrayHelper;
-use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 
-$this->title = 'Push-уведомления';
+$this->title = 'Push-уведомления для групп';
 $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
-
-$city_list = \yii\helpers\Url::to(['city-list']);
-$pharmacy_list = \yii\helpers\Url::to(['pharmacy-list']);
 ?>
 <div class="user-push">
 

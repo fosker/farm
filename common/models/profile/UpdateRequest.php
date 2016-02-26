@@ -62,15 +62,15 @@ class UpdateRequest extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'user_id' => 'ИД',
+            'user_id' => 'ID',
             'name' => 'Имя Фамилия',
             'sex' => 'Пол',
-            'email' => 'Почта',
+            'email' => 'Email',
             'education_id' => 'Образование',
             'pharmacy_id' => 'Аптека',
             'position_id' => 'Должность',
             'firm_id' => 'Фирма',
-            'city_id' => 'город',
+            'city_id' => 'Город',
             'region_id' => 'Область',
             'details'=>'Дополнительные сведения',
         ];
@@ -83,6 +83,18 @@ class UpdateRequest extends \yii\db\ActiveRecord
         $this->city_id = $user->pharmacy->city_id;
         $this->firm_id = $user->pharmacy->firm_id;
         $this->region_id = $user->pharmacy->city->region_id;
+    }
+
+    public function getPharmacy() {
+        return $this->hasOne(Pharmacy::className(), ['id' => 'pharmacy_id']);
+    }
+
+    public function getPosition() {
+        return $this->hasOne(Position::className(), ['id' => 'position_id']);
+    }
+
+    public function getEducation() {
+        return $this->hasOne(Education::className(), ['id' => 'education_id']);
     }
 
     public function fields() {

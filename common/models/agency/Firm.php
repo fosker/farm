@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models\agency;
-
+use common\models\agency\Pharmacy;
 use Yii;
 
 /**
@@ -42,5 +42,15 @@ class Firm extends \yii\db\ActiveRecord
     {
         parent::afterDelete();
         Pharmacy::deleteAll(['firm_id'=>$this->id]);
+    }
+
+    public static function getFirmList($city_id)
+    {
+        return Firm::find()->select([Firm::tableName().'.id',Firm::tableName().'.name'])
+            ->join('LEFT JOIN', Pharmacy::tableName(),
+                Firm::tableName().'.id = '.Pharmacy::tableName().'.firm_id')
+            ->where(['city_id'=>$city_id])
+            ->asArray()
+            ->all();
     }
 }

@@ -6,13 +6,13 @@ use yii\helpers\HtmlPurifier;
 /* @var $this yii\web\View */
 /* @var $answers array */
 
-
-$this->title = Html::a($answers[0]->view->user->name,['/user/view','id'=>$answers[0]->view->user->id]).' ответил на "'.Html::a($answers[0]->question->survey->title,['/survey/view','id'=>$answers[0]->question->survey_id]).'"';
+$this->title = 'Ответ анкеты';
+$title = Html::a($answers[0]->view->user->name,['/user/view','id'=>$answers[0]->view->user->id]).' ответил на "'.Html::a($answers[0]->question->survey->title,['/survey/view','id'=>$answers[0]->question->survey_id]).'"';
 ?>
 <div class="answer-view">
 
 
-    <h1><?= HtmlPurifier::process($this->title) ?></h1>
+    <h1><?= HtmlPurifier::process($title) ?></h1>
 
     <p>
         <?= Html::a('Список', ['index'], ['class' => 'btn btn-info']) ?>

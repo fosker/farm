@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\profile\Position;
 use Yii;
 
 use yii\helpers\ArrayHelper;
@@ -17,6 +18,9 @@ use common\models\location\City;
 use backend\models\profile\Search;
 use common\models\profile\Device;
 use common\models\profile\Education;
+use common\models\profile\UpdateRequest;
+use common\models\location\Region;
+use yii\helpers\Json;
 
 
 class UserController extends Controller
@@ -48,6 +52,11 @@ class UserController extends Controller
 
     public function actionIndex()
     {
+//        echo '<pre>';
+//        $out = Firm::getFirmList(91);
+//        var_dump($out);
+//        echo '</pre>';
+//        die();
         $searchModel = new Search();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -67,6 +76,32 @@ class UserController extends Controller
         return $this->render('view', [
             'model' => $this->findModel($id),
         ]);
+    }
+
+    public function actionUpdate($id, $update_id = null)
+    {
+        $model = $this->findModel($id);
+        if($update_id) {
+            $user = UpdateRequest::findOne(['user_id' => $update_id]);
+        }
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->save(false))
+                if($update_id) {
+                    UpdateRequest::deleteAll(['user_id' => $update_id]);
+                }
+            return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'firms' => ArrayHelper::map(Firm::find()->asArray()->all(), 'id','name'),
+                'regions' => ArrayHelper::map(Region::find()->asArray()->all(), 'id','name'),
+                'cities' => ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
+                'education' => ArrayHelper::map(Education::find()->asArray()->all(), 'id','name'),
+                'pharmacies' => ArrayHelper::map(Pharmacy::find()->asArray()->all(), 'id','name'),
+                'positions' => ArrayHelper::map(Position::find()->asArray()->all(), 'id','name'),
+                'user' => $user
+            ]);
+        }
     }
 
     public function actionDelete($id)
@@ -99,6 +134,58 @@ class UserController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionPushUsers()
+    {
+        $model = new Push();
+
+        if($model->load(Yii::$app->request->post())) {
+
+            $ids = Yii::$app->request->post('Push')['users'] ? Yii::$app->request->post('Push')['users'] : [];
+
+            $android_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $ids])
+                ->andWhere(['not',['push_token' => null]])
+                ->andWhere(['type' => 1])
+                ->asArray()
+                ->all(), 'id', 'push_token');
+
+            $android_tokens = array_values($android_tokens);
+            $android_tokens = array_filter(array_unique($android_tokens));
+
+            $ios_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $ids])
+                ->andWhere(['not',['push_token' => null]])
+                ->andWhere(['type' => 2])
+                ->asArray()
+                ->all(), 'id', 'push_token');
+
+            $ios_tokens = array_values($ios_tokens);
+            $ios_tokens = array_filter(array_unique($ios_tokens));
+
+            if($ios_tokens)
+            {
+                Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
+                    'sound' => 'default',
+                    'badge' => 1
+                ]);
+            }
+            if($android_tokens)
+            {
+
+                Yii::$app->gcm->sendMulti($android_tokens, $model->message);
+            }
+
+            Yii::$app->session->setFlash('PushMessage', 'Push-уведомление успешно отправлено. ');
+            return $this->redirect(['index']);
+
+        } else {
+            return $this->render('push_users', [
+                'model' => $model,
+                'users' => ArrayHelper::map(User::find()
+                    ->select(['id', new \yii\db\Expression("CONCAT(`name`, ' (', `login`,')') as login")])
+                    ->asArray()
+                    ->all(), 'id','login'),
+            ]);
+        }
+    }
 
     public function actionPushGroups()
     {
@@ -130,14 +217,23 @@ class UserController extends Controller
                 ->asArray()
                 ->all(), 'id', 'push_token');
 
+            $android_tokens = array_values($android_tokens);
             $android_tokens = array_filter(array_unique($android_tokens));
-            $ios_tokens = array_filter(array_unique($ios_tokens));
-            Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
-                'sound' => 'default',
-                'badge' => 1
-            ]);
 
-            Yii::$app->gcm->sendMulti($android_tokens, $model->message);
+            $ios_tokens = array_values($ios_tokens);
+            $ios_tokens = array_filter(array_unique($ios_tokens));
+            if($ios_tokens)
+            {
+                Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
+                    'sound' => 'default',
+                    'badge' => 1
+                ]);
+            }
+            if($android_tokens)
+            {
+                Yii::$app->gcm->sendMulti($android_tokens, $model->message);
+            }
+
             Yii::$app->session->setFlash('PushMessage', 'Push-уведомление успешно отправлено. ');
             return $this->redirect(['index']);
         } else {
@@ -149,4 +245,48 @@ class UserController extends Controller
             ]);
         }
     }
+
+    public function actionCityList() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $region_id = $parents[0];
+                $out = City::getCityList($region_id);
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionFirmList() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $city_id = $parents[0];
+                $out = Firm::getFirmList($city_id);
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
+    public function actionPharmacyList() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $firm_id = $parents[0];
+                $city_id = $parents[1];
+                $out = Pharmacy::getPharmacyList($firm_id, $city_id);
+                echo Json::encode(['output'=>$out, 'selected'=>'']);
+                return;
+            }
+        }
+        echo Json::encode(['output'=>'', 'selected'=>'']);
+    }
+
 }

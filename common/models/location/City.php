@@ -1,7 +1,7 @@
 <?php
 
 namespace common\models\location;
-
+use yii\helpers\ArrayHelper;
 use Yii;
 
 /**
@@ -54,6 +54,14 @@ class City extends \yii\db\ActiveRecord
 
     public function getRegion() {
         return $this->hasOne(Region::className(),['id'=>'region_id']);
+    }
+
+    public static function getCityList($region_id)
+    {
+        return City::find()->select('id, name')
+            ->where(['region_id'=>$region_id])
+            ->asArray()
+            ->all();
     }
 
 

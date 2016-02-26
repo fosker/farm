@@ -56,4 +56,13 @@ class Pharmacy extends \yii\db\ActiveRecord
         parent::afterDelete();
         // TODO: поудалять связи
     }
+
+    public static function getPharmacyList($firm_id, $city_id)
+    {
+        return Pharmacy::find()->select('id, name')
+            ->where(['firm_id'=>$firm_id])
+            ->andWhere(['city_id' => $city_id])
+            ->asArray()
+            ->all();
+    }
 }

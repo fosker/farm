@@ -37,7 +37,10 @@ endif;
             }
         },
         'columns' => [
-            'attribute' => 'id',
+            [
+                'attribute' => 'id',
+                'contentOptions'=>['style'=>'width: 150px;'],
+            ],
             [
                 'label' => 'Имя',
                 'attribute' => 'name',
@@ -136,7 +139,7 @@ endif;
             ],
             [
                 'class' => 'yii\grid\ActionColumn',
-                'template'=>'{ban} {accept} {view} {delete}',
+                'template'=>'{ban} {accept} {view} {delete} {update}',
                 'buttons'=>[
                     'accept' => function ($url, $model, $key) {
                         return $model->status == User::STATUS_VERIFY ? Html::a('<i class="glyphicon glyphicon-ok"></i>', ['accept', 'id'=>$model->id], [

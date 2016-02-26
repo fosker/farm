@@ -6,11 +6,13 @@ use backend\assets\AppAsset;
 use yii\widgets\Breadcrumbs;
 use backend\models\admin\Right;
 use backend\models\Admin;
+use common\models\profile\UpdateRequest;
 /**
  * @var $content string
  */
 
 AppAsset::register($this);
+$count = UpdateRequest::find()->count();
 ?>
 
 <?php $this->beginPage() ?>
@@ -34,6 +36,7 @@ AppAsset::register($this);
                 ],
             ]);
             echo Nav::widget([
+                'encodeLabels' => false,
                 'options' => ['class' => 'navbar-nav navbar-right'],
                 'items' => [
                     [
@@ -131,6 +134,16 @@ AppAsset::register($this);
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user')
                             ],
                             [
+                                'label' => 'Ожидают обновления ' . Html::tag('span', $count, ['class' => 'badge']),
+                                'url' => ['/users/update-request'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/update-request')
+                            ],
+                            [
+                                'label' => 'Подарки',
+                                'url' => ['/users/present'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/present')
+                            ],
+                            [
                                 'label' => 'Оповещения группам',
                                 'url' => ['/user/push-groups'],
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push-groups')
@@ -139,11 +152,6 @@ AppAsset::register($this);
                                 'label' => 'Оповещения пользователям',
                                 'url' => ['/user/push-users'],
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push-users')
-                            ],
-                            [
-                                'label' => 'Подарки',
-                                'url' => ['/users/present'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/present')
                             ],
                         ],
                         'visible' => Admin::showUser(Yii::$app->admin->id)
