@@ -59,7 +59,8 @@ class Pharmacy extends \yii\db\ActiveRecord
 
     public static function getPharmacyList($firm_id, $city_id)
     {
-        return Pharmacy::find()->select('id, name')
+        return Pharmacy::find()
+            ->select(['id', new \yii\db\Expression("CONCAT(`name`, ' (', `address`,')') as name")])
             ->where(['firm_id'=>$firm_id])
             ->andWhere(['city_id' => $city_id])
             ->asArray()

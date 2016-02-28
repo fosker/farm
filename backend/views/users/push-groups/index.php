@@ -6,11 +6,45 @@ use backend\components\CheckWidget;
 use kartik\form\ActiveForm;
 use common\models\location\Region;
 use common\models\agency\Firm;
+use kartik\widgets\Growl;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Push-уведомления для групп';
 $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+if(Yii::$app->session->hasFlash('PushMessage')) :
+    echo Growl::widget([
+        'type' => Growl::TYPE_SUCCESS,
+        'title' => 'Успешно',
+        'icon' => 'glyphicon glyphicon-ok-sign',
+        'body' => Yii::$app->session->getFlash('PushMessage'),
+        'showSeparator' => true,
+        'delay' => 0,
+        'pluginOptions' => [
+            'placement' => [
+                'from' => 'top',
+                'align' => 'right',
+            ]
+        ]
+    ]);
+endif;
+
+if(Yii::$app->session->hasFlash('PushMessage2')) :
+    echo Growl::widget([
+        'type' => Growl::TYPE_SUCCESS,
+        'title' => 'Успешно',
+        'icon' => 'glyphicon glyphicon-ok-sign',
+        'body' => Yii::$app->session->getFlash('PushMessage2'),
+        'showSeparator' => true,
+        'delay' => 0,
+        'pluginOptions' => [
+            'placement' => [
+                'from' => 'top',
+                'align' => 'right',
+            ]
+        ]
+    ]);
+endif;
 ?>
 <div class="user-push">
 

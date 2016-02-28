@@ -96,7 +96,7 @@ $this->title = 'Пользователь: '.$model->name;
             ],
             [
                 'label' => 'Ответы презентаций',
-                'value'=>Html::a('Ответы',['/presentations/answer', 'Search[view.user.id]' => $model->id]),
+                'value'=>Html::a('Ответы',['/presentations/answer', 'Search[user.id]' => $model->id]),
                 'format'=>'html',
             ],
             [
@@ -111,7 +111,7 @@ $this->title = 'Пользователь: '.$model->name;
             ],
             [
                 'label' => 'Ответы анкет',
-                'value'=>Html::a('Ответы',['/surveys/answer', 'Search[view.user.id]' => $model->id]),
+                'value'=>Html::a('Ответы',['/surveys/answer', 'Search[user.id]' => $model->id]),
                 'format'=>'html',
             ],
             [

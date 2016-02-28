@@ -19,7 +19,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         'maxlength' => true,
         ]) ?>
 
-    <?php if ($user) {
+    <?php if ($user->name) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новое имя: $user->name</p>
@@ -29,7 +29,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?php if ($user) {
+    <?php if ($user->email) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новый email: $user->email</p>
@@ -45,7 +45,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         ],
     ]); ?>
 
-    <?php if ($user) {
+    <?php if ($user->education_id) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новое образование: ".$user->education->name."</p>
@@ -90,11 +90,12 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         ]
     ]); ?>
 
-    <?php if ($user) {
+    <?php if ($user->pharmacy_id) {
         echo "<div class='row'>
-                <div class='col-md-8'>
+                <div class='col-md-12'>
                     <p class='text-success'>Новая аптека: ".
-            $user->pharmacy->city->region->name.' / '.$user->pharmacy->city->name.' / '. $user->pharmacy->firm->name.' / '.$user->pharmacy->name."</p>
+            $user->pharmacy->city->region->name.' / '.$user->pharmacy->city->name.' / '.
+            $user->pharmacy->firm->name.' / '.$user->pharmacy->name.' ('.$user->pharmacy->address.')'."</p>
                 </div>
               </div>";
     } ?>
@@ -104,7 +105,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         'female' => 'женский',
     ]); ?>
 
-    <?php if ($user) {
+    <?php if ($user->sex) {
         $sex = "";
         switch($user->sex) {
             case 'female' : $sex = 'женский';
@@ -127,7 +128,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         ],
     ]); ?>
 
-    <?php if ($user) {
+    <?php if ($user->position_id) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новая должность: ". $user->position->name."</p>
@@ -135,7 +136,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
               </div>";
     } ?>
 
-    <?php if ($user) {
+    <?php if ($user->details) {
         echo "<div class='row'>
                 <div class='col-md-12'>
                     <p class='text-info'>Детали: ". $user->details."</p>

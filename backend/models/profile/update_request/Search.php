@@ -45,6 +45,8 @@ class Search extends UpdateRequest
             'user_id' => $this->user_id,
         ]);
 
+        $query->andFilterWhere(['like', 'name', $this->name]);
+
         return $dataProvider;
     }
 }

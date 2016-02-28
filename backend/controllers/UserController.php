@@ -52,11 +52,6 @@ class UserController extends Controller
 
     public function actionIndex()
     {
-//        echo '<pre>';
-//        $out = Firm::getFirmList(91);
-//        var_dump($out);
-//        echo '</pre>';
-//        die();
         $searchModel = new Search();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
@@ -132,118 +127,6 @@ class UserController extends Controller
         $this->findModel($id)->ban();
 
         return $this->redirect(['index']);
-    }
-
-    public function actionPushUsers()
-    {
-        $model = new Push();
-
-        if($model->load(Yii::$app->request->post())) {
-
-            $ids = Yii::$app->request->post('Push')['users'] ? Yii::$app->request->post('Push')['users'] : [];
-
-            $android_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $ids])
-                ->andWhere(['not',['push_token' => null]])
-                ->andWhere(['type' => 1])
-                ->asArray()
-                ->all(), 'id', 'push_token');
-
-            $android_tokens = array_values($android_tokens);
-            $android_tokens = array_filter(array_unique($android_tokens));
-
-            $ios_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $ids])
-                ->andWhere(['not',['push_token' => null]])
-                ->andWhere(['type' => 2])
-                ->asArray()
-                ->all(), 'id', 'push_token');
-
-            $ios_tokens = array_values($ios_tokens);
-            $ios_tokens = array_filter(array_unique($ios_tokens));
-
-            if($ios_tokens)
-            {
-                Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
-                    'sound' => 'default',
-                    'badge' => 1
-                ]);
-            }
-            if($android_tokens)
-            {
-
-                Yii::$app->gcm->sendMulti($android_tokens, $model->message);
-            }
-
-            Yii::$app->session->setFlash('PushMessage', 'Push-уведомление успешно отправлено. ');
-            return $this->redirect(['index']);
-
-        } else {
-            return $this->render('push_users', [
-                'model' => $model,
-                'users' => ArrayHelper::map(User::find()
-                    ->select(['id', new \yii\db\Expression("CONCAT(`name`, ' (', `login`,')') as login")])
-                    ->asArray()
-                    ->all(), 'id','login'),
-            ]);
-        }
-    }
-
-    public function actionPushGroups()
-    {
-        $model = new Push();
-
-        if(Yii::$app->request->post()) {
-            $cities = Yii::$app->request->post('cities') ?  Yii::$app->request->post('cities') : [];
-            $educations = Yii::$app->request->post('education') ?  Yii::$app->request->post('education') : [];
-            $pharmacies = Yii::$app->request->post('pharmacies') ?  Yii::$app->request->post('pharmacies') : [];
-            $model->load(Yii::$app->request->post());
-
-            $users = ArrayHelper::map(User::find()->select(User::tableName().'.id')->andWhere(['in', 'education_id', $educations])
-                ->andWhere(['in', 'pharmacy_id', $pharmacies])
-                ->join('LEFT JOIN', Pharmacy::tableName(),
-                    User::tableName().'.pharmacy_id = '.Pharmacy::tableName().'.id')
-                ->andWhere(['in', 'city_id', $cities])
-                ->asArray()
-                ->all(), 'id', 'id');
-
-            $android_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $users])
-                ->andWhere(['not',['push_token' => null]])
-                ->andWhere(['type' => 1])
-                ->asArray()
-                ->all(), 'id', 'push_token');
-
-            $ios_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['in', 'user_id', $users])
-                ->andWhere(['not',['push_token' => null]])
-                ->andWhere(['type' => 2])
-                ->asArray()
-                ->all(), 'id', 'push_token');
-
-            $android_tokens = array_values($android_tokens);
-            $android_tokens = array_filter(array_unique($android_tokens));
-
-            $ios_tokens = array_values($ios_tokens);
-            $ios_tokens = array_filter(array_unique($ios_tokens));
-            if($ios_tokens)
-            {
-                Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
-                    'sound' => 'default',
-                    'badge' => 1
-                ]);
-            }
-            if($android_tokens)
-            {
-                Yii::$app->gcm->sendMulti($android_tokens, $model->message);
-            }
-
-            Yii::$app->session->setFlash('PushMessage', 'Push-уведомление успешно отправлено. ');
-            return $this->redirect(['index']);
-        } else {
-            return $this->render('push_groups', [
-                'model' => $model,
-                'cities'=>City::find()->asArray()->all(),
-                'pharmacies'=>Pharmacy::find()->asArray()->all(),
-                'education' => Education::find()->asArray()->all()
-            ]);
-        }
     }
 
     public function actionCityList() {

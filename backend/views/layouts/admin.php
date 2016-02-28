@@ -145,13 +145,13 @@ $count = UpdateRequest::find()->count();
                             ],
                             [
                                 'label' => 'Оповещения группам',
-                                'url' => ['/user/push-groups'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push-groups')
+                                'url' => ['/users/push-groups'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/push-groups')
                             ],
                             [
                                 'label' => 'Оповещения пользователям',
-                                'url' => ['/user/push-users'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'user/push-users')
+                                'url' => ['/users/push-users'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/push-users')
                             ],
                         ],
                         'visible' => Admin::showUser(Yii::$app->admin->id)

@@ -7,22 +7,6 @@ use yii\grid\GridView;
 use kartik\widgets\Select2;
 
 $this->title = 'Пользователи';
-if(Yii::$app->session->hasFlash('PushMessage')) :
-    echo Growl::widget([
-        'type' => Growl::TYPE_SUCCESS,
-        'title' => 'Успешно',
-        'icon' => 'glyphicon glyphicon-ok-sign',
-        'body' => Yii::$app->session->getFlash('PushMessage'),
-        'showSeparator' => true,
-        'delay' => 0,
-        'pluginOptions' => [
-            'placement' => [
-                'from' => 'top',
-                'align' => 'right',
-            ]
-        ]
-    ]);
-endif;
 ?>
 <div class="user-index">
 
