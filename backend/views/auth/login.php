@@ -63,10 +63,10 @@ $this->beginPage() ?>
                         <?= $form->field($model, 'rememberMe')->checkbox(); ?>
 
                         <?= Html::submitButton('Войти', ['class' => 'btn btn-primary']); ?>
+                    <?= Html::a('Забыли пароль?',['/auth/reset-password'], ['class' => 'btn btn-warning']); ?>
 
                     <?php ActiveForm::end(); ?>
                     <div>
-                        <?= Html::a('Забыли пароль?',['/auth/reset-password']); ?>
                     </div>
                 </div>
             </div>

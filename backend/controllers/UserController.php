@@ -122,6 +122,36 @@ class UserController extends Controller
     {
         $this->findModel($id)->verified();
 
+        $android_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['user_id' => $id])
+            ->andWhere(['not',['push_token' => null]])
+            ->andWhere(['type' => 1])
+            ->asArray()
+            ->all(), 'id', 'push_token');
+        $ios_tokens = ArrayHelper::map(Device::find()->select('id, push_token')->where(['user_id' => $id])
+            ->andWhere(['not',['push_token' => null]])
+            ->andWhere(['type' => 2])
+            ->asArray()
+            ->all(), 'id', 'push_token');
+
+        $android_tokens = array_values($android_tokens);
+        $android_tokens = array_filter(array_unique($android_tokens));
+        $ios_tokens = array_values($ios_tokens);
+        $ios_tokens = array_filter(array_unique($ios_tokens));
+
+        $message = 'Ваш аккаунт верифицирован. ';
+        if($ios_tokens)
+        {
+            Yii::$app->apns->sendMulti($ios_tokens, $message, [], [
+                'sound' => 'default',
+                'badge' => 1
+            ]);
+        }
+
+        if($android_tokens)
+        {
+            Yii::$app->gcm->sendMulti($android_tokens, $message);
+        }
+
         return $this->redirect(['index']);
     }
 
