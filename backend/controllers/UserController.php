@@ -93,7 +93,9 @@ class UserController extends Controller
                 'regions' => ArrayHelper::map(Region::find()->asArray()->all(), 'id','name'),
                 'cities' => ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
                 'education' => ArrayHelper::map(Education::find()->asArray()->all(), 'id','name'),
-                'pharmacies' => ArrayHelper::map(Pharmacy::find()->asArray()->all(), 'id','name'),
+                'pharmacies' => ArrayHelper::map(Pharmacy::find()
+                    ->select(['id', new \yii\db\Expression("CONCAT(`name`, ' (', `address`,')') as name")])
+                    ->asArray()->all(), 'id','name'),
                 'positions' => ArrayHelper::map(Position::find()->asArray()->all(), 'id','name'),
                 'user' => $user
             ]);
