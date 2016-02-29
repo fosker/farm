@@ -82,7 +82,6 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
     ]); ?>
 
     <?= $form->field($model, 'pharmacy_id')->widget(DepDrop::classname(), [
-        'data' => $pharmacies,
         'type' => 2,
         'options'=>['id'=>'pharmacy-id'],
         'pluginOptions'=>[

@@ -31,20 +31,6 @@ class MainController extends \yii\web\Controller
         ];
     }
 
-    public function actionGeneral() {
-
-        $settings = Param::find()->indexBy('id')->all();
-
-        if (Model::loadMultiple($settings, Yii::$app->request->post()) && Model::validateMultiple($settings)) {
-            foreach ($settings as $setting) {
-                $setting->save(false);
-            }
-            Yii::$app->session->setFlash('GeneralSettingsMessage', 'Данные успешно сохранены.');
-        }
-
-        return $this->render('general', ['settings' => $settings]);
-    }
-
     public function actionIndex() {
         return $this->render('index');
     }

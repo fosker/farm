@@ -5,7 +5,5 @@ $this->title .= 'Главная';
 ?>
 
 <div class="main-index">
-	
-    <h1>Добро пожаловать</h1>
-
+    <h1 class="text-center">Добро пожаловать</h1>
 </div>

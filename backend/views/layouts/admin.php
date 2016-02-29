@@ -41,16 +41,12 @@ $count = UpdateRequest::find()->count();
                 'items' => [
                     [
 
-                        'label'=> 'Настройки',
+                        'label'=> 'Главная',
                         'items'=> [
                             [
-                                'label' => 'Статистика',
+                                'label' => 'Главная',
                                 'url' => ['/main/index'],
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'main')
-                            ],
-                            [
-                                'label' => 'Общие настройки',
-                                'url' => ['/main/general']
                             ],
                             [
                                 'label' => 'Администраторы',

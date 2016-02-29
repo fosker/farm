@@ -76,9 +76,9 @@ class PushUsersController extends Controller
                         'Push-уведомление успешно отправлено на '.count($ios_tokens).' ios-устройств');
                 }
             }
+
             if($android_tokens)
             {
-                $test = ['cDM3Ye5umUM:APA91bEUDMs_bQ1BR4pD1aCG-uPRCfHsO99yLaH2-LRiBmwFY_EcvqNbZ8s7dAONwgchKIk80u7j5pJdp29dDPWrb8EcV4tA9uJvlv4BgitZet89QUH0t3jZzy8NOomwJUPyfAhaL_c-'];
                 if(Yii::$app->gcm->sendMulti($android_tokens, $model->message)){
                     Yii::$app->session->setFlash('PushMessage2',
                         'Push-уведомление успешно отправлено на ' . count($android_tokens) . ' android-устройств');

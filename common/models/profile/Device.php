@@ -34,11 +34,10 @@ class Device extends ActiveRecord
     {
         return [
             [['type'], 'required'],
-            [['push_token'],'string','max'=>100],
+            [['push_token'],'string'],
             [['type'],'in','range'=>[static::TYPE_ANDROID, static::TYPE_IOS]],
         ];
     }
-
     /**
      * @inheritdoc
      */
