@@ -79,6 +79,9 @@ class Factory extends ActiveRecord
 
     public function afterDelete()
     {
+        foreach($this->stocks as $stock)
+            $stock->delete();
+        Product::deleteAll(['factory_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/factories/'.$this->image));
         if($this->logo) @unlink(Yii::getAlias('@uploads/factories/logos'.$this->logo));
         parent::afterDelete();

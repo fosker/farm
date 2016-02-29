@@ -6,6 +6,7 @@ use common\models\agency\Firm;
 use common\models\agency\Pharmacy;
 use common\models\location\City;
 use common\models\location\Region;
+use common\models\User;
 use Yii;
 
 /**
@@ -95,6 +96,10 @@ class UpdateRequest extends \yii\db\ActiveRecord
 
     public function getEducation() {
         return $this->hasOne(Education::className(), ['id' => 'education_id']);
+    }
+
+    public function getUser() {
+        return $this->hasOne(User::className(), ['id' => 'user_id']);
     }
 
     public function fields() {

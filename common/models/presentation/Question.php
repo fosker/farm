@@ -65,4 +65,11 @@ class Question extends ActiveRecord
         return $this->hasOne(Presentation::className(), ['id' => 'presentation_id']);
     }
 
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        foreach($this->options as $option)
+            $option->delete();
+    }
+
 }

@@ -35,13 +35,14 @@ class Firm extends \yii\db\ActiveRecord
 
     public function getPharmacies()
     {
-        return $this->hasMany(Pharmacy::className(),['id'=>'firm_id']);
+        return $this->hasMany(Pharmacy::className(),['firm_id'=>'id']);
     }
 
     public function afterDelete()
     {
         parent::afterDelete();
-        Pharmacy::deleteAll(['firm_id'=>$this->id]);
+        foreach($this->pharmacies as $pharmacy)
+            $pharmacy->delete();
     }
 
     public static function getFirmList($city_id)

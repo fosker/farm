@@ -3,6 +3,7 @@
 namespace common\models\shop;
 
 use Yii;
+use common\models\Item;
 
 /**
  * This is the model class for table "shop_vendors".
@@ -42,6 +43,11 @@ class Vendor extends \yii\db\ActiveRecord
             'name' => 'Название поставщика',
             'email' => 'Email'
         ];
+    }
+
+    public function afterDelete() {
+        parent::afterDelete();
+        Item::deleteAll(['vendor_id'=>$this->id]);
     }
 
 }

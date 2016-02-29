@@ -18,6 +18,19 @@ use common\models\location\Region;
 use common\models\profile\Education;
 use common\models\profile\Position;
 
+use common\models\factory\Reply;
+use common\models\block\Comment as Block_comment;
+use common\models\block\Mark as Block_mark;
+use common\models\presentation\Comment as Presentation_comment;
+use common\models\presentation\View as Presentation_view;
+use common\models\seminar\Comment as Seminar_comment;
+use common\models\seminar\Entry as Seminar_entry;
+use common\models\substance\Request;
+use common\models\survey\View as Survey_view;
+use common\models\shop\Desire;
+use common\models\shop\Present;
+use common\models\profile\UpdateRequest;
+
 /**
  * This is the model class for table "users".
  *
@@ -462,6 +475,36 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
     {
         $this->status = static::STATUS_VERIFY;
         $this->save(false);
+    }
+
+    public function getPresentationViews()
+    {
+        return $this->hasMany(Presentation_view::className(), ['user_id' => 'id']);
+    }
+
+    public function getSurveyViews()
+    {
+        return $this->hasMany(Survey_view::className(), ['user_id' => 'id']);
+    }
+
+    public function afterDelete()
+    {
+        Block_comment::deleteAll(['user_id'=>$this->id]);
+        Reply::deleteAll(['user_id'=>$this->id]);
+        Block_mark::deleteAll(['user_id'=>$this->id]);
+        Presentation_comment::deleteAll(['user_id'=>$this->id]);
+        foreach($this->presentationViews as $view)
+            $view->delete();
+        Seminar_comment::deleteAll(['user_id'=>$this->id]);
+        Seminar_entry::deleteAll(['user_id'=>$this->id]);
+        Request::deleteAll(['user_id'=>$this->id]);
+        foreach($this->surveyViews as $view)
+            $view->delete();
+        Desire::deleteAll(['user_id'=>$this->id]);
+        Device::deleteAll(['user_id'=>$this->id]);
+        Present::deleteAll(['user_id'=>$this->id]);
+        UpdateRequest::deleteAll(['user_id'=>$this->id]);
+        parent::afterDelete();
     }
 
 }

@@ -18,7 +18,10 @@ $this->title = 'Баннеры';
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'id',
+            [
+                'attribute' => 'id',
+                'contentOptions'=>['style'=>'width: 150px;'],
+            ],
             [
                 'attribute'=>'title',
                 'value'=>'title',

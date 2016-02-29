@@ -332,9 +332,15 @@ class Presentation extends ActiveRecord
     {
         foreach($this->questions as $question)
             $question->delete();
+        foreach($this->views as $view)
+            $view->delete();
         City::deleteAll(['presentation_id'=>$this->id]);
         Pharmacy::deleteAll(['presentation_id'=>$this->id]);
-        Slide::deleteAll(['presentation_id'=>$this->id]);
+        foreach($this->slides as $slide)
+        {
+            if($slide->image) @unlink(Yii::getAlias('@uploads/presentations/slides/'.$slide->image));
+            $slide->delete();
+        }
         if($this->image) @unlink(Yii::getAlias('@uploads/presentations/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/presentations/thumbs/'.$this->thumbnail));
         parent::afterDelete();

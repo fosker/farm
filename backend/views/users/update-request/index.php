@@ -16,8 +16,14 @@ $this->title = 'Пользователи, ожидающие подтвержд�
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            'user_id',
-            'name',
+            [
+                'label' => 'ID пользователя',
+                'attribute' => 'user_id',
+            ],
+            [
+                'label' => 'Имя пользователя',
+                'attribute' => 'name',
+            ],
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{accept} {view} {delete}',

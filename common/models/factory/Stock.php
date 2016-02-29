@@ -11,6 +11,7 @@ use common\models\agency\Pharmacy as P;
 use common\models\agency\Firm;
 use common\models\factory\City;
 use common\models\factory\Pharmacy;
+use common\models\factory\Reply;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
 
@@ -245,6 +246,7 @@ class Stock extends ActiveRecord
         if($this->image) @unlink(Yii::getAlias('@uploads/stocks/'.$this->image));
         City::deleteAll(['stock_id'=>$this->id]);
         Pharmacy::deleteAll(['stock_id'=>$this->id]);
+        Reply::deleteAll(['stock_id'=>$this->id]);
         parent::afterDelete();
     }
 

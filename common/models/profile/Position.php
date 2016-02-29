@@ -3,6 +3,7 @@
 namespace common\models\profile;
 
 use Yii;
+use common\models\User;
 
 /**
  * This is the model class for table "user_positions".
@@ -33,9 +34,14 @@ class Position extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getUsers() {
+        return $this->hasMany(User::className(), ['education_id' => 'id']);
+    }
+
     public function afterDelete()
     {
         parent::afterDelete();
-        // TODO: удалить связи
+        foreach($this->users as $user)
+            $user->delete();
     }
 }

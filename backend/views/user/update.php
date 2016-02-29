@@ -60,6 +60,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
             'allowClear' => true
         ],
     ]); ?>
+
     <?= $form->field($model, 'city_id')->widget(DepDrop::classname(), [
         'type' => 2,
         'options'=>['id'=>'city-id'],
@@ -81,6 +82,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
     ]); ?>
 
     <?= $form->field($model, 'pharmacy_id')->widget(DepDrop::classname(), [
+        'data' => $pharmacies,
         'type' => 2,
         'options'=>['id'=>'pharmacy-id'],
         'pluginOptions'=>[

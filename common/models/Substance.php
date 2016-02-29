@@ -3,6 +3,7 @@
 namespace common\models;
 
 use Yii;
+use common\models\substance\Request;
 
 /**
  * This is the model class for table "substances".
@@ -49,6 +50,12 @@ class Substance extends \yii\db\ActiveRecord
     public function extraFields()
     {
         return ['description'];
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        Request::deleteAll(['substance_id' => $this->id]);
     }
 
     public static function findByPart($part)

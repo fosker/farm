@@ -59,4 +59,11 @@ class Question extends ActiveRecord
         return $this->hasMany(Option::className(), ['question_id' => 'id']);
     }
 
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        foreach($this->options as $option)
+            $option->delete();
+    }
+
 }

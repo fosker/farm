@@ -6,6 +6,7 @@ use common\models\Presentation;
 use Yii;
 use yii\db\ActiveRecord;
 use common\models\User;
+use common\models\presentation\Answer;
 
 /**
  * This is the model class for table "presentation_views".
@@ -73,5 +74,17 @@ class View extends ActiveRecord
             $answer->view_id = $view->id;
             $answer->save(false);
         }
+    }
+
+    public function getAnswers()
+    {
+        return $this->hasMany(Answer::className(), ['view_id' => 'id']);
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        foreach($this->answers as $answer)
+            $answer->delete();
     }
 }

@@ -259,9 +259,18 @@ class Survey extends ActiveRecord
         } else return false;
     }
 
+    public function getViews()
+    {
+        return $this->hasMany(View::className(), ['survey_id' => 'id']);
+    }
+
     public function afterDelete() {
         foreach($this->questions as $question)
             $question->delete();
+        foreach($this->views as $view)
+            $view->delete();
+        City::deleteAll(['survey_id'=>$this->id]);
+        Pharmacy::deleteAll(['survey_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/surveys/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/surveys/thumbs/'.$this->thumbnail));
         parent::afterDelete();

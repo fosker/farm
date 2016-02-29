@@ -79,7 +79,8 @@ class UserController extends Controller
         if($update_id) {
             $user = UpdateRequest::findOne(['user_id' => $update_id]);
         }
-        if ($model->load(Yii::$app->request->post())) {
+        if (Yii::$app->request->post()) {
+            $model->load(Yii::$app->request->post());
             if($model->save(false))
                 if($update_id) {
                     UpdateRequest::deleteAll(['user_id' => $update_id]);

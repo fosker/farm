@@ -215,6 +215,7 @@ class Item extends ActiveRecord
         Desire::deleteAll(['item_id'=>$this->id]);
         Present::deleteAll(['item_id'=>$this->id]);
         City::deleteAll(['item_id'=>$this->id]);
+        Pharmacy::deleteAll(['item_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/presents/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/presents/thumbs/'.$this->thumbnail));
     }

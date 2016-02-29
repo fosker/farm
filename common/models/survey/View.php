@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 use common\models\User;
 use common\models\Survey;
-
+use common\models\survey\Answer;
 /**
  * This is the model class for table "survey_views".
  *
@@ -59,6 +59,18 @@ class View extends ActiveRecord
 
     public function getSurvey() {
         return $this->hasOne(Survey::className(),['id'=>'survey_id']);
+    }
+
+    public function getAnswers()
+    {
+        return $this->hasMany(Answer::className(), ['view_id' => 'id']);
+    }
+
+    public function afterDelete()
+    {
+        parent::afterDelete();
+        foreach($this->answers as $answer)
+            $answer->delete();
     }
 
     public static function addByCurrentUser($answers)

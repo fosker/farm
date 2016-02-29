@@ -215,7 +215,7 @@ class PresentationController extends Controller
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->presentation_id = $presentation_id;
             if($model->save())
-                return $this->redirect(['view','id'=>$presentation_id]);
+                return $this->redirect(['view-option', 'question_id' => $model->primaryKey, 'presentation_id'=>$presentation_id]);
         }
 
         return $this->render('question/create', [
@@ -261,7 +261,8 @@ class PresentationController extends Controller
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->question_id = $question_id;
             if($model->save())
-                return $this->redirect(['view-option','question_id'=>$question_id,'presentation_id'=>$presentation_id]);
+                return $this->redirect(['view-option','question_id'=>$question_id,
+                    'presentation_id' => Yii::$app->request->get('presentation_id')]);
         }
 
         return $this->render('question/option/create', [
@@ -273,7 +274,8 @@ class PresentationController extends Controller
         $model = $this->findOptionModel($id);
 
         if($model->load(Yii::$app->request->getBodyParams()) && $model->save()) {
-            return $this->redirect(['view-option','question_id'=>$model->question_id,'presentation_id'=>$presentation_id]);
+            return $this->redirect(['view-option','question_id'=>$model->question_id,
+                'presentation_id' => Yii::$app->request->get('presentation_id')]);
         }
 
         return $this->render('question/option/update', [
@@ -284,7 +286,8 @@ class PresentationController extends Controller
     public function actionDeleteOption($id) {
         $model = $this->findOptionModel($id);
         $model->delete();
-        return $this->redirect(['view-option','question_id'=>$model->question_id,'presentation_id'=>$presentation_id]);
+        return $this->redirect(['view-option','question_id'=>$model->question_id,
+            'presentation_id' => Yii::$app->request->get('presentation_id')]);
     }
 
     public function findOptionModel($id) {

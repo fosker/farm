@@ -6,6 +6,7 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\profile\UpdateRequest;
+use common\models\User;
 
 class Search extends UpdateRequest
 {
@@ -36,6 +37,7 @@ class Search extends UpdateRequest
         ]);
 
         $this->load($params);
+
 
         if (!$this->validate()) {
             return $dataProvider;
