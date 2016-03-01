@@ -42,7 +42,7 @@ class FactoryController extends Controller
     }
 
     public function actionIndex() {
-        // СПИСОК АКТИВНЫХ АКЦИЙФ ДЛЯ ЭТОГО ПОЛЬЗОВАТЕЛЯ
+        // СПИСОК АКТИВНЫХ АКЦИЙ ДЛЯ ЭТОГО ПОЛЬЗОВАТЕЛЯ
         return new ActiveDataProvider([
             'query' => Factory::getForCurrentUser(),
         ]);
@@ -75,7 +75,7 @@ class FactoryController extends Controller
         $reply = new Reply();
 
         if($reply->load(Yii::$app->request->post(),'')) {
-                $reply->image = UploadedFile::getInstance($reply, 'image');
+                $reply->imageFile = UploadedFile::getInstance($reply, 'image');
                 $reply->user_id = Yii::$app->user->id;
                 if ($reply->validate()) {
                     $reply->saveImage();
