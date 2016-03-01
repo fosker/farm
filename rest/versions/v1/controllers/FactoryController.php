@@ -75,7 +75,7 @@ class FactoryController extends Controller
         $reply = new Reply();
 
         if($reply->load(Yii::$app->request->post(),'')) {
-                $reply->imageFile = UploadedFile::getInstance($reply, 'image');
+                $reply->image = UploadedFile::getInstance($reply, 'image');
                 $reply->user_id = Yii::$app->user->id;
                 if ($reply->validate()) {
                     $reply->saveImage();

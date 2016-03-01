@@ -38,8 +38,8 @@ class Reply extends ActiveRecord
             [['stock_id', 'user_id', 'image'], 'required'],
             [['stock_id'],function($model,$attr) {
                 if (!$this->hasErrors()) {
-                    if (Stock::getOneForCurrentUser($this->$attr)) {
-                        $this->addError($attr, 'Вы нем можете учавствовать в этой акции');
+                    if (!Stock::getOneForCurrentUser($this->stock_id)) {
+                        $this->addError('stock_id', 'Вы нем можете учавствовать в этой акции');
                     }
                 }
             }],
