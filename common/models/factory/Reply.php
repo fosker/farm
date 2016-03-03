@@ -32,14 +32,15 @@ class Reply extends ActiveRecord
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [
             [['stock_id', 'user_id', 'image'], 'required'],
             [['stock_id'],function($model,$attr) {
                 if (!$this->hasErrors()) {
-                    if (Stock::getOneForCurrentUser($this->$attr)) {
-                        $this->addError($attr, 'Вы нем можете учавствовать в этой акции');
+                    if (!Stock::getOneForCurrentUser($this->stock_id)) {
+                        $this->addError('stock_id', 'Вы не можете участвовать в этой акции');
                     }
                 }
             }],
@@ -63,15 +64,31 @@ class Reply extends ActiveRecord
         ];
     }
 
+    public function getImagePath()
+    {
+        return Yii::getAlias('@uploads_view/stock-replies/'.$this->photo);
+    }
+
+    public function afterDelete()
+    {
+        if($this->photo)
+            @unlink(Yii::getAlias('@uploads/stock-replies/'.$this->photo));
+        parent::afterDelete();
+    }
+
     public function saveImage()
     {
+
         if($this->image) {
+            $path = Yii::getAlias('@uploads/stock-replies/');
+            if($this->photo && file_exists($path . $this->photo))
+                @unlink($path . $this->photo);
             $filename = Yii::$app->getSecurity()->generateRandomString() . time() . '.' . $this->image->extension;
-            $path = Yii::getAlias('@uploads/stock-replies/'.$filename);
+            $path = $path . $filename;
             $this->image->saveAs($path);
             $this->photo = $filename;
             Image::thumbnail($path, 200, 200)
-                ->save($path, ['quality' => 100]);
+                ->save(Yii::getAlias('@uploads/stock-replies/').$this->photo, ['quality' => 80]);
         }
     }
 

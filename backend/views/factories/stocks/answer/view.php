@@ -26,7 +26,7 @@ use kartik\widgets\Select2;
             'id',
             [
                 'attribute'=>'photo',
-                'value'=>Html::img($model->photo, ['alt' => 'Изображение', 'width' => '50%', 'height' => '200px']),
+                'value'=>Html::img($model->imagePath, ['alt' => 'Изображение', 'width' => '50%', 'height' => '200px']),
                 'format'=>'html',
             ],
             [

@@ -139,6 +139,7 @@ class UserController extends Controller
         $ios_tokens = array_filter(array_unique($ios_tokens));
 
         $message = 'Ваш аккаунт верифицирован. ';
+
         if($ios_tokens)
         {
             Yii::$app->apns->sendMulti($ios_tokens, $message, [], [
