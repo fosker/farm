@@ -42,7 +42,7 @@ class FactoryController extends Controller
     }
 
     public function actionIndex() {
-        // СПИСОК АКТИВНЫХ АКЦИЙФ ДЛЯ ЭТОГО ПОЛЬЗОВАТЕЛЯ
+        // СПИСОК АКТИВНЫХ АКЦИЙ ДЛЯ ЭТОГО ПОЛЬЗОВАТЕЛЯ
         return new ActiveDataProvider([
             'query' => Factory::getForCurrentUser(),
         ]);
