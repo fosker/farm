@@ -72,7 +72,7 @@ $this->title = 'Запросы по веществам';
                         'format' => 'yyyy-mm-dd',
                     ]
                 ]),
-                'format' => ['date', 'php:Y-m-d'],
+                'format' => ['date', 'php:Y-m-d, h:m:s'],
                 'contentOptions'=>['style'=>'width: 200px;'],
             ],
             [

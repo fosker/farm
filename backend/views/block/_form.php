@@ -5,7 +5,7 @@ use kartik\widgets\ActiveForm;
 use kartik\widgets\FileInput;
 use backend\components\Editor;
 use yii\helpers\ArrayHelper;
-
+use dosamigos\ckeditor\CKEditor;
 
 /* @var $this yii\web\View */
 /* @var $model common\models\Block */
@@ -18,7 +18,7 @@ use yii\helpers\ArrayHelper;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->widget(Editor::className(), [
+    <?= $form->field($model, 'description')->widget(CKEditor::className(), [
         'options' => ['rows' => 6],
         'preset' => 'basic',
     ]); ?>

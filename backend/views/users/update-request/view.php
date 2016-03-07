@@ -40,7 +40,8 @@ $this->title = 'Пользователь: '.$model->name;
                 'format'=>'html',
             ],
             'position.name',
-            'details'
+            'details',
+            'date_add:datetime'
 
         ],
     ]) ?>

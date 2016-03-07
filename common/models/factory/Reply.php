@@ -15,11 +15,16 @@ use common\models\factory\Stock;
  * @property integer $stock_id
  * @property integer $user_id
  * @property string $photo
+ * @property string $date_add
+ * @property string $downloaded
  */
 class Reply extends ActiveRecord
 {
 
     public $image;
+
+    const DOWNLOADED = true;
+    const NOT_DOWNLOADED = false;
 
     /**
      * @inheritdoc
@@ -55,9 +60,11 @@ class Reply extends ActiveRecord
     public function attributeLabels()
     {
         return [
+            'id' => 'ID',
             'stock_id' => 'Акция',
             'user_id' => 'Пользователь',
             'photo' => 'Фото',
+            'date_add' => 'Дата добавления',
         ];
     }
 
@@ -73,6 +80,18 @@ class Reply extends ActiveRecord
         parent::afterDelete();
     }
 
+    public function downloaded()
+    {
+        $this->downloaded = static::DOWNLOADED;
+        $this->save(false);
+    }
+
+    public function notDownloaded()
+    {
+        $this->downloaded = static::NOT_DOWNLOADED;
+        $this->save(false);
+    }
+
     public function saveImage()
     {
 
@@ -84,8 +103,7 @@ class Reply extends ActiveRecord
             $path = $path . $filename;
             $this->image->saveAs($path);
             $this->photo = $filename;
-            Image::thumbnail($path, 200, 200)
-                ->save(Yii::getAlias('@uploads/stock-replies/').$this->photo, ['quality' => 80]);
+            move_uploaded_file($this->photo, Yii::getAlias('@uploads/stock-replies/'));
         }
     }
 
