@@ -42,18 +42,6 @@ class CheckWidget extends InputWidget
     public function run()
     {
         echo '<div>';
-        $array = ArrayHelper::map($this->child,'id','name');
-        echo Select2::widget([
-            'name' => 'search_'.$this->child_title,
-            'data' => $array,
-            'options' => [
-                'placeholder' => 'Поиск ...',
-                'multiple' => true,
-            ],
-            'pluginOptions' => [
-                'allowClear' => true
-            ],
-        ]);
         echo "<ul class = 'list-group'>";
         echo  Html::checkbox('all', false, [
         'label' => 'Все',
