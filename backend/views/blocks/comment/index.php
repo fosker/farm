@@ -69,7 +69,7 @@ $this->title = 'Комментарии';
                         'format' => 'yyyy-mm-dd',
                     ]
                 ]),
-                'format' => ['date', 'php:Y-m-d, h:m:s'],
+                'format' => ['datetime'],
                 'contentOptions'=>['style'=>'width: 250px;'],
             ],
             [

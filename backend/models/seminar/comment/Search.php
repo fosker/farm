@@ -58,9 +58,17 @@ class Search extends Comment
             'seminar_id' => $this->seminar_id
         ]);
 
-        $query->andFilterWhere(['like', 'comment', $this->comment])
-            ->andFilterWhere(['like', 'date_add', $this->date_add])
-            ->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')]);
+
+        $query->andFilterWhere(['like', 'comment', $this->comment]);
+        if($this->date_add)
+        {
+            var_dump($this->date_add);
+            die();
+            $query->andFilterWhere(['like', 'date_add', Yii::$app->getFormatter()->asDate($this->date_add, 'php: Y-m-d')]);
+        }
+
+
+        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')]);
 
         return $dataProvider;
     }

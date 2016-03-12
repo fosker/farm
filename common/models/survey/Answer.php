@@ -40,20 +40,20 @@ class Answer extends ActiveRecord
             [['question_id'], 'exist', 'targetClass'=>Question::className(), 'targetAttribute'=>'id'],
             [['view_id'], 'exist', 'targetClass'=>View::className(), 'targetAttribute'=>'id'],
             [['value'], 'string', 'max' => 255],
-            [['value'],'validatorInOptionList'],
+            //[['value'],'validatorInOptionList'],
         ];
     }
 
     /**
      * @param $attribute
      */
-    public function validatorInOptionList($attribute) {
-        if (!$this->hasErrors()) {
-            if ($this->question->options && !in_array($this->value,ArrayHelper::map($this->question->options,'id','value'))) {
-                $this->addError($attribute, 'Ответ не сооветствует предложенным вариантам.');
-            }
-        }
-    }
+//    public function validatorInOptionList($attribute) {
+//        if (!$this->hasErrors()) {
+//            if ($this->question->options && !in_array($this->value,ArrayHelper::map($this->question->options,'id','value'))) {
+//                $this->addError($attribute, 'Ответ не сооветствует предложенным вариантам.');
+//            }
+//        }
+//    }
 
     /**
      * @inheritdoc

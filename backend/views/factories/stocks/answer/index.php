@@ -44,7 +44,7 @@ $this->title = 'Ответы на акции';
             [
                 'attribute'=>'stock.title',
                 'value'=>function($model) {
-                    return Html::a($model->stock->title, ['/stock/view', 'id'=>$model->stock->id]);
+                    return Html::a($model->stock->title, ['/factories/stock/view', 'id'=>$model->stock->id]);
                 },
                 'format' => 'html',
                 'filter'=>Select2::widget([
@@ -69,7 +69,7 @@ $this->title = 'Ответы на акции';
                         'format' => 'yyyy-mm-dd',
                     ]
                 ]),
-                'format' => ['date', 'php:Y-m-d, h:m:s'],
+                'format' => ['datetime'],
                 'contentOptions'=>['style'=>'width: 250px;'],
             ],
             [
@@ -81,7 +81,7 @@ $this->title = 'Ответы на акции';
                 'template'=>'{downloaded}',
                 'buttons'=>[
                     'downloaded'=>function ($url, $model, $key) {
-                        return Html::a($model->downloaded == Reply::DOWNLOADED ? '<i class="glyphicon glyphicon-ok" style="color:green"></i>' : '<i class="glyphicon glyphicon-ok text-muted"></i>', [$model->downloaded == Reply::NOT_DOWNLOADED ? 'downloaded' : 'not-downloaded', 'id'=>$model->id],
+                        return Html::a($model->downloaded == Reply::DOWNLOADED ? '<i class="glyphicon glyphicon-ok" style="color:lime"></i>' : '<i class="glyphicon glyphicon-ok text-muted"></i>', [$model->downloaded == Reply::NOT_DOWNLOADED ? 'downloaded' : 'not-downloaded', 'id'=>$model->id],
                             ['title'=>$model->downloaded ? 'Не скачано' : "Скачано"]);
                     },
                 ],
