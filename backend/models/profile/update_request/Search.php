@@ -15,7 +15,7 @@ class Search extends UpdateRequest
     {
         return [
             [['user_id'], 'integer'],
-            [['name'], 'string'],
+            [['name', 'date_add'], 'string'],
         ];
     }
     public function scenarios()
@@ -31,7 +31,7 @@ class Search extends UpdateRequest
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'user_id'=>SORT_DESC,
+                    'date_add'=>SORT_DESC,
                 ],
             ],
         ]);
@@ -47,7 +47,9 @@ class Search extends UpdateRequest
             'user_id' => $this->user_id,
         ]);
 
-        $query->andFilterWhere(['like', 'name', $this->name]);
+        $query->andFilterWhere(['like', 'name', $this->name])
+            ->andFilterWhere(['like', 'date_add', $this->date_add]);
+
 
         return $dataProvider;
     }

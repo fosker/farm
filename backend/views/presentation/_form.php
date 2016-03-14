@@ -62,6 +62,8 @@ $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\J
         'preset' => 'click'
     ]); ?>
 
+    <?= $form->field($model, 'home_priority')->textInput() ?>
+
     <?= $form->field($model, 'imageFile')->widget(FileInput::classname(),[
         'pluginOptions' => [
             'initialPreview'=> $model->image ? Html::img($model->imagePath, ['class'=>'file-preview-image', 'alt'=>'image', 'title'=>'Image']) : '',

@@ -15,11 +15,16 @@ use common\models\factory\Stock;
  * @property integer $stock_id
  * @property integer $user_id
  * @property string $photo
+ * @property string $date_add
+ * @property string $downloaded
  */
 class Reply extends ActiveRecord
 {
 
     public $image;
+
+    const DOWNLOADED = true;
+    const NOT_DOWNLOADED = false;
 
     /**
      * @inheritdoc
@@ -32,6 +37,7 @@ class Reply extends ActiveRecord
     /**
      * @inheritdoc
      */
+
     public function rules()
     {
         return [
@@ -39,39 +45,65 @@ class Reply extends ActiveRecord
             [['stock_id'],function($model,$attr) {
                 if (!$this->hasErrors()) {
                     if (!Stock::getOneForCurrentUser($this->stock_id)) {
-                        $this->addError('stock_id', 'Вы нем можете учавствовать в этой акции');
+                        $this->addError('stock_id', 'Вы не можете участвовать в этой акции');
                     }
                 }
             }],
             [['image'],'image',
-                'extensions' => 'jpg',
-                'minWidth' => 200, 'maxWidth' => 4000,
-                'minHeight' => 200, 'maxHeight' => 4000,
+                'extensions' => 'jpg, jpeg, png',
+                'minWidth' => 150, 'maxWidth' => 4000,
+                'minHeight' => 150, 'maxHeight' => 4000,
             ],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
     public function attributeLabels()
     {
         return [
+            'id' => 'ID',
             'stock_id' => 'Акция',
             'user_id' => 'Пользователь',
             'photo' => 'Фото',
+            'date_add' => 'Дата добавления',
         ];
+    }
+
+    public function getImagePath()
+    {
+        return Yii::getAlias('@uploads_view/stock-replies/'.$this->photo);
+    }
+
+    public function afterDelete()
+    {
+        if($this->photo)
+            @unlink(Yii::getAlias('@uploads/stock-replies/'.$this->photo));
+        parent::afterDelete();
+    }
+
+    public function downloaded()
+    {
+        $this->downloaded = static::DOWNLOADED;
+        $this->save(false);
+    }
+
+    public function notDownloaded()
+    {
+        $this->downloaded = static::NOT_DOWNLOADED;
+        $this->save(false);
     }
 
     public function saveImage()
     {
+
         if($this->image) {
+            $path = Yii::getAlias('@uploads/stock-replies/');
+            if($this->photo && file_exists($path . $this->photo))
+                @unlink($path . $this->photo);
             $filename = Yii::$app->getSecurity()->generateRandomString() . time() . '.' . $this->image->extension;
-            $path = Yii::getAlias('@uploads/stock-replies/'.$filename);
+            $path = $path . $filename;
             $this->image->saveAs($path);
             $this->photo = $filename;
-            Image::thumbnail($path, 200, 200)
-                ->save($path, ['quality' => 100]);
+            move_uploaded_file($this->photo, Yii::getAlias('@uploads/stock-replies/'));
         }
     }
 

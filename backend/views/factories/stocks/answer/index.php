@@ -3,6 +3,8 @@
 use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
+use kartik\date\DatePicker;
+use common\models\factory\Reply;
 
 $this->title = 'Ответы на акции';
 ?>
@@ -42,7 +44,7 @@ $this->title = 'Ответы на акции';
             [
                 'attribute'=>'stock.title',
                 'value'=>function($model) {
-                    return Html::a($model->stock->title, ['/stock/view', 'id'=>$model->stock->id]);
+                    return Html::a($model->stock->title, ['/factories/stock/view', 'id'=>$model->stock->id]);
                 },
                 'format' => 'html',
                 'filter'=>Select2::widget([
@@ -59,8 +61,30 @@ $this->title = 'Ответы на акции';
                 ]),
             ],
             [
+                'attribute' => 'date_add',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_add',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['datetime'],
+                'contentOptions'=>['style'=>'width: 250px;'],
+            ],
+            [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {delete}',
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template'=>'{downloaded}',
+                'buttons'=>[
+                    'downloaded'=>function ($url, $model, $key) {
+                        return Html::a($model->downloaded == Reply::DOWNLOADED ? '<i class="glyphicon glyphicon-ok" style="color:lime"></i>' : '<i class="glyphicon glyphicon-ok text-muted"></i>', [$model->downloaded == Reply::NOT_DOWNLOADED ? 'downloaded' : 'not-downloaded', 'id'=>$model->id],
+                            ['title'=>$model->downloaded ? 'Не скачано' : "Скачано"]);
+                    },
+                ],
             ],
         ],
     ]); ?>

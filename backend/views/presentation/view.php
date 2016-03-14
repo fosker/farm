@@ -31,6 +31,12 @@ $this->title = $model->title;
             [$model->status == $model::STATUS_HIDDEN ? 'approve' : 'hide' , 'id' => $model->id],
             ['class' => 'pull-right btn btn-success'])
         ?>
+
+        <?= Html::a(
+            $model->home == $model::HOME_HIDDEN ? 'Разместить на главной' : 'Убрать с главной',
+            [$model->home == $model::HOME_HIDDEN ? 'approve-home' : 'hide-home' , 'id' => $model->id],
+            ['class' => 'pull-right btn btn-success'])
+        ?>
     </p>
 
     <h2>Информация о презентации</h2>
@@ -60,6 +66,11 @@ $this->title = $model->title;
             ],
             'description:html',
             'points',
+            'home_priority',
+            [
+                'attribute'=>'home',
+                'value'=>$model::getHomeStatusList()[$model->home],
+            ],
             [
                 'attribute'=>'status',
                 'value'=>$model::getStatusList()[$model->status],

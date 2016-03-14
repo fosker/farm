@@ -2,8 +2,10 @@
 
 namespace backend\components;
 
+use yii\helpers\ArrayHelper;
 use yii\widgets\InputWidget;
 use yii\helpers\Html;
+use kartik\widgets\Select2;
 
 
 class CheckWidget extends InputWidget

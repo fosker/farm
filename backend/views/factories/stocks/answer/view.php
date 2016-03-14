@@ -26,7 +26,7 @@ use kartik\widgets\Select2;
             'id',
             [
                 'attribute'=>'photo',
-                'value'=>Html::img($model->photo, ['alt' => 'Изображение', 'width' => '50%', 'height' => '200px']),
+                'value'=>Html::img($model->imagePath, ['alt' => 'Изображение', 'width' => '50%', 'height' => '350px']),
                 'format'=>'html',
             ],
             [
@@ -36,9 +36,10 @@ use kartik\widgets\Select2;
             ],
             [
                 'attribute'=>'stock.title',
-                'value'=>Html::a($model->stock->title, ['/stock/view', 'id'=>$model->stock_id]),
+                'value'=>Html::a($model->stock->title, ['/factories/stock/view', 'id'=>$model->stock_id]),
                 'format'=>'html',
             ],
+            'date_add:datetime'
         ],
     ]) ?>
 

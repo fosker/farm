@@ -21,7 +21,7 @@ class Search extends Reply
     {
         return [
             [['id', 'stock_id', 'user.id'], 'integer'],
-            [['stock.title', 'user.login'], 'string'],
+            [['stock.title', 'user.login', 'date_add'], 'string'],
         ];
     }
 
@@ -54,7 +54,7 @@ class Search extends Reply
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'stock_id'=>SORT_DESC,
+                    'date_add'=>SORT_DESC,
                 ],
             ],
         ]);
@@ -72,18 +72,16 @@ class Search extends Reply
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
             'stock_id' => $this->stock_id,
         ]);
 
         $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', Reply::tableName().'.date_add', $this->date_add])
             ->andFilterWhere(['like', Stock::tableName().'.title', $this->getAttribute('stock.title')]);
 
         return $dataProvider;

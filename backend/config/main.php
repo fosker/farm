@@ -15,6 +15,8 @@ $config =  [
         'formatter' => [
             'class' => 'yii\i18n\Formatter',
             'locale' => 'ru_RU',
+            'datetimeFormat' => 'php: d.m.Y, H:i:s',
+            'defaultTimeZone' => 'Europe/Minsk'
         ],
         'admin' => [
             'class' => 'yii\web\User',

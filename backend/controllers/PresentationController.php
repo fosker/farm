@@ -152,9 +152,23 @@ class PresentationController extends Controller
         return $this->redirect(['index']);
     }
 
+    public function actionApproveHome($id)
+    {
+        $this->findModel($id)->approveHome();
+
+        return $this->redirect(['index']);
+    }
+
     public function actionHide($id)
     {
         $this->findModel($id)->hide();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionHideHome($id)
+    {
+        $this->findModel($id)->hideHome();
 
         return $this->redirect(['index']);
     }

@@ -71,7 +71,7 @@ $this->title = 'Ответы на презентации';
                         'format' => 'yyyy-mm-dd',
                     ]
                 ]),
-                'format' => ['date', 'php:Y-m-d'],
+                'format' => ['datetime'],
                 'contentOptions'=>['style'=>'width: 250px;'],
             ],
             [

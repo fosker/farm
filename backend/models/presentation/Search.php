@@ -15,7 +15,7 @@ class Search extends Presentation
     public function rules()
     {
         return [
-            [['id', 'status'], 'integer'],
+            [['id', 'status', 'home', 'home_priority'], 'integer'],
             [['title'], 'string'],
             [['city_id', 'firm_id'], 'safe']
         ];
@@ -54,6 +54,8 @@ class Search extends Presentation
         $query->andFilterWhere([
             Presentation::tableName().'.id' => $this->id,
             'status' => $this->status,
+            'home' => $this->home,
+            'home_priority' => $this->home_priority
         ]);
 
         if($this->getAttribute('city_id'))

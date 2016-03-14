@@ -29,7 +29,7 @@ use kartik\widgets\Select2;
 
     <?= $form->field($model, 'imageFile')->widget(FileInput::classname(),[
         'pluginOptions' => [
-            'initialPreview'=> $model->image ? Html::img($model->imagePath, ['class'=>'file-preview-image', 'alt'=>'image', 'title'=>'Image']) : '',
+            'initialPreview'=> $model->image ? Html::img($model->imagePath, ['class'=>'file-preview-image', 'alt'=>'image', 'title'=>'Изображение']) : '',
             'showUpload' => false,
             'showRemove' => false,
         ]
@@ -37,7 +37,7 @@ use kartik\widgets\Select2;
 
     <?= $form->field($model, 'thumbFile')->widget(FileInput::classname(),[
         'pluginOptions' => [
-            'initialPreview'=> $model->image ? Html::img($model->imagePath, ['class'=>'file-preview-image', 'alt'=>'image', 'title'=>'Image']) : '',
+            'initialPreview'=> $model->thumbnail ? Html::img($model->thumbnailPath, ['class'=>'file-preview-image', 'alt'=>'image', 'title'=>'Превью']) : '',
             'showUpload' => false,
             'showRemove' => false,
         ]

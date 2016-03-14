@@ -20,6 +20,7 @@ use Yii;
  * @property integer $pharmacy_id
  * @property integer $position_id
  * @property string $details
+ * @property string date_add
  */
 class UpdateRequest extends \yii\db\ActiveRecord
 {
@@ -74,6 +75,7 @@ class UpdateRequest extends \yii\db\ActiveRecord
             'city_id' => 'Город',
             'region_id' => 'Область',
             'details'=>'Дополнительные сведения',
+            'date_add'=>'Дата запроса'
         ];
     }
 

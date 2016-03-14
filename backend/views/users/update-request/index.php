@@ -5,6 +5,7 @@ use kartik\widgets\Growl;
 use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 
 $this->title = 'Пользователи, ожидающие подтверждение обновления';
 ?>
@@ -23,6 +24,18 @@ $this->title = 'Пользователи, ожидающие подтвержд�
             [
                 'label' => 'Имя пользователя',
                 'attribute' => 'name',
+            ],
+            [
+                'attribute' => 'date_add',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_add',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['datetime'],
+                'contentOptions'=>['style'=>'width: 250px;'],
             ],
             [
                 'class' => 'yii\grid\ActionColumn',

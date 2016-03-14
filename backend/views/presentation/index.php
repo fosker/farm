@@ -80,7 +80,15 @@ $this->title = 'Презентации';
                 'filter'=>$searchModel::getStatusList(),
                 'contentOptions'=>['style'=>'width: 150px;'],
             ],
-
+            [
+                'attribute'=>'home',
+                'value'=>function($model) {
+                    return $model::getHomeStatusList()[$model->home];
+                },
+                'filter'=>$searchModel::getHomeStatusList(),
+                'contentOptions'=>['style'=>'width: 150px;'],
+            ],
+            'home_priority',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template'=>'{view} {approve} {update} {delete}',

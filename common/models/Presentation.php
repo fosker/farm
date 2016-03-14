@@ -34,6 +34,9 @@ class Presentation extends ActiveRecord
     const STATUS_ACTIVE = 1;
     const STATUS_HIDDEN = 0;
 
+    const HOME_ACTIVE = 1;
+    const HOME_HIDDEN = 0;
+
     public $imageFile;
     public $thumbFile;
 
@@ -52,7 +55,7 @@ class Presentation extends ActiveRecord
     {
         return [
             [['title', 'description', 'points'], 'required'],
-            ['points', 'integer'],
+            [['points', 'home_priority'], 'integer'],
             [['imageFile','thumbFile'], 'required', 'on' => 'create'],
         ];
     }
@@ -76,6 +79,8 @@ class Presentation extends ActiveRecord
             'image' => 'Изображение',
             'thumbnail' => 'Превью',
             'status' => 'Статус',
+            'home' => 'Отображать на главной',
+            'home_priority' => 'Приоритет'
         ];
     }
 
@@ -172,9 +177,21 @@ class Presentation extends ActiveRecord
         $this->save(false);
     }
 
+    public function approveHome()
+    {
+        $this->home = static::HOME_ACTIVE;
+        $this->save(false);
+    }
+
     public function hide()
     {
         $this->status = static::STATUS_HIDDEN;
+        $this->save(false);
+    }
+
+    public function hideHome()
+    {
+        $this->home = static::HOME_HIDDEN;
         $this->save(false);
     }
 
@@ -188,6 +205,11 @@ class Presentation extends ActiveRecord
     public static function getStatusList()
     {
         return [static::STATUS_ACTIVE=>'активный',static::STATUS_HIDDEN=>'скрытый'];
+    }
+
+    public static function getHomeStatusList()
+    {
+        return [static::HOME_ACTIVE=>'да',static::HOME_HIDDEN=>'нет'];
     }
 
     public function getCitiesView($isFull = false)

@@ -13,14 +13,10 @@ use common\models\User;
 use common\models\factory\Stock;
 use yii\helpers\ArrayHelper;
 
-/**
- * AnswerController implements the CRUD actions for Reply model.
- */
+
 class AnswerController extends Controller
 {
-    /**
-     * @inheritdoc
-     */
+
     public function behaviors()
     {
         return [
@@ -46,10 +42,6 @@ class AnswerController extends Controller
         ];
     }
 
-    /**
-     * Lists all Reply models.
-     * @return mixed
-     */
     public function actionIndex()
     {
         $searchModel = new Search();
@@ -63,11 +55,20 @@ class AnswerController extends Controller
         ]);
     }
 
-    /**
-     * Displays a single Reply model.
-     * @param integer $id
-     * @return mixed
-     */
+    public function actionDownloaded($id)
+    {
+        $this->findModel($id)->downloaded();
+
+        return $this->redirect(['index']);
+    }
+
+    public function actionNotDownloaded($id)
+    {
+        $this->findModel($id)->notDownloaded();
+
+        return $this->redirect(['index']);
+    }
+
     public function actionView($id)
     {
         return $this->render('view', [
@@ -75,11 +76,6 @@ class AnswerController extends Controller
         ]);
     }
 
-    /**
-     * Creates a new Reply model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
     public function actionCreate()
     {
         $model = new Reply();
@@ -93,12 +89,6 @@ class AnswerController extends Controller
         }
     }
 
-    /**
-     * Updates an existing Reply model.
-     * If update is successful, the browser will be redirected to the 'view' page.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
@@ -112,12 +102,6 @@ class AnswerController extends Controller
         }
     }
 
-    /**
-     * Deletes an existing Reply model.
-     * If deletion is successful, the browser will be redirected to the 'index' page.
-     * @param integer $id
-     * @return mixed
-     */
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -125,19 +109,12 @@ class AnswerController extends Controller
         return $this->redirect(['index']);
     }
 
-    /**
-     * Finds the Reply model based on its primary key value.
-     * If the model is not found, a 404 HTTP exception will be thrown.
-     * @param integer $id
-     * @return Reply the loaded model
-     * @throws NotFoundHttpException if the model cannot be found
-     */
     protected function findModel($id)
     {
         if (($model = Reply::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('The requested page does not exist.');
+            throw new NotFoundHttpException('Страница не найдена.');
         }
     }
 }
