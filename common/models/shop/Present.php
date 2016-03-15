@@ -40,7 +40,11 @@ class Present extends \yii\db\ActiveRecord
 
     public function extraFields() {
         return [
-            'promo','user','date_buy', 'description'=>function($model) {
+            'promo','user',
+            'date_buy'=>function($model) {
+                return strtotime($model->date_buy);
+            },
+            'description'=>function($model) {
                 return $model->item->description;
             }
         ];
