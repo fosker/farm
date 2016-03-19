@@ -19,7 +19,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         'maxlength' => true,
         ]) ?>
 
-    <?php if ($user->name) {
+    <?php if ($user->name != $model->name && $user->name) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новое имя: $user->name</p>
@@ -29,7 +29,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
 
     <?= $form->field($model, 'email')->textInput(['maxlength' => true]) ?>
 
-    <?php if ($user->email) {
+    <?php if ($user->email != $model->email && $user->email) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новый email: $user->email</p>
@@ -45,7 +45,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         ],
     ]); ?>
 
-    <?php if ($user->education_id) {
+    <?php if ($user->education_id != $model->education_id && $user->education_id) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новое образование: ".$user->education->name."</p>
@@ -82,6 +82,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
     ]); ?>
 
     <?= $form->field($model, 'pharmacy_id')->widget(DepDrop::classname(), [
+        'data' => $pharmacies,
         'type' => 2,
         'options'=>['id'=>'pharmacy-id'],
         'pluginOptions'=>[
@@ -91,7 +92,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         ]
     ]); ?>
 
-    <?php if ($user->pharmacy_id) {
+    <?php if ($user->pharmacy_id != $model->pharmacy_id && $user->pharmacy_id) {
         echo "<div class='row'>
                 <div class='col-md-12'>
                     <p class='text-success'>Новая аптека: ".
@@ -106,7 +107,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         'female' => 'женский',
     ]); ?>
 
-    <?php if ($user->sex) {
+    <?php if ($user->sex != $model->sex && $user->sex) {
         $sex = "";
         switch($user->sex) {
             case 'female' : $sex = 'женский';
@@ -129,7 +130,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
         ],
     ]); ?>
 
-    <?php if ($user->position_id) {
+    <?php if ($user->position_id != $model->position_id && $user->position_id) {
         echo "<div class='row'>
                 <div class='col-md-4'>
                     <p class='text-success'>Новая должность: ". $user->position->name."</p>

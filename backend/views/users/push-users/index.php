@@ -4,6 +4,11 @@ use yii\helpers\Html;
 use kartik\form\ActiveForm;
 use kartik\widgets\Select2;
 use kartik\widgets\Growl;
+use yii\helpers\Url;
+use yii\web\JsExpression;
+
+$url = Url::to(['/users/push-groups/link-list']);
+
 $this->title = 'Push-уведомления для пользователей';
 
 if(Yii::$app->session->hasFlash('PushMessage')) :
@@ -47,6 +52,24 @@ endif;
     <?php $form = ActiveForm::begin(['options' => ['enctype' => 'multipart/form-data']]); ?>
 
     <?=  $form->field($model, 'message')->textInput(); ?>
+
+    <?=  $form->field($model, 'link')->widget(Select2::classname(),
+        [
+            'initValueText' => $model->linkTitle,
+            'pluginOptions' => [
+                'allowClear' => false,
+                'minimumInputLength' => 0,
+                'ajax' => [
+                    'url' => $url,
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { return {q:params.term}; }'),
+                ],
+                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(link) { return link.text; }'),
+                'templateSelection' => new JsExpression('function (link) { return link.text; }'),
+            ],
+        ]
+    ); ?>
 
     <?= $form->field($model, 'users')->widget(Select2::classname(), [
         'data' => $users,

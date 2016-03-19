@@ -45,7 +45,10 @@ class Entry extends ActiveRecord
 
     public function fields() {
         return [
-            'seminar_id','contact','date_contact'
+            'seminar_id','contact','date_contact',
+            'date_add'=>function($model) {
+                return strtotime($model->date_add);
+            }
         ];
     }
 

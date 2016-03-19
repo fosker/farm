@@ -34,13 +34,19 @@ class Present extends \yii\db\ActiveRecord
 
     public function fields() {
         return [
-            'id', 'item', 'count'
+            'id', 'item', 'count',
+            'date_buy'=>function($model) {
+                return strtotime($model->date_buy);
+            }
         ];
     }
 
     public function extraFields() {
         return [
-            'promo','user','date_buy'
+            'promo','user',
+            'date_buy'=>function($model) {
+                return strtotime($model->date_buy);
+            }
         ];
     }
 
@@ -51,6 +57,7 @@ class Present extends \yii\db\ActiveRecord
     {
         return [
             [['item_id', 'count', 'user_id'], 'required'],
+            ['date_buy', 'string'],
             [['count'], 'integer','min'=>1],
             [['count'], 'validatePoints'],
             [['item_id'], 'isAvailable'],
@@ -128,7 +135,7 @@ class Present extends \yii\db\ActiveRecord
             'promo'=>$this->promo,
         ])
             ->setFrom(Param::getParam('email'))
-            ->setTo("pharmbonus@gmail.com")
+            ->setTo(["pharmbonus@gmail.com", $item->vendor->email])
             ->setSubject('Новая покупка!')
             ->send();
     }

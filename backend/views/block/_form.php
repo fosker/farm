@@ -7,9 +7,8 @@ use backend\components\Editor;
 use yii\helpers\ArrayHelper;
 use dosamigos\ckeditor\CKEditor;
 
-/* @var $this yii\web\View */
-/* @var $model common\models\Block */
-/* @var $form yii\widgets\ActiveForm */
+
+$this->registerJs("CKEDITOR.plugins.addExternal('dropler','".Yii::getAlias('@web')."/js/ckeditor/plugins/dropler/');");
 ?>
 
 <div class="block-form">
@@ -18,8 +17,19 @@ use dosamigos\ckeditor\CKEditor;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'description')->widget(CKEditor::className(), [
-        'options' => ['rows' => 6],
+    <?= $form->field($model, 'description')->widget(Editor::className(), [
+        'options' => [
+            'rows' => 6,
+        ],
+        'clientOptions' => [
+            'extraPlugins' => 'dropler',
+            'droplerConfig' => [
+                'backend' => 'basic',
+                'settings' => [
+                    'uploadUrl' => 'http://farm.loc/backend/components/upload.php'
+                ]
+            ]
+        ],
         'preset' => 'basic',
     ]); ?>
 
@@ -38,3 +48,4 @@ use dosamigos\ckeditor\CKEditor;
     <?php ActiveForm::end(); ?>
 
 </div>
+

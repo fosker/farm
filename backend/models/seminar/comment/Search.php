@@ -37,7 +37,7 @@ class Search extends Comment
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'date_add' => SORT_DESC
+                    'date_add' => SORT_ASC
                 ],
             ],
         ]);

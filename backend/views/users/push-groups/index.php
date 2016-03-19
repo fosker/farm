@@ -7,11 +7,17 @@ use kartik\form\ActiveForm;
 use common\models\location\Region;
 use common\models\agency\Firm;
 use kartik\widgets\Growl;
+use kartik\widgets\Select2;
+use yii\helpers\Url;
+use yii\web\JsExpression;
 
 /* @var $this yii\web\View */
 
 $this->title = 'Push-уведомления для групп';
 $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\JqueryAsset::className()]]);
+
+$url = Url::to(['/users/push-groups/link-list']);
+
 if(Yii::$app->session->hasFlash('PushMessage')) :
     echo Growl::widget([
         'type' => Growl::TYPE_SUCCESS,
@@ -58,6 +64,24 @@ endif;
 
 
     echo $form->field($model, 'message')->textInput();
+
+    echo $form->field($model, 'link')->widget(Select2::classname(),
+        [
+            'initValueText' => $model->linkTitle,
+            'pluginOptions' => [
+                'allowClear' => false,
+                'minimumInputLength' => 0,
+                'ajax' => [
+                    'url' => $url,
+                    'dataType' => 'json',
+                    'data' => new JsExpression('function(params) { return {q:params.term}; }'),
+                ],
+                'escapeMarkup' => new JsExpression('function (markup) { return markup; }'),
+                'templateResult' => new JsExpression('function(link) { return link.text; }'),
+                'templateSelection' => new JsExpression('function (link) { return link.text; }'),
+            ],
+        ]
+    );
 
     Modal::begin([
         'header' => '<h2>Выберите города</h2>',

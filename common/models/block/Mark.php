@@ -39,6 +39,9 @@ class Mark extends \yii\db\ActiveRecord
                 'user',
                 'block_id',
                 'mark',
+                'date_add'=>function($model) {
+                    return strtotime($model->date_add);
+                }
             ];
         else
             return $this->scenarios()[$this->scenario];

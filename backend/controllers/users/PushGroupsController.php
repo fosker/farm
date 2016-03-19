@@ -21,6 +21,12 @@ use common\models\profile\Education;
 use common\models\profile\UpdateRequest;
 use common\models\location\Region;
 use yii\helpers\Json;
+use common\models\Seminar;
+use common\models\Survey;
+use common\models\Block;
+use common\models\Item;
+use common\models\factory\Stock;
+use common\models\Presentation;
 
 
 class PushGroupsController extends Controller
@@ -50,11 +56,60 @@ class PushGroupsController extends Controller
         ];
     }
 
+    public function actionLinkList($q = null, $id = null) {
+        Yii::$app->response->format = \yii\web\Response::FORMAT_JSON;
+        $out = ['results' => ['id' => '', 'text' => '']];
+        if (!is_null($q)) {
+            $block = Block::find()->select('CONCAT("block/",`id`) as id, CONCAT("Страница: ",`title`) as text')->where(['like','CONCAT("Страница: ",title)',$q])->asArray()->limit(20);
+
+            $survey = Survey::find()->select('CONCAT("survey/",`id`) as id, CONCAT("Анкета: ",`title`) as text')->where(['like','CONCAT("Анкета: ",title)',$q])->asArray();
+
+            $seminar = Seminar::find()->select('CONCAT("seminar/",`id`) as id, CONCAT("Семинар: ",`title`) as text')->where(['like','CONCAT("Семинар: ",title)',$q])->asArray();
+
+            $present = Item::find()->select('CONCAT("present/",`id`) as id, CONCAT("Подарок: ",`title`) as text')->where(['like','CONCAT("Подарок: ",title)',$q])->asArray();
+
+            $presentation = Presentation::find()->select('CONCAT("presentation/",`id`) as id, CONCAT("Презентация: ",`title`) as text')->where(['like','CONCAT("Презентация: ",title)',$q])->asArray();
+
+            $stock = Stock::find()->select('CONCAT("stock/",`id`) as id, CONCAT("Акция: ",`title`) as text')->where(['like','CONCAT("Акция: ",title)',$q])->asArray();
+
+            $block->union($survey)->union($seminar)->union($present)->union($stock)->union($presentation);
+
+            $out['results'] = array_values($block->limit(20)->all());
+        }
+        elseif (!is_null($id)) {
+            $path = explode("/",$id);
+            switch($path[0]) {
+                case 'block':
+                    $item = Block::findOne($path[1]);
+                    break;
+                case 'present':
+                    $item = Item::findOne($path[1]);
+                    break;
+                case 'presentation':
+                    $item = Presentation::findOne($path[1]);
+                    break;
+                case 'survey':
+                    $item = Survey::findOne($path[1]);
+                    break;
+                case 'seminar':
+                    $item = Seminar::findOne($path[1]);
+                    break;
+                case 'stock':
+                    $item = Stock::findOne($path[1]);
+                    break;
+            }
+            $out['results'] = ['id' => $id, 'text' => $item->title];
+        }
+
+        return $out;
+    }
+
     public function actionIndex()
     {
         $model = new Push();
 
         if(Yii::$app->request->post()) {
+
             $cities = Yii::$app->request->post('cities') ?  Yii::$app->request->post('cities') : [];
             $educations = Yii::$app->request->post('education') ?  Yii::$app->request->post('education') : [];
             $pharmacies = Yii::$app->request->post('pharmacies') ?  Yii::$app->request->post('pharmacies') : [];
@@ -88,9 +143,9 @@ class PushGroupsController extends Controller
 
             if($ios_tokens)
             {
-                if(Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
+                if(Yii::$app->apns->sendMulti($ios_tokens, $model->message, ['link' => $model->link], [
                     'sound' => 'default',
-                    'badge' => 1
+                    'badge' => 1,
                 ])){
                     Yii::$app->session->setFlash('PushMessage',
                         'Push-уведомление успешно отправлено на '.count($ios_tokens).' ios-устройств');
@@ -98,7 +153,7 @@ class PushGroupsController extends Controller
             }
             if($android_tokens)
             {
-                if(Yii::$app->gcm->sendMulti($android_tokens, $model->message)){
+                if(Yii::$app->gcm->sendMulti($android_tokens, $model->message, ['link' => $model->link])){
                     Yii::$app->session->setFlash('PushMessage2',
                         'Push-уведомление успешно отправлено на ' . count($android_tokens) . ' android-устройств');
                 }

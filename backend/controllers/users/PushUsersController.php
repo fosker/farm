@@ -68,7 +68,7 @@ class PushUsersController extends Controller
 
             if($ios_tokens)
             {
-                if(Yii::$app->apns->sendMulti($ios_tokens, $model->message, [], [
+                if(Yii::$app->apns->sendMulti($ios_tokens, $model->message, ['link' => $model->link], [
                     'sound' => 'default',
                     'badge' => 1
                 ])){
@@ -79,7 +79,7 @@ class PushUsersController extends Controller
 
             if($android_tokens)
             {
-                if(Yii::$app->gcm->sendMulti($android_tokens, $model->message)){
+                if(Yii::$app->gcm->sendMulti($android_tokens, $model->message, ['link' => $model->link])){
                     Yii::$app->session->setFlash('PushMessage2',
                         'Push-уведомление успешно отправлено на ' . count($android_tokens) . ' android-устройств');
                 }

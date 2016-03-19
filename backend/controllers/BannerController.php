@@ -2,6 +2,7 @@
 
 namespace backend\controllers;
 
+use common\models\Presentation;
 use Yii;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
@@ -170,8 +171,12 @@ class BannerController extends Controller
 
             $present = Item::find()->select('CONCAT("present/",`id`) as id, CONCAT("Подарок: ",`title`) as text')->where(['like','CONCAT("Подарок: ",title)',$q])->asArray();
 
+            $presentation = Presentation::find()->select('CONCAT("presentation/",`id`) as id, CONCAT("Презентация: ",`title`) as text')->where(['like','CONCAT("Презентация: ",title)',$q])->asArray();
+
             $stock = Stock::find()->select('CONCAT("stock/",`id`) as id, CONCAT("Акция: ",`title`) as text')->where(['like','CONCAT("Акция: ",title)',$q])->asArray();
-            $block->union($survey)->union($seminar)->union($present)->union($stock);
+
+            $block->union($survey)->union($seminar)->union($present)->union($stock)->union($presentation);
+
             $out['results'] = array_values($block->limit(20)->all());
         }
         elseif (!is_null($id)) {
@@ -182,6 +187,9 @@ class BannerController extends Controller
                     break;
                 case 'present':
                     $item = Item::findOne($path[1]);
+                    break;
+                case 'presentation':
+                    $item = Presentation::findOne($path[1]);
                     break;
                 case 'survey':
                     $item = Survey::findOne($path[1]);
