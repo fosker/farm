@@ -54,7 +54,7 @@ $config =  [
         ],
         'apns' => [
             'class' => 'bryglen\apnsgcm\Apns',
-            'environment' => \bryglen\apnsgcm\Apns::ENVIRONMENT_SANDBOX,
+            'environment' => \bryglen\apnsgcm\Apns::ENVIRONMENT_PRODUCTION,
             'pemFile' => dirname(__DIR__).'/extensions/Shogunate_Farma_aps.pem',
             // 'retryTimes' => 3,
             'options' => [
