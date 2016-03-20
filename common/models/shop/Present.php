@@ -46,12 +46,9 @@ class Present extends \yii\db\ActiveRecord
             'promo','user',
             'date_buy'=>function($model) {
                 return strtotime($model->date_buy);
-<<<<<<< HEAD
-=======
             },
             'description'=>function($model) {
                 return $model->item->description;
->>>>>>> 63096b0101abcb870222e2ed8055e65d354603b8
             }
         ];
     }

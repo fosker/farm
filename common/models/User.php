@@ -17,7 +17,7 @@ use common\models\agency\Pharmacy;
 use common\models\location\Region;
 use common\models\profile\Education;
 use common\models\profile\Position;
-
+use backend\models\Param;
 use common\models\factory\Reply;
 use common\models\block\Comment as Block_comment;
 use common\models\block\Mark as Block_mark;
@@ -421,9 +421,11 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
     public function register()
     {
         $this->setPassword($this->password);
+        $this->sendInfoMail();
         $this->save(false);
         SetNotification::registerNewUser($this->id);
         $this->generateAccessToken();
+
     }
 
     public function answerSurvey($survey) {
@@ -514,6 +516,21 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
         Present::deleteAll(['user_id'=>$this->id]);
         UpdateRequest::deleteAll(['user_id'=>$this->id]);
         parent::afterDelete();
+    }
+
+    private function sendInfoMail()
+    {
+        Yii::$app->mailer->compose('@common/mail/user-register', [
+            'name'=>$this->name,
+            'login'=>$this->login,
+            'email'=>$this->email,
+            'pharmacy'=>$this->pharmacy->name,
+            'education'=>$this->education->name,
+        ])
+            ->setFrom(Param::getParam('email'))
+            ->setTo("pharmbonus@gmail.com")
+            ->setSubject('Новый пользователь!')
+            ->send();
     }
 
 }
