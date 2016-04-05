@@ -53,6 +53,11 @@ $count = UpdateRequest::find()->count();
                                 'url' => ['/admin'],
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'admin')
                             ],
+                            [
+                                'label' => 'Обратная связь',
+                                'url' => ['/contact-form'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'contact-form')
+                            ],
                         ],
                         'visible' => Admin::showMain(Yii::$app->admin->id)
                     ],

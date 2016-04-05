@@ -65,6 +65,7 @@ return [
                 'GET v1/user'   => 'v1/user/index',
                 'PUT v1/user' => 'v1/user/update-profile',
                 'POST v1/user/photo' => 'v1/user/update-photo',
+                'POST v1/user/message' => 'v1/user/send-message',
                 'PUT v1/user/password' => 'v1/user/update-password',
                 'PUT v1/user/notifications' => 'v1/user/notifications',
                 'GET v1/user/notifications' => 'v1/user/get-notifications',

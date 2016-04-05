@@ -15,6 +15,7 @@ use common\models\profile\SetNotification;
 use common\models\User;
 use common\models\profile\Notification;
 use rest\components\Controller;
+use common\models\ContactForm;
 
 class UserController extends Controller
 {
@@ -119,6 +120,20 @@ class UserController extends Controller
 
     public function actionGetNotifications() {
         return Notification::find()->asArray()->all();
+    }
+
+    public function actionSendMessage() {
+
+        $message = new ContactForm();
+
+        if ($message->load(Yii::$app->request->bodyParams,'')) {
+            $message->user_id = $this->_user()->id;
+            if($message->save()) {
+                return ['success'=>true];
+            }
+        }
+        return $message;
+
     }
 
 }
