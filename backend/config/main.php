@@ -18,18 +18,6 @@ $config =  [
             'datetimeFormat' => 'php: d.m.Y, H:i:s',
             'defaultTimeZone' => 'Europe/Minsk'
         ],
-        'urlManager' => [
-            'class' => 'yii\web\UrlManager',
-            // Disable index.php
-            'showScriptName' => false,
-            // Disable r= routes
-            'enablePrettyUrl' => true,
-            'rules' => array(
-                '<controller:\w+>/<id:\d+>' => '<controller>/view',
-                '<controller:\w+>/<action:\w+>/<id:\d+>' => '<controller>/<action>',
-                '<controller:\w+>/<action:\w+>' => '<controller>/<action>',
-            ),
-        ],
         'admin' => [
             'class' => 'yii\web\User',
             'identityClass' => 'backend\models\Admin',

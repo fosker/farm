@@ -7,6 +7,7 @@ use yii\widgets\Breadcrumbs;
 use backend\models\admin\Right;
 use backend\models\Admin;
 use common\models\profile\UpdateRequest;
+use kartik\nav\NavX;
 /**
  * @var $content string
  */
@@ -34,9 +35,9 @@ $count = UpdateRequest::find()->count();
                     'class' => 'navbar-inverse navbar-fixed-top',
                 ],
             ]);
-            echo Nav::widget([
+        echo NavX::widget([
                 'encodeLabels' => false,
-                'options' => ['class' => 'navbar-nav navbar-right'],
+                'options' => ['class' => 'navbar-nav'],
                 'items' => [
                     [
 
@@ -101,26 +102,6 @@ $count = UpdateRequest::find()->count();
                         ],
                         'visible' => Admin::showLists(Yii::$app->admin->id)
                     ],
-                    ['label' => 'Страницы',
-                        'items'=>[
-                            [
-                                'label' => 'Страницы',
-                                'url' => ['/block'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'block')
-                            ],
-                            [
-                                'label' => 'Комментарии',
-                                'url' => ['/blocks/comment'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'blocks/comment')
-                            ],
-                            [
-                                'label' => 'Оценки',
-                                'url' => ['/blocks/mark'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'blocks/mark')
-                            ],
-                        ],
-                        'visible' => Admin::showBlock(Yii::$app->admin->id)
-                    ],
                     ['label' => 'Пользователи',
                         'items'=>[
                             [
@@ -139,114 +120,144 @@ $count = UpdateRequest::find()->count();
                                 'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/present')
                             ],
                             [
-                                'label' => 'Оповещения группам',
-                                'url' => ['/users/push-groups'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/push-groups')
-                            ],
-                            [
-                                'label' => 'Оповещения пользователям',
-                                'url' => ['/users/push-users'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/push-users')
+                                'label' => 'Оповещения',
+                                'items' => [
+                                    [
+                                        'label' => 'Оповещения группам',
+                                        'url' => ['/users/push-groups'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/push-groups')
+                                    ],
+                                    [
+                                        'label' => 'Оповещения пользователям',
+                                        'url' => ['/users/push-users'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'users/push-users')
+                                    ],
+                                ]
                             ],
                         ],
                         'visible' => Admin::showUser(Yii::$app->admin->id)
                     ],
-                    ['label'=>'Анкеты',
-                        'items'=>[
-                            [
-                                'label'=>'Анкеты',
-                                'url'=>['/survey'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'survey')
+                    ['label' => 'Основное меню',
+                        'items' => [
+                            ['label' => 'Страницы',
+                                'items'=>[
+                                    [
+                                        'label' => 'Страницы',
+                                        'url' => ['/block'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'block')
+                                    ],
+                                    [
+                                        'label' => 'Комментарии',
+                                        'url' => ['/blocks/comment'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'blocks/comment')
+                                    ],
+                                    [
+                                        'label' => 'Оценки',
+                                        'url' => ['/blocks/mark'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'blocks/mark')
+                                    ],
+                                ],
+                                'visible' => Admin::showBlock(Yii::$app->admin->id)
                             ],
-                            [
-                                'label'=>'Ответы',
-                                'url'=>['/surveys/answer'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'surveys/answer')
+                            ['label'=>'Анкеты',
+                                'items'=>[
+                                    [
+                                        'label'=>'Анкеты',
+                                        'url'=>['/survey'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'survey')
+                                    ],
+                                    [
+                                        'label'=>'Ответы',
+                                        'url'=>['/surveys/answer'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'surveys/answer')
+                                    ],
+                                ],
+                                'visible' => Admin::showSurvey(Yii::$app->admin->id)
                             ],
-                         ],
-                        'visible' => Admin::showSurvey(Yii::$app->admin->id)
-                    ],
-                    ['label'=>'Презентации',
-                        'items'=>[
-                            [
-                                'label'=>'Презентации',
-                                'url'=>['/presentation'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentation')
+                            ['label'=>'Презентации',
+                                'items'=>[
+                                    [
+                                        'label'=>'Презентации',
+                                        'url'=>['/presentation'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentation')
+                                    ],
+                                    [
+                                        'label'=>'Комментарии',
+                                        'url'=>['/presentations/comment'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentations/comment')
+                                    ],
+                                    [
+                                        'label'=>'Ответы',
+                                        'url'=>['/presentations/answer'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentations/answer')
+                                    ],
+                                ],
+                                'visible' => Admin::showPresentation(Yii::$app->admin->id)
                             ],
-                            [
-                                'label'=>'Комментарии',
-                                'url'=>['/presentations/comment'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentations/comment')
+                            ['label'=>'Фабрики',
+                                'items'=>[
+                                    [
+                                        'label'=>'Фабрики',
+                                        'url'=>['/factory'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factory')
+                                    ],
+                                    [
+                                        'label'=>'Акции',
+                                        'url'=>['/factories/stock'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/stock')
+                                    ],
+                                    [
+                                        'label'=>'Продукты',
+                                        'url'=>['/factories/product'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/product')
+                                    ],
+                                    [
+                                        'label'=>'Ответы',
+                                        'url'=>['/factories/stocks/answer'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/stocks/answer')
+                                    ],
+                                ],
+                                'visible' => Admin::showFactory(Yii::$app->admin->id)
                             ],
-                            [
-                                'label'=>'Ответы',
-                                'url'=>['/presentations/answer'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presentations/answer')
-                            ],
-                        ],
-                        'visible' => Admin::showPresentation(Yii::$app->admin->id)
-                    ],
-                    ['label'=>'Фабрики',
-                        'items'=>[
-                            [
-                                'label'=>'Фабрики',
-                                'url'=>['/factory'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factory')
-                            ],
-                            [
-                                'label'=>'Акции',
-                                'url'=>['/factories/stock'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/stock')
-                            ],
-                            [
-                                'label'=>'Продукты',
-                                'url'=>['/factories/product'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/product')
-                            ],
-                            [
-                                'label'=>'Ответы',
-                                'url'=>['/factories/stocks/answer'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'factories/stocks/answer')
-                            ],
-                        ],
-                        'visible' => Admin::showFactory(Yii::$app->admin->id)
-                    ],
 
-                    ['label'=>'Семинары',
-                        'items'=>[
-                            [
-                                'label'=>'Семинары',
-                                'url'=>['/seminar'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminar')
+                            ['label'=>'Семинары',
+                                'items'=>[
+                                    [
+                                        'label'=>'Семинары',
+                                        'url'=>['/seminar'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminar')
+                                    ],
+                                    [
+                                        'label'=>'Записи',
+                                        'url'=>['/seminars/sign'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminars/sign')
+                                    ],
+                                    [
+                                        'label'=>'Комментарии',
+                                        'url'=>['/seminars/comment'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminars/comment')
+                                    ],
+                                ],
+                                'visible' => Admin::showSeminar(Yii::$app->admin->id)
                             ],
-                            [
-                                'label'=>'Записи',
-                                'url'=>['/seminars/sign'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminars/sign')
-                            ],
-                            [
-                                'label'=>'Комментарии',
-                                'url'=>['/seminars/comment'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'seminars/comment')
-                            ],
-                        ],
-                        'visible' => Admin::showSeminar(Yii::$app->admin->id)
-                    ],
 
-                    ['label'=>'Подарки',
-                        'items'=>[
-                            [
-                                'label'=>'Подарки',
-                                'url'=>['/present'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'present')
+                            ['label'=>'Подарки',
+                                'items'=>[
+                                    [
+                                        'label'=>'Подарки',
+                                        'url'=>['/present'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'present')
+                                    ],
+                                    [
+                                        'label'=>'Поставщики',
+                                        'url'=>['/presents/vendor'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presents/vendor')
+                                    ],
+                                ],
+                                'visible' => Admin::showPresent(Yii::$app->admin->id)
                             ],
-                            [
-                                'label'=>'Поставщики',
-                                'url'=>['/presents/vendor'],
-                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'presents/vendor')
-                            ],
-                        ],
-                        'visible' => Admin::showPresent(Yii::$app->admin->id)
+                                    ],
+                        'visible' => Admin::showContent(Yii::$app->admin->id)
                     ],
                     ['label' => 'Выход', 'url' => ['/auth/logout']],
                 ],

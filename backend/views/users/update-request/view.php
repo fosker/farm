@@ -33,6 +33,7 @@ $this->title = 'Пользователь: '.$model->name;
                 'value'=>$model->sex == User::SEX_MALE ? 'мужской' : 'женский',
             ],
             'email:email',
+            'phone',
             'education.name',
             [
                 'attribute'=>'pharmacy.name',

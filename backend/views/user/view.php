@@ -73,6 +73,7 @@ $this->title = 'Пользователь: '.$model->name;
                 'format'=>'html',
             ],
             'position.name',
+            'phone',
             [
                 'attribute'=>'status',
                 'value'=> $model->status == User::STATUS_VERIFY ? 'Ожидает верификацию' : 'активный',

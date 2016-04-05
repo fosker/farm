@@ -37,6 +37,16 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
               </div>";
     } ?>
 
+    <?= $form->field($model, 'phone')->textInput(['maxlength' => true]) ?>
+
+    <?php if ($user->phone != $model->phone && $user->phone) {
+        echo "<div class='row'>
+                <div class='col-md-4'>
+                    <p class='text-success'>Новый телефон: $user->phone</p>
+                </div>
+              </div>";
+    } ?>
+
     <?= $form->field($model, 'education_id')->widget(Select2::classname(), [
         'data' => $education,
         'options' => ['placeholder' => 'Выберите образование ...'],

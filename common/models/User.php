@@ -50,6 +50,7 @@ use common\models\profile\UpdateRequest;
  * @property integer $points
  * @property string $date_reg
  * @property string $details
+ * @property string $phone
  */
 class User extends ActiveRecord implements IdentityInterface , RateLimitInterface
 {
@@ -109,6 +110,7 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
             [['name','email'], 'string', 'max'=>255],
             [['sex'], 'string', 'max' => 6],
             [['email'],'email'],
+            [['phone'], 'string', 'max' => 30],
             [['login','email'],'unique'],
             [['re_password'], 'compare', 'compareAttribute'=>'password'],
             [['password','old_password', 're_password'], 'string', 'min' => 8,'max' => 100],
@@ -158,7 +160,7 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
     public function fields() {
         if($this->scenario == 'default')
             return [
-                'name','login','email','sex','points','avatar'=>'avatarPath'
+                'name','login','email','sex','points','phone','avatar'=>'avatarPath'
             ];
         else
             return $this->scenarios()[$this->scenario];
@@ -195,6 +197,7 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
             'date_reg'=>'Зарегистрирован',
             'points' => 'Баллы',
             'details'=>'Дополнительные сведения',
+            'phone' => 'Телефон',
         ];
     }
 
