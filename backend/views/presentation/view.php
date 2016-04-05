@@ -91,7 +91,7 @@ $this->title = $model->title;
 
         <?php foreach($model->slides as $slide) : ?>
             <tr>
-                <td><?=Html::img($slide->imagePath, ['alt' => 'Изображение', 'width'=>'50%', 'height'=>'200px']);?></td>
+                <td><?=Html::img($slide->imagePath, ['alt' => 'Изображение', 'height'=>'200px']);?></td>
                 <td><?= $slide->description; ?></td>
                 <td><?=$slide->order_index?></td>
                 <td>

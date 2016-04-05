@@ -76,8 +76,10 @@ class Slide extends \yii\db\ActiveRecord
             $path = $path . $filename;
             $this->imageFile->saveAs($path);
             $this->image = $filename;
-            Image::thumbnail($path, 1000, 500)
-                ->save(Yii::getAlias('@uploads/presentations/slides/') . $this->image, ['quality' => 80]);
+
+            move_uploaded_file($this->image, Yii::getAlias('@uploads/presentations/slides/'));
+            //Image::thumbnail($path, 1000, 500)
+                //->save(Yii::getAlias('@uploads/presentations/slides/') . $this->image, ['quality' => 80]);
         }
     }
 
