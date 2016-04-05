@@ -20,6 +20,7 @@ use Yii;
  * @property integer $pharmacy_id
  * @property integer $position_id
  * @property string $phone
+ * @property string $mail_address
  * @property string $details
  * @property string date_add
  */
@@ -45,7 +46,7 @@ class UpdateRequest extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'region_id', 'education_id', 'sex'], 'required'],
-            [['name','email'], 'string', 'max'=>255],
+            [['name','email', 'mail_address'], 'string', 'max'=>255],
             [['sex'], 'string', 'max' => 6],
             [['phone'], 'string', 'max' => 30],
             [['email'],'email'],
@@ -78,7 +79,8 @@ class UpdateRequest extends \yii\db\ActiveRecord
             'region_id' => 'Область',
             'details'=>'Дополнительные сведения',
             'date_add'=>'Дата запроса',
-            'phone' => 'Телефон'
+            'phone' => 'Мобильный телефон',
+            'mail_address' => 'Почтовый адрес'
         ];
     }
 
@@ -109,7 +111,8 @@ class UpdateRequest extends \yii\db\ActiveRecord
 
     public function fields() {
         return [
-            'user_id', 'name', 'sex', 'email', 'education_id', 'pharmacy_id', 'position_id', 'firm_id', 'city_id', 'region_id', 'details', 'phone'
+            'user_id', 'name', 'sex', 'email', 'education_id', 'pharmacy_id', 'position_id',
+            'firm_id', 'city_id', 'region_id', 'details', 'phone', 'mail_address'
         ];
     }
 }

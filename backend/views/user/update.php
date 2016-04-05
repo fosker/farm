@@ -47,6 +47,16 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
               </div>";
     } ?>
 
+    <?= $form->field($model, 'mail_address')->textInput(['maxlength' => true]) ?>
+
+    <?php if ($user->mail_address != $model->mail_address && $user->mail_address) {
+        echo "<div class='row'>
+                <div class='col-md-4'>
+                    <p class='text-success'>Новый почтовый адрес: $mail_address</p>
+                </div>
+              </div>";
+    } ?>
+
     <?= $form->field($model, 'education_id')->widget(Select2::classname(), [
         'data' => $education,
         'options' => ['placeholder' => 'Выберите образование ...'],

@@ -51,6 +51,7 @@ use common\models\profile\UpdateRequest;
  * @property string $date_reg
  * @property string $details
  * @property string $phone
+ * @property string @mail_address
  */
 class User extends ActiveRecord implements IdentityInterface , RateLimitInterface
 {
@@ -107,7 +108,7 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
             [['login', 'name', 'password', 're_password', 'region_id', 'education_id', 'sex', 'reset_token', 'old_password', 'device_id'], 'required'],
             [['device_id'],'exist','targetClass'=>Device::className(),'targetAttribute'=>'id'],
             [['login'], 'string', 'max' => 100],
-            [['name','email'], 'string', 'max'=>255],
+            [['name','email', 'mail_address'], 'string', 'max'=>255],
             [['sex'], 'string', 'max' => 6],
             [['email'],'email'],
             [['phone'], 'string', 'max' => 30],
@@ -160,7 +161,7 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
     public function fields() {
         if($this->scenario == 'default')
             return [
-                'name','login','email','sex','points','phone','avatar'=>'avatarPath'
+                'name','login','email','sex','points','phone','mail_address','avatar'=>'avatarPath'
             ];
         else
             return $this->scenarios()[$this->scenario];
@@ -197,7 +198,8 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
             'date_reg'=>'Зарегистрирован',
             'points' => 'Баллы',
             'details'=>'Дополнительные сведения',
-            'phone' => 'Телефон',
+            'phone' => 'Мобильный телефон',
+            'mail_address' => 'Почтовый адрес'
         ];
     }
 

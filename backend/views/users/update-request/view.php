@@ -34,6 +34,7 @@ $this->title = 'Пользователь: '.$model->name;
             ],
             'email:email',
             'phone',
+            'mail_address',
             'education.name',
             [
                 'attribute'=>'pharmacy.name',
