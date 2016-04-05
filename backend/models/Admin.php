@@ -400,9 +400,22 @@ class Admin extends ActiveRecord  implements IdentityInterface
         return false;
     }
 
+    public static function showNews($id)
+    {
+        $list = ['news', 'newss/comment'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            }
+        }
+
+        return false;
+    }
+
     public static function showContent($id)
     {
-        $list = ['block', 'survey', 'presentation', 'factory', 'seminar', 'present'];
+        $list = ['block', 'survey', 'presentation', 'factory', 'seminar', 'present', 'news'];
         foreach($list as $item) {
             if (Right::HasAdmin($id, $item)) {
                 return true;

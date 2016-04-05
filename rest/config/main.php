@@ -110,6 +110,13 @@ return [
                 'GET v1/promo/<promo>/<token>' => 'v1/promo/use-promo',
                 'GET v1/cron/<key>' => 'v1/promo/cron',
 
+                'GET v1/news' => 'v1/news/index',
+                'GET v1/news/<id>' => 'v1/news/view',
+                'GET v1/news/comments/<news_id>' => 'v1/news/comments',
+                'GET v1/news/comment/<id>' => 'v1/news/comment',
+                'POST v1/news/comment' => 'v1/news/add-comment',
+                'DELETE v1/news/comment/<id>' => 'v1/news/delete-comment',
+
                 'GET v1/seminars' => 'v1/seminar/index',
                 'GET v1/seminar/<id>' => 'v1/seminar/view',
                 'GET v1/seminar/comments/<seminar_id>' => 'v1/seminar/comments',
