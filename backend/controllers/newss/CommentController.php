@@ -8,6 +8,10 @@ use backend\models\news\comment\Search;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\filters\AccessControl;
+use common\models\News;
+use yii\helpers\ArrayHelper;
+use common\models\User;
 
 /**
  * CommentController implements the CRUD actions for Comment model.
@@ -23,7 +27,20 @@ class CommentController extends Controller
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['post'],
+                ],
+            ],
+            'access' => [
+                'class' => AccessControl::className(),
+                'user'=>'admin',
+                'rules' => [
+                    [
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            return Yii::$app->admin->identity->can($action);
+                        }
+                    ],
                 ],
             ],
         ];
@@ -41,6 +58,8 @@ class CommentController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'news'=>ArrayHelper::map(News::find()->asArray()->all(),'id','title'),
+            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'id','name'),
         ]);
     }
 

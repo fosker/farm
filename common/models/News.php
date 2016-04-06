@@ -68,7 +68,7 @@ class News extends \yii\db\ActiveRecord
             'thumbFile' => 'Превью',
             'date' => 'Дата публикации',
             'views' => 'Количество уникальных просмотров',
-            'views_added' => 'Добавить просмотры'
+            'views_added' => 'Добавленные просмотры'
         ];
     }
 

@@ -37,7 +37,7 @@ class Search extends Comment
             'query' => $query,
             'sort'=> [
                 'defaultOrder'=>[
-                    'date_add' => SORT_ASC
+                    'date_add'=>SORT_ASC,
                 ],
             ],
         ]);
@@ -59,16 +59,9 @@ class Search extends Comment
         ]);
 
 
-        $query->andFilterWhere(['like', 'comment', $this->comment]);
-        if($this->date_add)
-        {
-            var_dump($this->date_add);
-            die();
-            $query->andFilterWhere(['like', 'date_add', Yii::$app->getFormatter()->asDate($this->date_add, 'php: Y-m-d')]);
-        }
-
-
-        $query->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')]);
+        $query->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', 'date_add', $this->date_add]);
 
         return $dataProvider;
     }

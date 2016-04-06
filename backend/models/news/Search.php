@@ -29,7 +29,8 @@ class Search extends News
         $query = News::find();
 
         $viewsQuery = View::find()
-            ->select('DISTINCT count(id) as count, news_id');
+            ->select('count(DISTINCT user_id) as count, news_id')
+            ->groupBy('news_id');
         $query->leftJoin(['viewsCount' => $viewsQuery], 'viewsCount.news_id = id');
 
         $dataProvider = new ActiveDataProvider([
@@ -55,6 +56,9 @@ class Search extends News
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
+
+        if($this->views)
+            $query->andFilterWhere(['(viewsCount.count + views_added)' => ($this->views + $this->views_added)]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'date', $this->date]);

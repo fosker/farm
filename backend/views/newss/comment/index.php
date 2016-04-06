@@ -2,35 +2,81 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use kartik\widgets\Select2;
+use kartik\date\DatePicker;
 
-/* @var $this yii\web\View */
-/* @var $searchModel backend\models\news\comment\Search */
-/* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'Comments';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'Комментарии';
 ?>
 <div class="comment-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
-    <p>
-        <?= Html::a('Create Comment', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
         'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+            [
+                'label' => 'Автор',
+                'attribute' => 'user.name',
+                'value'=>function($model) {
+                    return Html::a($model->user->name, ['/user/view', 'id'=>$model->user_id]);
+                },
+                'format'=>'html',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $users,
+                    'attribute'=>'user.id',
+                    'options' => [
+                        'placeholder' => 'Выберите пользователя ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '200px'
+                    ],
+                ]),
+            ],
+            [
+                'label'=>'Новость',
+                'attribute' => 'news_id',
+                'value'=>function($model) {
+                    return Html::a($model->news->title, ['/news/view', 'id' => $model->news_id]);
+                },
+                'format'=>'html',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $news,
+                    'attribute'=>'news_id',
+                    'options' => [
+                        'placeholder' => 'Выберите новость ...',
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '200px'
+                    ],
+                ]),
+            ],
+            [
+                'attribute' => 'comment',
+                'value' => 'comment',
+                'contentOptions'=>['style'=>'width: 350px;'],
 
-            'id',
-            'user_id',
-            'comment:ntext',
-            'news_id',
-            'date_add',
-
-            ['class' => 'yii\grid\ActionColumn'],
+            ],
+            [
+                'attribute' => 'date_add',
+                'filter' => DatePicker::widget([
+                    'model' => $searchModel,
+                    'attribute' => 'date_add',
+                    'pluginOptions' => [
+                        'format' => 'yyyy-mm-dd',
+                    ]
+                ]),
+                'format' => ['datetime'],
+                'contentOptions'=>['style'=>'width: 250px;'],
+            ],
+            [
+                'class' => 'yii\grid\ActionColumn',
+                'template' => '{view} {delete}',
+            ],
         ],
     ]); ?>
 </div>

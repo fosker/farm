@@ -6,66 +6,61 @@ use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\news\Comment;
+use common\models\User;
 
-/**
- * Search represents the model behind the search form about `common\models\news\Comment`.
- */
 class Search extends Comment
 {
-    /**
-     * @inheritdoc
-     */
+
     public function rules()
     {
         return [
-            [['id', 'user_id', 'news_id'], 'integer'],
-            [['comment', 'date_add'], 'safe'],
+            [['id', 'news_id', 'user.id'], 'integer'],
+            [['comment', 'user.name', 'date_add'], 'string'],
         ];
     }
 
-    /**
-     * @inheritdoc
-     */
+    public function attributes() {
+        return array_merge(parent::attributes(), ['user.name', 'user.id']);
+    }
+
     public function scenarios()
     {
-        // bypass scenarios() implementation in the parent class
         return Model::scenarios();
     }
 
-    /**
-     * Creates data provider instance with search query applied
-     *
-     * @param array $params
-     *
-     * @return ActiveDataProvider
-     */
     public function search($params)
     {
-        $query = Comment::find();
-
-        // add conditions that should always apply here
+        $query = Comment::find()->joinWith(['user','news']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
+            'sort'=> [
+                'defaultOrder'=>[
+                    'date_add'=>SORT_ASC,
+                ],
+            ],
         ]);
+
+        $dataProvider->sort->attributes['user.name'] = [
+            'asc' => [User::tableName().'.name' => SORT_ASC],
+            'desc' => [User::tableName().'.name' => SORT_DESC],
+        ];
 
         $this->load($params);
 
         if (!$this->validate()) {
-            // uncomment the following line if you do not want to return any records when validation fails
-            // $query->where('0=1');
+
             return $dataProvider;
         }
 
-        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'user_id' => $this->user_id,
             'news_id' => $this->news_id,
-            'date_add' => $this->date_add,
         ]);
 
-        $query->andFilterWhere(['like', 'comment', $this->comment]);
+        $query->andFilterWhere(['like', 'comment', $this->comment])
+            ->andFilterWhere(['like', User::tableName().'.id', $this->getAttribute('user.id')])
+            ->andFilterWhere(['like', 'date_add', $this->date_add]);
 
         return $dataProvider;
     }
