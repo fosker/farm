@@ -1,19 +1,19 @@
 <?php
 
-namespace backend\controllers\seminars;
+namespace backend\controllers\vacancies;
 
 use Yii;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\helpers\ArrayHelper;
-use common\models\seminar\Entry;
+use common\models\vacancy\Comment;
+use common\models\Vacancy;
+use backend\models\vacancy\comment\Search;
 use common\models\User;
-use common\models\Seminar;
-use backend\models\seminar\sign\Search;
 
-class SignController extends Controller
+class CommentController extends Controller
 {
     public function behaviors()
     {
@@ -48,8 +48,8 @@ class SignController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'logins' => ArrayHelper::map(User::find()->asArray()->all(),'id','login'),
-            'seminars' => ArrayHelper::map(Seminar::find()->asArray()->all(),'title','title'),
+            'vacancies'=>ArrayHelper::map(Vacancy::find()->asArray()->all(),'id','title'),
+            'users'=>ArrayHelper::map(User::find()->asArray()->all(),'id','name'),
         ]);
     }
 
@@ -60,7 +60,6 @@ class SignController extends Controller
         ]);
     }
 
-
     public function actionDelete($id)
     {
         $this->findModel($id)->delete();
@@ -70,7 +69,7 @@ class SignController extends Controller
 
     protected function findModel($id)
     {
-        if (($model = Entry::findOne($id)) !== null) {
+        if (($model = Comment::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('�������� �� �������. ');

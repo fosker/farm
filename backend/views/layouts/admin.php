@@ -279,6 +279,26 @@ $count = UpdateRequest::find()->count();
                                     ],
                         'visible' => Admin::showContent(Yii::$app->admin->id)
                     ],
+                    ['label'=>'Вакансии',
+                        'items'=>[
+                            [
+                                'label'=>'Вакансии',
+                                'url'=>['/vacancy'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'vacancy')
+                            ],
+                            [
+                                'label'=>'Комментарии',
+                                'url'=>['/vacancies/comment'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'vacancies/comment')
+                            ],
+                            [
+                                'label'=>'Записи',
+                                'url'=>['/vacancies/sign'],
+                                'visible' => Right::HasAdmin(Yii::$app->admin->id, 'vacancies/sign')
+                            ],
+                        ],
+                        'visible' => Admin::showVacancy(Yii::$app->admin->id)
+                    ],
                     ['label' => 'Выход', 'url' => ['/auth/logout']],
                 ],
             ]);

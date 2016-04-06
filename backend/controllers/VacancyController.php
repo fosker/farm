@@ -3,23 +3,24 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
+use common\models\Vacancy;
+use backend\models\vacancy\Search;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-use yii\web\UploadedFile;
+use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
-use common\models\Seminar;
-use common\models\location\City;
-use common\models\agency\Pharmacy;
-use common\models\seminar\City as Seminar_City;
-use common\models\seminar\Pharmacy as Seminar_Pharmacy;
-use common\models\agency\Firm;
 use common\models\User;
-use backend\models\seminar\Search;
+use common\models\agency\Firm;
+use common\models\location\City;
+use common\models\vacancy\City as Vacancy_City;
+use common\models\vacancy\Pharmacy as Vacancy_Pharmacy;
+use yii\web\UploadedFile;
+use common\models\agency\Pharmacy;
 
-class SeminarController extends Controller
+class VacancyController extends Controller
 {
+
     public function behaviors()
     {
         return [
@@ -45,6 +46,7 @@ class SeminarController extends Controller
         ];
     }
 
+
     public function actionIndex()
     {
         $searchModel = new Search();
@@ -53,8 +55,8 @@ class SeminarController extends Controller
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'seminars' => ArrayHelper::map(Seminar::find()->asArray()->all(),'title','title'),
-            'emails' => ArrayHelper::map(Seminar::find()->asArray()->all(),'email','email'),
+            'vacancies' => ArrayHelper::map(Vacancy::find()->asArray()->all(),'title','title'),
+            'emails' => ArrayHelper::map(Vacancy::find()->asArray()->all(),'email','email'),
             'firms' => ArrayHelper::map(Firm::find()->asArray()->all(),'id','name'),
             'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
         ]);
@@ -69,10 +71,10 @@ class SeminarController extends Controller
 
     public function actionCreate()
     {
-        $model = new Seminar();
-        $model->scenario = 'create';
-        $seminar_cities = new Seminar_City();
-        $seminar_pharmacies = new Seminar_Pharmacy();
+        $model = new Vacancy();
+        //$model->scenario = 'create';
+        $vacancy_cities = new Vacancy_City();
+        $vacancy_pharmacies = new Vacancy_Pharmacy();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -87,8 +89,8 @@ class SeminarController extends Controller
                 'model' => $model,
                 'cities'=>City::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
-                'seminar_cities' => $seminar_cities,
-                'seminar_pharmacies' => $seminar_pharmacies
+                'vacancy_cities' => $vacancy_cities,
+                'vacancy_pharmacies' => $vacancy_pharmacies
             ]);
         }
     }
@@ -96,11 +98,11 @@ class SeminarController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        $seminar_cities = new Seminar_City();
-        $seminar_pharmacies = new Seminar_Pharmacy();
+        $vacancy_cities = new Vacancy_City();
+        $vacancy_pharmacies = new Vacancy_Pharmacy();
 
-        $old_cities = Seminar_City::find()->select('city_id')->where(['seminar_id' => $id])->asArray()->all();
-        $old_pharmacies = Seminar_Pharmacy::find()->select('pharmacy_id')->where(['seminar_id' => $id])->asArray()->all();
+        $old_cities = Vacancy_City::find()->select('city_id')->where(['vacancy_id' => $id])->asArray()->all();
+        $old_pharmacies = Vacancy_Pharmacy::find()->select('pharmacy_id')->where(['vacancy_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -115,8 +117,8 @@ class SeminarController extends Controller
                 'model' => $model,
                 'cities'=>City::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
-                'seminar_cities' => $seminar_cities,
-                'seminar_pharmacies' => $seminar_pharmacies,
+                'vacancy_cities' => $vacancy_cities,
+                'vacancy_pharmacies' => $vacancy_pharmacies,
                 'old_cities' => $old_cities,
                 'old_pharmacies' => $old_pharmacies
             ]);
@@ -130,12 +132,13 @@ class SeminarController extends Controller
         return $this->redirect(['index']);
     }
 
+
     protected function findModel($id)
     {
-        if (($model = Seminar::findOne($id)) !== null) {
+        if (($model = Vacancy::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
 

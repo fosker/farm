@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\controllers\seminars;
+namespace backend\controllers\vacancies;
 
 use Yii;
 use yii\filters\AccessControl;
@@ -8,10 +8,10 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
-use common\models\seminar\Entry;
+use common\models\vacancy\Entry;
 use common\models\User;
-use common\models\Seminar;
-use backend\models\seminar\sign\Search;
+use common\models\Vacancy;
+use backend\models\vacancy\sign\Search;
 
 class SignController extends Controller
 {
@@ -49,7 +49,7 @@ class SignController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'logins' => ArrayHelper::map(User::find()->asArray()->all(),'id','login'),
-            'seminars' => ArrayHelper::map(Seminar::find()->asArray()->all(),'title','title'),
+            'vacancies' => ArrayHelper::map(Vacancy::find()->asArray()->all(),'title','title'),
         ]);
     }
 
@@ -59,7 +59,6 @@ class SignController extends Controller
             'model' => $this->findModel($id),
         ]);
     }
-
 
     public function actionDelete($id)
     {

@@ -125,6 +125,14 @@ return [
                 'DELETE v1/seminar/comment/<id>' => 'v1/seminar/delete-comment',
                 'POST v1/seminar' => 'v1/seminar/entry',
 
+                'GET v1/vacancy' => 'v1/vacancy/index',
+                'GET v1/vacancy/<id>' => 'v1/vacancy/view',
+                'GET v1/vacancy/comments/<seminar_id>' => 'v1/vacancy/comments',
+                'GET v1/vacancy/comment/<id>' => 'v1/vacancy/comment',
+                'POST v1/vacancy/comment' => 'v1/vacancy/add-comment',
+                'DELETE v1/vacancy/comment/<id>' => 'v1/vacancy/delete-comment',
+                'POST v1/vacancy' => 'v1/vacancy/entry',
+
                 'GET v1/factories' => 'v1/factory/index',
                 'GET v1/factory/<id>' => 'v1/factory/view',
                 'GET v1/factory/stocks/<factory_id>' => 'v1/factory/stocks',
