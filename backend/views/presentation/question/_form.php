@@ -13,6 +13,8 @@ use kartik\widgets\ActiveForm;
 
     <?= $form->field($model, 'question')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'right_answers')->textInput(['maxlength' => true]) ?>
+
     <?= $form->field($model, 'order_index') ?>
 
     <div class="form-group">

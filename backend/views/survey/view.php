@@ -74,7 +74,7 @@ $this->title = $model->title;
     <h2>Вопросы</h2>
 
     <table class="table">
-        <tr><th>Вопрос</th><th>Варианты ответа</th></tr>
+        <tr><th>Вопрос</th><th>Варианты ответа</th><th>Количество правильных ответов</th></tr>
         <?php foreach($model->questions as $question) : ?>
             <tr><td><?=$question->question?></td>
                 <td>
@@ -84,6 +84,7 @@ $this->title = $model->title;
                 <?php endforeach; ?>
                 </table>
                 </td>
+                <td><?=$question->right_answers?></td>
             </tr>
         <?php endforeach; ?>
     </table>

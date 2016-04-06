@@ -15,6 +15,7 @@ use common\models\presentation\Option;
  * @property string $question
  * @property integer $presentation_id
  * @property integer $order_index
+ * @property integer $right_answers
  */
 class Question extends ActiveRecord
 {
@@ -32,8 +33,8 @@ class Question extends ActiveRecord
     public function rules()
     {
         return [
-            [['question', 'order_index'], 'required'],
-            ['order_index', 'integer']
+            [['question', 'order_index', 'right_answers'], 'required'],
+            [['order_index', 'right_answers'], 'integer']
         ];
     }
 
@@ -44,14 +45,15 @@ class Question extends ActiveRecord
     {
         return [
             'question' => 'Вопрос',
-            'order_index' => 'Порядковый номер'
+            'order_index' => 'Порядковый номер',
+            'right_answers' => 'Количество правильных ответов'
         ];
     }
 
     public function fields()
     {
         return [
-            'id', 'question', 'options', 'order'=>'order_index',
+            'id', 'question', 'options', 'order'=>'order_index', 'right_answers'
         ];
     }
 

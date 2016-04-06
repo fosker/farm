@@ -103,6 +103,7 @@ $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\J
                 <td></td>
                 <td><?= Html::activeLabel($questions[0], 'question'); ?></td>
                 <td><label class="control-label">Варианты ответа</label></td>
+                <td><label class="control-label">Количество правильных ответов</label></td>
             </tr>
             </thead>
 
@@ -113,7 +114,6 @@ $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\J
                     <td>
                         <button type="button" class="del-question btn btn-danger btn-xs"><i class="glyphicon glyphicon-minus"></i></button>
                         <?php
-                        // necessary for update action.
                         if (! $question->isNewRecord) {
                             echo Html::activeHiddenInput($question, "[{$i}]id");
                         }
@@ -128,10 +128,14 @@ $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\J
                         ?>
                     </td>
 
+                    <td>
+                        <?php
+                        echo $form->field($question, "[{$i}]right_answers")->textInput();
+                        ?>
+                    </td>
+
                     <!-- The Options on the Question -->
                     <td id="questions_options">
-
-                        <?//var_dump($options[$i]);// die();?>
 
                         <?php DynamicFormWidget::begin([
                             'widgetContainer' => 'dynamicform_inner', // required: only alphanumeric characters plus "_" [A-Za-z0-9_]

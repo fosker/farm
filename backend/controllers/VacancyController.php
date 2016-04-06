@@ -72,7 +72,7 @@ class VacancyController extends Controller
     public function actionCreate()
     {
         $model = new Vacancy();
-        //$model->scenario = 'create';
+        $model->scenario = 'create';
         $vacancy_cities = new Vacancy_City();
         $vacancy_pharmacies = new Vacancy_Pharmacy();
 

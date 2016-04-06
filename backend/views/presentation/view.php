@@ -120,7 +120,7 @@ $this->title = $model->title;
     </h2>
 
     <table class="table">
-        <tr><th>Вопрос</th><th>Варианты ответа</th><th>Порядковый номер</th><th>Действия</th></tr>
+        <tr><th>Вопрос</th><th>Варианты ответа</th><th>Порядковый номер</th><th>Количество правильных ответов</th><th>Действия</th></tr>
 
         <?php foreach($model->questions as $question) : ?>
             <tr>
@@ -133,6 +133,7 @@ $this->title = $model->title;
                     </table>
                 </td>
                 <td><?=$question->order_index?></td>
+                <td><?=$question->right_answers?></td>
                 <td>
                     <?=Html::a('<span class="glyphicon glyphicon-list"></span>',['view-option', 'question_id'=>$question->id, 'presentation_id'=>$model->id],['class'=>'btn btn-warning btn-xs']);?>
 

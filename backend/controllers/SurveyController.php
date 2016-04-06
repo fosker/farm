@@ -98,6 +98,8 @@ class SurveyController extends Controller
             $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
 
             $valid = $model->validate();
+
+
             //$valid = Question::validateWithOptions($questions, $options) && $valid;
 
             if ($valid) {
@@ -258,7 +260,7 @@ class SurveyController extends Controller
         if (($model = Survey::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена. ');
+            throw new NotFoundHttpException('пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅ. ');
         }
     }
 

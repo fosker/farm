@@ -40,20 +40,33 @@ class Answer extends ActiveRecord
             [['question_id'], 'exist', 'targetClass'=>Question::className(), 'targetAttribute'=>'id'],
             [['view_id'], 'exist', 'targetClass'=>View::className(), 'targetAttribute'=>'id'],
             [['value'], 'string', 'max' => 255],
-            //[['value'],'validatorInOptionList'],
+            [['value'],'validatorInOptionList'],
+            [['value'],'validatorAnswersCount'],
         ];
     }
 
-    /**
-     * @param $attribute
-     */
-//    public function validatorInOptionList($attribute) {
-//        if (!$this->hasErrors()) {
-//            if ($this->question->options && !in_array($this->value,ArrayHelper::map($this->question->options,'id','value'))) {
-//                $this->addError($attribute, 'Ответ не сооветствует предложенным вариантам.');
-//            }
-//        }
-//    }
+    public function validatorAnswersCount($attribute) {
+        if (!$this->hasErrors()) {
+            $values = explode(',', $this->value);
+            if(count($values) != $this->question->right_answers) {
+                $this->addError($attribute, 'Неправильное количество ответов. ');
+            }
+        }
+    }
+
+    public function validatorInOptionList($attribute) {
+        if (!$this->hasErrors() && $this->question->options) {
+            $values = explode(',', $this->value);
+            $valid = true;
+            $options = ArrayHelper::map($this->question->options,'id','value');
+            foreach($values as $value) {
+                $valid = $valid && in_array(trim($value), $options);
+            }
+            if (!$valid) {
+                $this->addError($attribute, 'Ответ не соответствует предложенным вариантам.');
+            }
+        }
+    }
 
     /**
      * @inheritdoc

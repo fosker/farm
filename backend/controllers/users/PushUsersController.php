@@ -66,6 +66,12 @@ class PushUsersController extends Controller
             $ios_tokens = array_values($ios_tokens);
             $ios_tokens = array_filter(array_unique($ios_tokens));
 
+            echo '<pre>';
+            var_dump($ios_tokens);
+            var_dump($android_tokens);
+            echo '</pre>';
+            die();
+
             if($ios_tokens)
             {
                 if(Yii::$app->apns->sendMulti($ios_tokens, $model->message, ['link' => $model->link], [

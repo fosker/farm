@@ -36,7 +36,7 @@ $this->title = $model->title;
                 'format'=>'html',
             ],
             'title',
-            'text',
+            'text:html',
             [
                 'attribute'=>'views',
                 'value'=>$model->countUniqueViews()
