@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use kartik\widgets\ActiveForm;
 use kartik\widgets\FileInput;
+use backend\components\Editor;
 /* @var $this yii\web\View */
 /* @var $model common\models\News */
 /* @var $form yii\widgets\ActiveForm */
@@ -14,7 +15,10 @@ use kartik\widgets\FileInput;
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'text')->textarea(['rows' => 6]) ?>
+    <?= $form->field($model, 'text')->widget(Editor::className(), [
+        'options' => ['rows' => 6],
+        'preset' => 'click'
+    ]); ?>
 
     <?= $form->field($model, 'imageFile')->widget(FileInput::classname(),[
         'pluginOptions' => [

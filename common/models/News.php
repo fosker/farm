@@ -23,6 +23,7 @@ class News extends \yii\db\ActiveRecord
 
     public $imageFile;
     public $thumbFile;
+
     public $views;
 
     /**
