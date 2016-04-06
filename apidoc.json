@@ -1,0 +1,14 @@
+{
+    "name": "Farmbonus",
+    "version": "0.1.0",
+    "description": "Api doc for Farmbonus",
+    "sampleUrl" : "http://farm.shop4u.by/rest/web/index.php/v1",
+    "apidoc": {
+        "title": "Farmbonus | API",
+        "url" : "http://farm.shop4u.by/rest/web/index.php/v1"
+    },
+    "template": {
+      "withCompare" : false,
+      "forceLanguage": "en"
+    }
+}

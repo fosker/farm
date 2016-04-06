@@ -17,6 +17,34 @@ class AuthController extends Controller
         Yii::$app->getResponse()->getHeaders()->set('Allow', implode(', ', ['GET', 'POST', 'PUT' ,'HEAD', 'OPTIONS','PATCH']));
     }
 
+    /**
+     * @api {post} /register-device Register new device
+     * @apiName PostRegisterDevice
+     * @apiGroup User
+     * @apiPermission none
+     *
+     * @apiParam {Number=1,2} type Type of the device, 1 for Android and 2 for IOS
+     *
+     * @apiParam {String} [push_token] Push token for push-notifications
+     *
+     * @apiSuccess {String} device_id The id of device in the system
+     *
+     * @apiSuccessExample {json} Success-Response:
+     *     HTTP/1.1 200 OK
+     *     {
+     *       "device_id": "sdgsdfg1shsdhsdhs2dhsdgsd2fgshsdhs4dhsdh"
+     *     }
+     *
+     * @apiError {json} ValidationFailed Wrong data entry.
+     *
+     * @apiErrorExample Error-Response:
+     *     HTTP/1.1 422 Validation failed
+     *     {
+     *       "field": "type",
+     *       "message": "Значение type неверно"
+     *     }
+     *
+     */
     public function actionRegisterDevice() {
         $device = new Device();
 
@@ -25,6 +53,11 @@ class AuthController extends Controller
         } else return $device;
     }
 
+    /**
+     * @api {post} /login Login to the system
+     * @apiName PostLogin
+     * @apiGroup User
+     */
     public function actionLogin()
     {
         $model = new LoginForm();
