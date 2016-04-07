@@ -7,6 +7,9 @@ use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use common\models\News;
 use common\models\news\View;
+use common\models\news\City;
+use common\models\news\Pharmacy;
+
 
 class Search extends News
 {
@@ -16,12 +19,17 @@ class Search extends News
         return [
             [['id', 'views'], 'integer'],
             [['title', 'text', 'date'], 'string'],
+            [['city_id', 'firm_id'], 'safe']
         ];
     }
 
     public function scenarios()
     {
         return Model::scenarios();
+    }
+
+    public function attributes() {
+        return array_merge(parent::attributes(),['city_id', 'firm_id']);
     }
 
     public function search($params)
@@ -60,8 +68,16 @@ class Search extends News
         if($this->views)
             $query->andFilterWhere(['(viewsCount.count + views_added)' => ($this->views + $this->views_added)]);
 
+        if($this->getAttribute('city_id'))
+            $cities = City::find()->select('news_id')->where(['in', 'city_id', $this->getAttribute('city_id')]);
+        if($this->getAttribute('firm_id'))
+            $firms = Pharmacy::find()->select('news_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
+                ->joinWith('pharmacy');
+
         $query->andFilterWhere(['like', 'title', $this->title])
-            ->andFilterWhere(['like', 'date', $this->date]);
+            ->andFilterWhere(['like', 'date', $this->date])
+            ->andFilterWhere(['in', News::tableName().'.id', $cities])
+            ->andFilterWhere(['in', News::tableName().'.id', $firms]);
 
         return $dataProvider;
     }

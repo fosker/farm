@@ -48,7 +48,7 @@ class Answer extends ActiveRecord
     public function validatorAnswersCount($attribute) {
         if (!$this->hasErrors()) {
             $values = explode(',', $this->value);
-            if(count($values) != $this->question->right_answers) {
+            if(count($values) < $this->question->right_answers) {
                 $this->addError($attribute, 'Неправильное количество ответов. ');
             }
         }

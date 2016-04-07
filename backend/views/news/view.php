@@ -36,6 +36,14 @@ $this->title = $model->title;
                 'format'=>'html',
             ],
             'title',
+            [
+                'label'=>'Для городов',
+                'value'=>$model->getCitiesView(true)
+            ],
+            [
+                'label'=>'Для фирм',
+                'value'=>$model->getFirmsView(true)
+            ],
             'text:html',
             [
                 'attribute'=>'views',

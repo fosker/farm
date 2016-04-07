@@ -4,7 +4,6 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use kartik\widgets\Select2;
 use kartik\date\DatePicker;
-
 $this->title = 'Новости';
 ?>
 <div class="news-index">
@@ -19,10 +18,6 @@ $this->title = 'Новости';
         'filterModel' => $searchModel,
         'columns' => [
             [
-                'attribute' => 'id',
-                'contentOptions'=>['style'=>'width: 150px;'],
-            ],
-            [
                 'attribute'=>'title',
                 'value'=>'title',
                 'filter'=>Select2::widget([
@@ -34,16 +29,49 @@ $this->title = 'Новости';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '350px'
+                        'width' => '220px'
                     ],
                 ]),
+            ],
+            [
+                'label'=>'Для городов',
+                'value'=>'citiesView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $cities,
+                    'attribute'=>'city_id',
+                    'options' => [
+                        'placeholder' => 'Выберите города ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '175px'
+                    ],
+                ]),
+            ],
+            [
+                'label'=>'Для фирм',
+                'value'=>'firmsView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $firms,
+                    'attribute'=>'firm_id',
+                    'options' => [
+                        'placeholder' => 'Выберите фирмы ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '175px'
+                    ],
+                ])
             ],
             [
                 'attribute'=>'views',
                 'value'=>function($model) {
                     return $model->countUniqueViews();
                 },
-                'contentOptions'=>['style'=>'width: 150px;'],
             ],
             [
                 'attribute' => 'date',
@@ -55,7 +83,7 @@ $this->title = 'Новости';
                     ]
                 ]),
                 'format' => ['datetime'],
-                'contentOptions'=>['style'=>'width: 300px;'],
+                'contentOptions'=>['style'=>'width: 250px;'],
             ],
             ['class' => 'yii\grid\ActionColumn'],
         ],

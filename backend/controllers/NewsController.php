@@ -10,6 +10,12 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
+use yii\web\UploadedFile;
+use common\models\news\City as News_City;
+use common\models\news\Pharmacy as News_Pharmacy;
+use common\models\location\City;
+use common\models\agency\Pharmacy;
+use common\models\agency\Firm;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -57,6 +63,8 @@ class NewsController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'news' => ArrayHelper::map(News::find()->asArray()->all(),'title','title'),
+            'firms' => ArrayHelper::map(Firm::find()->asArray()->all(),'id','name'),
+            'cities'=> ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
         ]);
     }
 
@@ -81,11 +89,23 @@ class NewsController extends Controller
     {
         $model = new News();
         $model->scenario = 'create';
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $news_cities = new News_City();
+        $news_pharmacies = new News_Pharmacy();
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
+            if ($model->save()) {
+                $model->loadCities(Yii::$app->request->post('cities'));
+                $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('create', [
                 'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'news_cities' => $news_cities,
+                'news_pharmacies' => $news_pharmacies
             ]);
         }
     }
@@ -100,11 +120,29 @@ class NewsController extends Controller
     {
         $model = $this->findModel($id);
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        $news_cities = new News_City();
+        $news_pharmacies = new News_Pharmacy();
+
+        $old_cities = News_City::find()->select('city_id')->where(['news_id' => $id])->asArray()->all();
+        $old_pharmacies = News_Pharmacy::find()->select('pharmacy_id')->where(['news_id' => $id])->asArray()->all();
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
+            $model->thumbFile = UploadedFile::getInstance($model, 'thumbFile');
+            if ($model->save()) {
+                $model->updateCities(Yii::$app->request->post('cities'));
+                $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
+                return $this->redirect(['view', 'id' => $model->id]);
+            }
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'cities'=>City::find()->asArray()->all(),
+                'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'news_cities' => $news_cities,
+                'news_pharmacies' => $news_pharmacies,
+                'old_cities' => $old_cities,
+                'old_pharmacies' => $old_pharmacies
             ]);
         }
     }

@@ -6,7 +6,12 @@ use Yii;
 use common\models\news\Comment;
 use common\models\news\View;
 use yii\imagine\Image;
-
+use common\models\news\City;
+use common\models\news\Pharmacy;
+use common\models\location\City as Region_City;
+use common\models\agency\Pharmacy as P;
+use yii\helpers\ArrayHelper;
+use common\models\agency\Firm;
 /**
  * This is the model class for table "news".
  *
@@ -156,5 +161,106 @@ class News extends \yii\db\ActiveRecord
 
     public function getThumbPath() {
         return Yii::getAlias('@uploads_view/news/thumbs/'.$this->thumbnail);
+    }
+
+    public function getCitiesView($isFull = false) {
+        $result = ArrayHelper::getColumn((City::find()
+            ->select(Region_City::tableName().'.name')
+            ->joinWith('city')
+            ->asArray()
+            ->where(['news_id'=>$this->id])
+            ->all()),'name');
+        $string = "";
+        if(!$isFull) {
+            $limit = 5;
+            if (count($result) > $limit) {
+                for ($i = 0; $i < $limit; $i++) {
+                    $string .= $result[$i].", ";
+                }
+                $string .= "и ещё (".(count($result)-$limit).")";
+            } else
+                $string = implode(", ", $result);
+        } else
+            $string = implode(", ", $result);
+
+        return $string;
+    }
+
+    public function getFirmsView($isFull = false) {
+        $result = ArrayHelper::getColumn((Firm::find()->select([
+            'firms.name'])
+            ->from(Firm::tableName())
+            ->join('LEFT JOIN', P::tableName(),
+                Firm::tableName().'.id = '.P::tableName().'.firm_id')
+            ->join('LEFT JOIN', Pharmacy::tableName(),
+                Pharmacy::tableName().'.pharmacy_id = '.P::tableName().'.id')
+            ->distinct()
+            ->asArray()
+            ->where(['news_id' => $this->id])
+            ->all()),'name');
+        $string = "";
+        if(!$isFull) {
+            $limit = 5;
+            if (count($result) > $limit) {
+                for ($i = 0; $i < $limit; $i++) {
+                    $string .= $result[$i].", ";
+                }
+                $string .= "и ещё (".(count($result)-$limit).")";
+            } else
+                $string = implode(", ", $result);
+        } else
+            $string = implode(", ", $result);
+
+        return $string;
+    }
+
+    public function loadCities($cities)
+    {
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->news_id = $this->id;
+                $city->save();
+            }
+        }
+    }
+
+    public function loadPharmacies($pharmacies)
+    {
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->news_id = $this->id;
+                $pharmacy->save();
+            }
+        }
+    }
+
+    public function updateCities($cities)
+    {
+        City::deleteAll(['news_id' => $this->id]);
+        if($cities) {
+            for ($i = 0; $i < count($cities); $i++) {
+                $city = new City();
+                $city->city_id = $cities[$i];
+                $city->news_id = $this->id;
+                $city->save();
+            }
+        }
+    }
+
+    public function updatePharmacies($pharmacies)
+    {
+        Pharmacy::deleteAll(['news_id' => $this->id]);
+        if($pharmacies) {
+            for ($i = 0; $i < count($pharmacies); $i++) {
+                $pharmacy = new Pharmacy();
+                $pharmacy->pharmacy_id = $pharmacies[$i];
+                $pharmacy->news_id = $this->id;
+                $pharmacy->save();
+            }
+        }
     }
 }
