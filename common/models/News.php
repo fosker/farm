@@ -94,10 +94,23 @@ class News extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getAllNews()
+    public function getCities() {
+        return $this->hasMany(City::className(), ['news_id' => 'id']);
+    }
+
+    public function getPharmacies() {
+        return $this->hasMany(Pharmacy::className(), ['news_id' => 'id']);
+    }
+
+    public static function getForCurrentUser()
     {
         return static::find()
-            ->orderBy(['id'=>SORT_DESC]);
+            ->joinWith('cities')
+            ->joinWith('pharmacies')
+            ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
+            ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
+            ->orderBy(['id'=>SORT_DESC])
+            ->groupBy(static::tableName().'.id');
     }
 
     public static function getOneForCurrentUser($id)

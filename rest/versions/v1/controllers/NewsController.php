@@ -40,7 +40,7 @@ class NewsController extends Controller
 
     public function actionIndex() {
         return new ActiveDataProvider([
-            'query' => News::getAllNews(),
+            'query' => News::getForCurrentUser(),
         ]);
     }
 
