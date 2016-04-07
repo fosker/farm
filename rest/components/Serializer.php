@@ -43,7 +43,7 @@ class Serializer extends \yii\rest\Serializer
             if($model->hasErrors()) {
                 $result[$key] = $this->serializeModelErrors($model);
             } else {
-                $result[$key] = $this->serializeModel($model);
+                //$result[$key] = $this->serializeModel($model);
             }
         }
 
