@@ -48,16 +48,18 @@ class Answer extends ActiveRecord
      */
     public function validatorAnswersCount($attribute) {
         if (!$this->hasErrors()) {
-            $values = explode(',', $this->value);
-            if(count($values) < $this->question->right_answers) {
-                $this->addError($attribute, 'Неправильное количество ответов. ');
+            if(stristr($this->value, ';')) {
+                $values = explode(';', $this->value);
+                if(count($values) > $this->question->right_answers) {
+                    $this->addError($attribute, 'Неправильное количество ответов. ');
+                }
             }
         }
     }
 
     public function validatorInOptionList($attribute) {
         if (!$this->hasErrors() && $this->question->options) {
-            $values = explode(',', $this->value);
+            $values = explode(';', $this->value);
             $valid = true;
             $options = ArrayHelper::map($this->question->options,'id','value');
             foreach($values as $value) {

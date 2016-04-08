@@ -65,8 +65,10 @@ class Search extends News
             'id' => $this->id,
         ]);
 
-        if($this->views)
-            $query->andFilterWhere(['(viewsCount.count + views_added)' => ($this->views + $this->views_added)]);
+        if($this->views) {
+            $query->andFilterWhere(['(viewsCount.count + views_added)' => $this->views]);
+        }
+
 
         if($this->getAttribute('city_id'))
             $cities = City::find()->select('news_id')->where(['in', 'city_id', $this->getAttribute('city_id')]);
