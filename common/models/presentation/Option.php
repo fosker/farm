@@ -36,6 +36,7 @@ class Option extends ActiveRecord
         return [
             ['value', 'required'],
             ['value', 'trim'],
+            ['value', 'string']
         ];
     }
 

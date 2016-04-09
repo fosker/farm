@@ -139,7 +139,7 @@ class Presentation extends ActiveRecord
     }
 
     public function getQuestions() {
-        return Question::find()->select('*')->from(Question::tableName())->where(['presentation_id' => $this->id])->orderBy('order_index')->all();
+        return $this->hasMany(Question::className(), ['presentation_id' => 'id'])->orderBy('order_index');
     }
 
     public function getSlides() {

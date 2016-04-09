@@ -105,7 +105,7 @@ class Answer extends ActiveRecord
         // Если ответ относится к презентации - копируем в отвеченные вопросы
         foreach($models as $answer) {
             if(in_array($answer->question_id,$questions))
-                $answers[] = $answer;
+                $answers[$answer->question_id] = $answer;
         }
 
         // Проверяем, ответил ли пользователь на все вопросы
