@@ -134,6 +134,7 @@ return [
                 'POST v1/vacancy' => 'v1/vacancy/entry',
 
                 'GET v1/factories' => 'v1/factory/index',
+                'GET v1/factories/all' => 'v1/factory/all',
                 'GET v1/factory/<id>' => 'v1/factory/view',
                 'GET v1/factory/stocks/<factory_id>' => 'v1/factory/stocks',
                 'GET v1/factory/stock/<id>' => 'v1/factory/stock',
