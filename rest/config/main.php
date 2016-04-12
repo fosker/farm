@@ -127,7 +127,7 @@ return [
 
                 'GET v1/vacancy' => 'v1/vacancy/index',
                 'GET v1/vacancy/<id>' => 'v1/vacancy/view',
-                'GET v1/vacancy/comments/<seminar_id>' => 'v1/vacancy/comments',
+                'GET v1/vacancy/comments/<vacancy_id>' => 'v1/vacancy/comments',
                 'GET v1/vacancy/comment/<id>' => 'v1/vacancy/comment',
                 'POST v1/vacancy/comment' => 'v1/vacancy/add-comment',
                 'DELETE v1/vacancy/comment/<id>' => 'v1/vacancy/delete-comment',
