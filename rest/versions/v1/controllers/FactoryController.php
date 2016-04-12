@@ -48,6 +48,12 @@ class FactoryController extends Controller
         ]);
     }
 
+    public function actionAll() {
+        return new ActiveDataProvider([
+            'query' => Factory::find(),
+        ]);
+    }
+
     public function actionView($id) {
         return Factory::getOneForCurrentUser($id);
     }
