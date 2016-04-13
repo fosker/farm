@@ -309,6 +309,19 @@ class Admin extends ActiveRecord  implements IdentityInterface
         return false;
     }
 
+    public static function showVideo($id)
+    {
+        $list = ['video', 'videos/comment'];
+        foreach($list as $item) {
+            if (Right::HasAdmin($id, $item)) {
+                return true;
+                break;
+            }
+        }
+
+        return false;
+    }
+
     public static function showUser($id)
     {
         $list = ['user', 'users/push-users', 'users/present', 'users/push-groups', 'users/update-request'];
@@ -428,7 +441,7 @@ class Admin extends ActiveRecord  implements IdentityInterface
 
     public static function showContent($id)
     {
-        $list = ['block', 'survey', 'presentation', 'factory', 'seminar', 'present', 'news'];
+        $list = ['block', 'survey', 'presentation', 'factory', 'seminar', 'present', 'news', 'video'];
         foreach($list as $item) {
             if (Right::HasAdmin($id, $item)) {
                 return true;

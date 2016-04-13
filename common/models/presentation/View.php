@@ -68,7 +68,7 @@ class View extends ActiveRecord
     {
         $view = new static();
         $view->user_id = Yii::$app->user->id;
-        $view->presentation_id = $answers[0]->question->presentation_id;
+        $view->presentation_id =reset($answers)->question->presentation_id;
         $view->save(false);
         foreach($answers as $answer) {
             $answer->view_id = $view->id;

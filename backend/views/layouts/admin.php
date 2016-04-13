@@ -179,6 +179,21 @@ $count = UpdateRequest::find()->count();
                                 ],
                                 'visible' => Admin::showNews(Yii::$app->admin->id)
                             ],
+                            ['label' => 'Видео',
+                                'items'=>[
+                                    [
+                                        'label' => 'Видео',
+                                        'url' => ['/video'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'video')
+                                    ],
+                                    [
+                                        'label' => 'Комментарии',
+                                        'url' => ['/videos/comment'],
+                                        'visible' => Right::HasAdmin(Yii::$app->admin->id, 'videos/comment')
+                                    ],
+                                ],
+                                'visible' => Admin::showVideo(Yii::$app->admin->id)
+                            ],
                             ['label'=>'Анкеты',
                                 'items'=>[
                                     [

@@ -52,7 +52,7 @@ $this->title = 'Редактирование данных: ' . ' ' . $model->nam
     <?php if ($user->mail_address != $model->mail_address && $user->mail_address) {
         echo "<div class='row'>
                 <div class='col-md-4'>
-                    <p class='text-success'>Новый почтовый адрес: $mail_address</p>
+                    <p class='text-success'>Новый почтовый адрес: $user->mail_address</p>
                 </div>
               </div>";
     } ?>

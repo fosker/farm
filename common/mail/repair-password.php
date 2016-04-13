@@ -1,12 +1,5 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Андрей
- * Date: 24.09.2015
- * Time: 18:38
 
- * @var $route string
-*/
 use yii\helpers\Html;
 use yii\helpers\Url;
 
