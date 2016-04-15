@@ -6,7 +6,7 @@ use app\components\YoutubeWidget;
 
 $this->title = $model->title;
 ?>
-<div class="seminar-view">
+<div class="video-view">
 
     <h1><?= Html::encode($this->title) ?></h1>
 
@@ -38,5 +38,20 @@ $this->title = $model->title;
             'tags'
         ],
     ]) ?>
+
+    <div class="container">
+        <h2 class="text-center">Комментарии</h2>
+        </br>
+            <?php foreach($model->comments as $comment) : ?>
+                <div class="row">
+                    <div class="col-md-6 col-md-offset-3">
+                        <h4 class="text-center"><?=$comment->user->name?></h4>
+                        <p class="text-center"><?=$comment->comment?></p>
+                        <h6 class="text-center"><?=$comment->date_add?></h6>
+                        </br>
+                    </div>
+                </div>
+            <?php endforeach;?>
+    </div>
 
 </div>

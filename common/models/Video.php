@@ -3,7 +3,7 @@
 namespace common\models;
 
 use Yii;
-
+use common\models\video\Comment;
 /**
  * This is the model class for table "videos".
  *
@@ -47,5 +47,10 @@ class Video extends \yii\db\ActiveRecord
             'tags' => 'Тэги',
             'link' => 'Ссылка',
         ];
+    }
+
+    public function getComments()
+    {
+        return $this->hasMany(Comment::className(), ['video_id' => 'id'])->orderBy('date_add ASC');
     }
 }

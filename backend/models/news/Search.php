@@ -66,7 +66,9 @@ class Search extends News
         ]);
 
         if($this->views) {
-            $query->andFilterWhere(['(viewsCount.count + views_added)' => $this->views]);
+            $query->andFilterWhere(['viewsCount.count' => $this->views]);
+            $query->orWhere(['(views_added + viewsCount.count)' => $this->views]);
+            $query->orWhere(['views_added' => $this->views]);
         }
 
 
