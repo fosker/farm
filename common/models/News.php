@@ -91,6 +91,9 @@ class News extends \yii\db\ActiveRecord
                 return $this->countUniqueViews();
             },
             'image'=>'imagePath',
+            'date'=>function($model) {
+                return strtotime($model->date);
+            }
         ];
     }
 
