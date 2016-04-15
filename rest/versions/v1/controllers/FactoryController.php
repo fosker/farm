@@ -55,11 +55,11 @@ class FactoryController extends Controller
     }
 
     public function actionView($id) {
-        return Factory::getOneForCurrentUser($id);
+        return Factory::findOne($id);
     }
 
     public function actionProducts($factory_id) {
-        return Factory::getOneForCurrentUser($factory_id)->products;
+        return Factory::findOne($factory_id)->products;
     }
 
     public function actionProduct($id) {
