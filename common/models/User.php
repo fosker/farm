@@ -88,7 +88,9 @@ class User extends ActiveRecord implements IdentityInterface , RateLimitInterfac
 
     public function logout()
     {
-        $device = Device::findOne(['access_token' => Yii::$app->request->get('access-token')]);
+        $request = Yii::$app->request;
+        $token = $request->get('access-token') ? $request->get('access-token') : explode(" ",$request->getHeaders()->get('Authorization'))[1];
+        $device = Device::findOne(['access_token' => $token]);
         $device->user_id = "";
         $device->access_token = "";
         $device->save();
