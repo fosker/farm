@@ -108,6 +108,7 @@ class Seminar extends \yii\db\ActiveRecord
         return static::find()
             ->joinWith('cities')
             ->joinWith('pharmacies')
+            ->joinWith('education')
             ->andWhere([Education::tableName().'.education_id'=>Yii::$app->user->identity->education_id])
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
