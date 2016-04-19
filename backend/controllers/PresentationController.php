@@ -18,7 +18,10 @@ use common\models\location\City;
 use common\models\agency\Pharmacy;
 use common\models\presentation\City as Presentation_City;
 use common\models\presentation\Pharmacy as Presentation_Pharmacy;
+use common\models\presentation\Education as Presentation_Education;
 use backend\models\presentation\Search;
+use common\models\profile\Education;
+
 
 
 class PresentationController extends Controller
@@ -60,6 +63,7 @@ class PresentationController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'firms' => ArrayHelper::map(Firm::find()->asArray()->all(),'id','name'),
+            'education' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
             'cities' => ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
             'titles' =>ArrayHelper::map(Presentation::find()->asArray()->all(), 'title','title'),
         ]);
@@ -78,6 +82,7 @@ class PresentationController extends Controller
         $model->scenario = 'create';
         $presentation_cities = new Presentation_City();
         $presentation_pharmacies = new Presentation_Pharmacy();
+        $presentation_education = new Presentation_Education();
 
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
@@ -85,6 +90,7 @@ class PresentationController extends Controller
             if ($model->save(false)) {
                 $model->loadCities(Yii::$app->request->post('cities'));
                 $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
+                $model->loadEducation(Yii::$app->request->post('education'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -92,8 +98,10 @@ class PresentationController extends Controller
                 'model' => $model,
                 'cities'=>City::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'education' => Education::find()->asArray()->all(),
                 'presentation_cities' => $presentation_cities,
-                'presentation_pharmacies' => $presentation_pharmacies
+                'presentation_pharmacies' => $presentation_pharmacies,
+                'presentation_education' => $presentation_education
             ]);
         }
     }
@@ -103,9 +111,11 @@ class PresentationController extends Controller
         $model = $this->findModel($id);
         $presentation_cities = new Presentation_City();
         $presentation_pharmacies = new Presentation_Pharmacy();
+        $presentation_education = new Presentation_Education();
 
         $old_cities = Presentation_City::find()->select('city_id')->where(['presentation_id' => $id])->asArray()->all();
         $old_pharmacies = Presentation_Pharmacy::find()->select('pharmacy_id')->where(['presentation_id' => $id])->asArray()->all();
+        $old_education = Presentation_Education::find()->select('education_id')->where(['presentation_id' => $id])->asArray()->all();
 
         if($model->load(Yii::$app->request->getBodyParams())) {
             $model->imageFile = UploadedFile::getInstance($model,'imageFile');
@@ -113,6 +123,7 @@ class PresentationController extends Controller
             if ($model->save()) {
                 $model->updateCities(Yii::$app->request->post('cities'));
                 $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
+                $model->updateEducation(Yii::$app->request->post('education'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -120,10 +131,13 @@ class PresentationController extends Controller
                 'model' => $model,
                 'cities'=>City::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'education' => Education::find()->asArray()->all(),
                 'presentation_cities' => $presentation_cities,
                 'presentation_pharmacies' => $presentation_pharmacies,
+                'presentation_education' => $presentation_education,
                 'old_cities' => $old_cities,
-                'old_pharmacies' => $old_pharmacies
+                'old_pharmacies' => $old_pharmacies,
+                'old_education' => $old_education
             ]);
         }
 
@@ -141,7 +155,7 @@ class PresentationController extends Controller
         if (($model = Presentation::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('РџСЂРµР·РµРЅС‚Р°С†РёСЏ РЅРµ РЅР°Р№РґРµРЅР°.');
         }
     }
 
@@ -219,7 +233,7 @@ class PresentationController extends Controller
         if (($model = Slide::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('РЎР»Р°Р№Рґ РЅРµ РЅР°Р№РґРµРЅ.');
         }
     }
 
@@ -259,7 +273,7 @@ class PresentationController extends Controller
         if (($model = Question::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('Р’РѕРїСЂРѕСЃ РЅРµ РЅР°Р№РґРµРЅ.');
         }
     }
 
@@ -308,7 +322,7 @@ class PresentationController extends Controller
         if (($model = Option::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('Страница не найдена.');
+            throw new NotFoundHttpException('Р’Р°СЂРёР°РЅС‚ РѕС‚РІРµС‚Р° РЅРµ РЅР°Р№РґРµРЅ.');
         }
     }
 

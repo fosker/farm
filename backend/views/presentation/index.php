@@ -73,6 +73,23 @@ $this->title = 'Презентации';
                 ])
             ],
             [
+                'label'=>'Для образования',
+                'value'=>'educationsView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $education,
+                    'attribute'=>'education_id',
+                    'options' => [
+                        'placeholder' => 'Выберите группы ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '150px'
+                    ],
+                ])
+            ],
+            [
                 'attribute'=>'status',
                 'value'=>function($model) {
                     return $model::getStatusList()[$model->status];

@@ -74,6 +74,23 @@ $this->title = 'Анкеты';
                 ])
             ],
             [
+                'label'=>'Для образования',
+                'value'=>'educationsView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $education,
+                    'attribute'=>'education_id',
+                    'options' => [
+                        'placeholder' => 'Выберите группы ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '150px'
+                    ],
+                ])
+            ],
+            [
                 'attribute' => 'points',
                 'contentOptions'=>['style'=>'width: 50px;'],
             ],

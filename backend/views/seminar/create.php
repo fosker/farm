@@ -12,8 +12,10 @@ $this->title = 'Добавить семинар';
         'model' => $model,
         'cities'=>$cities,
         'pharmacies'=>$pharmacies,
+        'education'=>$education,
         'seminar_cities' => $seminar_cities,
-        'seminar_pharmacies' => $seminar_pharmacies
+        'seminar_pharmacies' => $seminar_pharmacies,
+        'seminar_education' => $seminar_education
     ]) ?>
 
 </div>

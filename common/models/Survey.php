@@ -14,6 +14,8 @@ use common\models\agency\Pharmacy as P;
 use common\models\agency\Firm;
 use common\models\survey\Pharmacy;
 use yii\helpers\ArrayHelper;
+use common\models\survey\Education;
+use common\models\profile\Education as E;
 
 /**
  * This is the model class for table "surveys".
@@ -106,6 +108,7 @@ class Survey extends ActiveRecord
             ->joinWith('cities')
             ->joinWith('pharmacies')
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
+            ->andWhere([Education::tableName().'.education_id'=>Yii::$app->user->identity->education_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
             ->andWhere(['status'=>static::STATUS_ACTIVE])
             ->andWhere([
@@ -124,6 +127,10 @@ class Survey extends ActiveRecord
 
     public function getQuestions() {
         return $this->hasMany(Question::className(), ['survey_id' => 'id']);
+    }
+
+    public function getEducation() {
+        return $this->hasMany(Education::className(),['survey_id'=>'id']);
     }
 
     public function getCities() {
@@ -216,6 +223,29 @@ class Survey extends ActiveRecord
         return $string;
     }
 
+    public function getEducationsView($isFull = false) {
+        $result = ArrayHelper::getColumn((Education::find()
+            ->select(E::tableName().'.name')
+            ->joinWith('education')
+            ->asArray()
+            ->where(['survey_id'=>$this->id])
+            ->all()),'name');
+        $string = "";
+        if(!$isFull) {
+            $limit = 5;
+            if (count($result) > $limit) {
+                for ($i = 0; $i < $limit; $i++) {
+                    $string .= $result[$i].", ";
+                }
+                $string .= "и ещё (".(count($result)-$limit).")";
+            } else
+                $string = implode(", ", $result);
+        } else
+            $string = implode(", ", $result);
+
+        return $string;
+    }
+
     public function getAnswersCount()
     {
         return View::find()
@@ -270,6 +300,7 @@ class Survey extends ActiveRecord
         foreach($this->views as $view)
             $view->delete();
         City::deleteAll(['survey_id'=>$this->id]);
+        Education::deleteAll(['survey_id'=>$this->id]);
         Pharmacy::deleteAll(['survey_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/surveys/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/surveys/thumbs/'.$this->thumbnail));
@@ -296,6 +327,31 @@ class Survey extends ActiveRecord
                 $pharmacy->pharmacy_id = $pharmacies[$i];
                 $pharmacy->survey_id = $this->id;
                 $pharmacy->save();
+            }
+        }
+    }
+
+    public function loadEducation($educations)
+    {
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->survey_id = $this->id;
+                $education->save();
+            }
+        }
+    }
+
+    public function updateEducation($educations)
+    {
+        Education::deleteAll(['survey_id' => $this->id]);
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->survey_id = $this->id;
+                $education->save();
             }
         }
     }

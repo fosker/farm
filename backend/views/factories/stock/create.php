@@ -14,8 +14,10 @@ $this->title = 'Добавить акцию';
         'factories' => $factories,
         'cities'=>$cities,
         'pharmacies'=>$pharmacies,
+        'education'=>$education,
         'stock_cities' => $stock_cities,
-        'stock_pharmacies' => $stock_pharmacies
+        'stock_pharmacies' => $stock_pharmacies,
+        'stock_education' => $stock_education
     ]) ?>
 
 </div>

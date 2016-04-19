@@ -8,10 +8,12 @@ use yii\db\ActiveRecord;
 use common\models\Factory;
 use common\models\location\City as Region_City;
 use common\models\agency\Pharmacy as P;
+use common\models\profile\Education as E;
 use common\models\agency\Firm;
 use common\models\factory\City;
 use common\models\factory\Pharmacy;
 use common\models\factory\Reply;
+use common\models\factory\Education;
 use yii\helpers\ArrayHelper;
 use yii\imagine\Image;
 
@@ -95,6 +97,7 @@ class Stock extends ActiveRecord
             ->andWhere(['status'=>static::STATUS_ACTIVE])
             ->joinWith('cities')
             ->joinWith('pharmacies')
+            ->andWhere([Education::tableName().'.education_id'=>Yii::$app->user->identity->education_id])
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
             ->orderBy(['id'=>SORT_DESC])
@@ -114,6 +117,10 @@ class Stock extends ActiveRecord
     public function getPharmacies()
     {
         return $this->hasMany(Pharmacy::className(),['stock_id'=>'id']);
+    }
+
+    public function getEducation() {
+        return $this->hasMany(Education::className(),['stock_id'=>'id']);
     }
 
     public function getImagePath()
@@ -183,6 +190,29 @@ class Stock extends ActiveRecord
         return $string;
     }
 
+    public function getEducationsView($isFull = false) {
+        $result = ArrayHelper::getColumn((Education::find()
+            ->select(E::tableName().'.name')
+            ->joinWith('education')
+            ->asArray()
+            ->where(['stock_id'=>$this->id])
+            ->all()),'name');
+        $string = "";
+        if(!$isFull) {
+            $limit = 5;
+            if (count($result) > $limit) {
+                for ($i = 0; $i < $limit; $i++) {
+                    $string .= $result[$i].", ";
+                }
+                $string .= "и ещё (".(count($result)-$limit).")";
+            } else
+                $string = implode(", ", $result);
+        } else
+            $string = implode(", ", $result);
+
+        return $string;
+    }
+
     public function loadCities($cities)
     {
         if($cities) {
@@ -203,6 +233,31 @@ class Stock extends ActiveRecord
                 $pharmacy->pharmacy_id = $pharmacies[$i];
                 $pharmacy->stock_id = $this->id;
                 $pharmacy->save();
+            }
+        }
+    }
+
+    public function loadEducation($educations)
+    {
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->stock_id = $this->id;
+                $education->save();
+            }
+        }
+    }
+
+    public function updateEducation($educations)
+    {
+        Education::deleteAll(['stock_id' => $this->id]);
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->stock_id = $this->id;
+                $education->save();
             }
         }
     }
@@ -246,6 +301,7 @@ class Stock extends ActiveRecord
         if($this->image) @unlink(Yii::getAlias('@uploads/stocks/'.$this->image));
         City::deleteAll(['stock_id'=>$this->id]);
         Pharmacy::deleteAll(['stock_id'=>$this->id]);
+        Education::deleteAll(['stock_id'=>$this->id]);
         Reply::deleteAll(['stock_id'=>$this->id]);
         parent::afterDelete();
     }

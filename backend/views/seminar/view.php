@@ -46,6 +46,10 @@ $this->title = $model->title;
                 'label'=>'Для фирм',
                 'value'=>$model->getFirmsView(true)
             ],
+            [
+                'label'=>'Для групп',
+                'value'=>$model->getEducationsView(true)
+            ],
             'description:html',
             'email:email',
             [

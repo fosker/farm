@@ -15,8 +15,10 @@ $this->title = 'Добавить презентацию';
         'model' => $model,
         'cities'=>$cities,
         'pharmacies'=>$pharmacies,
+        'education'=>$education,
         'presentation_cities' => $presentation_cities,
-        'presentation_pharmacies' => $presentation_pharmacies
+        'presentation_pharmacies' => $presentation_pharmacies,
+        'presentation_education' => $presentation_education
     ]) ?>
 
 </div>

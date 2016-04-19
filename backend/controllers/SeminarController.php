@@ -14,9 +14,11 @@ use common\models\location\City;
 use common\models\agency\Pharmacy;
 use common\models\seminar\City as Seminar_City;
 use common\models\seminar\Pharmacy as Seminar_Pharmacy;
+use common\models\seminar\Education as Seminar_Education;
 use common\models\agency\Firm;
 use common\models\User;
 use backend\models\seminar\Search;
+use common\models\profile\Education;
 
 class SeminarController extends Controller
 {
@@ -54,6 +56,7 @@ class SeminarController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'seminars' => ArrayHelper::map(Seminar::find()->asArray()->all(),'title','title'),
+            'education' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
             'emails' => ArrayHelper::map(Seminar::find()->asArray()->all(),'email','email'),
             'firms' => ArrayHelper::map(Firm::find()->asArray()->all(),'id','name'),
             'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
@@ -73,6 +76,7 @@ class SeminarController extends Controller
         $model->scenario = 'create';
         $seminar_cities = new Seminar_City();
         $seminar_pharmacies = new Seminar_Pharmacy();
+        $seminar_education = new Seminar_Education();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -80,15 +84,18 @@ class SeminarController extends Controller
             if ($model->save()) {
                 $model->loadCities(Yii::$app->request->post('cities'));
                 $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
+                $model->loadEducation(Yii::$app->request->post('education'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             return $this->render('create', [
                 'model' => $model,
                 'cities'=>City::find()->asArray()->all(),
+                'education' => Education::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
                 'seminar_cities' => $seminar_cities,
-                'seminar_pharmacies' => $seminar_pharmacies
+                'seminar_pharmacies' => $seminar_pharmacies,
+                'seminar_education' => $seminar_education
             ]);
         }
     }
@@ -98,9 +105,11 @@ class SeminarController extends Controller
         $model = $this->findModel($id);
         $seminar_cities = new Seminar_City();
         $seminar_pharmacies = new Seminar_Pharmacy();
+        $seminar_education = new Seminar_Education();
 
         $old_cities = Seminar_City::find()->select('city_id')->where(['seminar_id' => $id])->asArray()->all();
         $old_pharmacies = Seminar_Pharmacy::find()->select('pharmacy_id')->where(['seminar_id' => $id])->asArray()->all();
+        $old_education = Seminar_Education::find()->select('education_id')->where(['seminar_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
@@ -108,6 +117,7 @@ class SeminarController extends Controller
             if ($model->save()) {
                 $model->updateCities(Yii::$app->request->post('cities'));
                 $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
+                $model->updateEducation(Yii::$app->request->post('education'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -115,10 +125,13 @@ class SeminarController extends Controller
                 'model' => $model,
                 'cities'=>City::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
+                'education' => Education::find()->asArray()->all(),
                 'seminar_cities' => $seminar_cities,
                 'seminar_pharmacies' => $seminar_pharmacies,
+                'seminar_education' => $seminar_education,
                 'old_cities' => $old_cities,
-                'old_pharmacies' => $old_pharmacies
+                'old_pharmacies' => $old_pharmacies,
+                'old_education' => $old_education
             ]);
         }
     }

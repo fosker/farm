@@ -12,10 +12,12 @@ $this->title = 'Добавить анкету';
         'model' => $model,
         'questions'=>$questions,
         'options'=>$options,
+        'education'=>$education,
         'cities'=>$cities,
         'pharmacies'=>$pharmacies,
         'survey_cities' => $survey_cities,
-        'survey_pharmacies' => $survey_pharmacies
+        'survey_pharmacies' => $survey_pharmacies,
+        'survey_education' => $survey_education
     ]) ?>
 
 </div>

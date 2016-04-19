@@ -14,6 +14,8 @@ use common\models\location\City;
 use common\models\agency\Pharmacy;
 use common\models\factory\City as Stock_City;
 use common\models\factory\Pharmacy as Stock_Pharmacy;
+use common\models\factory\Education as Stock_Education;
+use common\models\profile\Education;
 use common\models\agency\Firm;
 use yii\web\UploadedFile;
 use yii\filters\AccessControl;
@@ -56,6 +58,7 @@ class StockController extends Controller
             'dataProvider' => $dataProvider,
             'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
             'firms' => ArrayHelper::map(Firm::find()->asArray()->all(),'id','name'),
+            'education' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
             'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
             'titles'=>ArrayHelper::map(Stock::find()->asArray()->all(), 'title','title'),
         ]);
@@ -75,22 +78,26 @@ class StockController extends Controller
         $model->scenario = 'create';
         $stock_cities = new Stock_City();
         $stock_pharmacies = new Stock_Pharmacy();
+        $stock_education = new Stock_Education();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->save()) {
                 $model->loadCities(Yii::$app->request->post('cities'));
                 $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
+                $model->loadEducation(Yii::$app->request->post('education'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
             return $this->render('create', [
                 'model' => $model,
                 'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
+                'education' => Education::find()->asArray()->all(),
                 'cities'=>City::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
                 'stock_cities' => $stock_cities,
-                'stock_pharmacies' => $stock_pharmacies
+                'stock_pharmacies' => $stock_pharmacies,
+                'stock_education' => $stock_education
             ]);
         }
     }
@@ -100,15 +107,18 @@ class StockController extends Controller
         $model = $this->findModel($id);
         $stock_cities = new Stock_City();
         $stock_pharmacies = new Stock_Pharmacy();
+        $stock_education = new Stock_Education();
 
         $old_cities = Stock_City::find()->select('city_id')->where(['stock_id' => $id])->asArray()->all();
         $old_pharmacies = Stock_Pharmacy::find()->select('pharmacy_id')->where(['stock_id' => $id])->asArray()->all();
+        $old_education = Stock_Education::find()->select('education_id')->where(['stock_id' => $id])->asArray()->all();
 
         if ($model->load(Yii::$app->request->post())) {
             $model->imageFile = UploadedFile::getInstance($model, 'imageFile');
             if ($model->save()) {
                 $model->updateCities(Yii::$app->request->post('cities'));
                 $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
+                $model->updateEducation(Yii::$app->request->post('education'));
                 return $this->redirect(['view', 'id' => $model->id]);
             }
         } else {
@@ -116,11 +126,14 @@ class StockController extends Controller
                 'model' => $model,
                 'factories'=> ArrayHelper::map(Factory::find()->asArray()->all(),'id','title'),
                 'cities'=>City::find()->asArray()->all(),
+                'education' => Education::find()->asArray()->all(),
                 'pharmacies'=>Pharmacy::find()->asArray()->all(),
                 'stock_cities' => $stock_cities,
                 'stock_pharmacies' => $stock_pharmacies,
+                'stock_education' => $stock_education,
                 'old_cities' => $old_cities,
-                'old_pharmacies' => $old_pharmacies
+                'old_pharmacies' => $old_pharmacies,
+                'old_education' => $old_education
             ]);
         }
     }

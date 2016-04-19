@@ -74,6 +74,13 @@ class AuthController extends Controller
 
         if ($model->load(Yii::$app->request->post(),'') && $model->validate()) {
             $model->register();
+            Yii::$app->mailer->compose('@common/mail/user-register-info', [
+                'user' => $model,
+            ])
+                ->setFrom('pharmbonus@gmail.com')
+                ->setTo($model->email)
+                ->setSubject('Вы зарегистрировались в PharmBonus')
+                ->send();
             return ['success'=>true];
         } else return $model;
     }

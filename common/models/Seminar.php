@@ -9,8 +9,10 @@ use common\models\seminar\Comment;
 use common\models\seminar\Entry;
 use common\models\seminar\City;
 use common\models\seminar\Pharmacy;
+use common\models\seminar\Education;
 use common\models\location\City as Region_City;
 use common\models\agency\Pharmacy as P;
+use common\models\profile\Education as E;
 use common\models\agency\Firm;
 use yii\helpers\ArrayHelper;
 
@@ -106,6 +108,7 @@ class Seminar extends \yii\db\ActiveRecord
         return static::find()
             ->joinWith('cities')
             ->joinWith('pharmacies')
+            ->andWhere([Education::tableName().'.education_id'=>Yii::$app->user->identity->education_id])
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
             ->andWhere(['status'=>static::STATUS_ACTIVE])
@@ -124,6 +127,10 @@ class Seminar extends \yii\db\ActiveRecord
 
     public function getPharmacies() {
         return $this->hasMany(Pharmacy::className(), ['seminar_id' => 'id']);
+    }
+
+    public function getEducation() {
+        return $this->hasMany(Education::className(),['seminar_id'=>'id']);
     }
 
     public function getImagePath() {
@@ -194,6 +201,29 @@ class Seminar extends \yii\db\ActiveRecord
         return $string;
     }
 
+    public function getEducationsView($isFull = false) {
+        $result = ArrayHelper::getColumn((Education::find()
+            ->select(E::tableName().'.name')
+            ->joinWith('education')
+            ->asArray()
+            ->where(['seminar_id'=>$this->id])
+            ->all()),'name');
+        $string = "";
+        if(!$isFull) {
+            $limit = 5;
+            if (count($result) > $limit) {
+                for ($i = 0; $i < $limit; $i++) {
+                    $string .= $result[$i].", ";
+                }
+                $string .= "и ещё (".(count($result)-$limit).")";
+            } else
+                $string = implode(", ", $result);
+        } else
+            $string = implode(", ", $result);
+
+        return $string;
+    }
+
     public function getSignsCount()
     {
         return Entry::find()->select('user_id')->where(['seminar_id'=>$this->id])->distinct()->count();
@@ -222,6 +252,7 @@ class Seminar extends \yii\db\ActiveRecord
         Comment::deleteAll(['seminar_id'=>$this->id]);
         Entry::deleteAll(['seminar_id'=>$this->id]);
         City::deleteAll(['seminar_id'=>$this->id]);
+        Education::deleteAll(['seminar_id'=>$this->id]);
         Pharmacy::deleteAll(['seminar_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/seminars/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/seminars/thumbs/'.$this->thumbnail));
@@ -247,6 +278,31 @@ class Seminar extends \yii\db\ActiveRecord
                 $pharmacy->pharmacy_id = $pharmacies[$i];
                 $pharmacy->seminar_id = $this->id;
                 $pharmacy->save();
+            }
+        }
+    }
+
+    public function loadEducation($educations)
+    {
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->seminar_id = $this->id;
+                $education->save();
+            }
+        }
+    }
+
+    public function updateEducation($educations)
+    {
+        Education::deleteAll(['seminar_id' => $this->id]);
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->seminar_id = $this->id;
+                $education->save();
             }
         }
     }

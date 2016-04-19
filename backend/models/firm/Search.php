@@ -14,7 +14,7 @@ class Search extends Firm
     {
         return [
             ['name', 'string'],
-            ['id', 'integer'],
+            [['id', 'producer'], 'integer'],
         ];
     }
 
@@ -44,6 +44,7 @@ class Search extends Firm
 
         $query->andFilterWhere([
             'id' => $this->id,
+            'producer' => $this->producer
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name]);

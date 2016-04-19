@@ -8,8 +8,10 @@ use common\models\news\View;
 use yii\imagine\Image;
 use common\models\news\City;
 use common\models\news\Pharmacy;
+use common\models\news\Education;
 use common\models\location\City as Region_City;
 use common\models\agency\Pharmacy as P;
+use common\models\profile\Education as E;
 use yii\helpers\ArrayHelper;
 use common\models\agency\Firm;
 /**
@@ -105,11 +107,16 @@ class News extends \yii\db\ActiveRecord
         return $this->hasMany(Pharmacy::className(), ['news_id' => 'id']);
     }
 
+    public function getEducation() {
+        return $this->hasMany(Education::className(),['news_id'=>'id']);
+    }
+
     public static function getForCurrentUser()
     {
         return static::find()
             ->joinWith('cities')
             ->joinWith('pharmacies')
+            ->andWhere([Education::tableName().'.education_id'=>Yii::$app->user->identity->education_id])
             ->andWhere([City::tableName().'.city_id'=>Yii::$app->user->identity->pharmacy->city_id])
             ->andWhere([Pharmacy::tableName().'.pharmacy_id'=>Yii::$app->user->identity->pharmacy_id])
             ->orderBy(['id'=>SORT_DESC])
@@ -138,6 +145,9 @@ class News extends \yii\db\ActiveRecord
     public function afterDelete() {
         parent::afterDelete();
         Comment::deleteAll(['news_id'=>$this->id]);
+        City::deleteAll(['news_id'=>$this->id]);
+        Pharmacy::deleteAll(['news_id'=>$this->id]);
+        Education::deleteAll(['news_id'=>$this->id]);
         View::deleteAll(['news_id'=>$this->id]);
         if($this->image) @unlink(Yii::getAlias('@uploads/news/'.$this->image));
         if($this->thumbnail) @unlink(Yii::getAlias('@uploads/news/thumbs/'.$this->thumbnail));
@@ -230,6 +240,29 @@ class News extends \yii\db\ActiveRecord
         return $string;
     }
 
+    public function getEducationsView($isFull = false) {
+        $result = ArrayHelper::getColumn((Education::find()
+            ->select(E::tableName().'.name')
+            ->joinWith('education')
+            ->asArray()
+            ->where(['news_id'=>$this->id])
+            ->all()),'name');
+        $string = "";
+        if(!$isFull) {
+            $limit = 5;
+            if (count($result) > $limit) {
+                for ($i = 0; $i < $limit; $i++) {
+                    $string .= $result[$i].", ";
+                }
+                $string .= "и ещё (".(count($result)-$limit).")";
+            } else
+                $string = implode(", ", $result);
+        } else
+            $string = implode(", ", $result);
+
+        return $string;
+    }
+
     public function loadCities($cities)
     {
         if($cities) {
@@ -250,6 +283,31 @@ class News extends \yii\db\ActiveRecord
                 $pharmacy->pharmacy_id = $pharmacies[$i];
                 $pharmacy->news_id = $this->id;
                 $pharmacy->save();
+            }
+        }
+    }
+
+    public function loadEducation($educations)
+    {
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->news_id = $this->id;
+                $education->save();
+            }
+        }
+    }
+
+    public function updateEducation($educations)
+    {
+        Education::deleteAll(['news_id' => $this->id]);
+        if($educations) {
+            for ($i = 0; $i < count($educations); $i++) {
+                $education = new Education();
+                $education->education_id = $educations[$i];
+                $education->news_id = $this->id;
+                $education->save();
             }
         }
     }

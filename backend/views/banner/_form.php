@@ -45,6 +45,8 @@ $url = Url::to(['/banner/link-list']);
             'toggleButton' => ['label' => 'Для аптек', 'class' => 'btn btn-primary'],
         ]);
             echo $form->field($banner_pharmacies, 'pharmacies')->widget(CheckWidget::className(), [
+                'firms' => true,
+                'color' => 'green',
                 'parent_title' => 'firms',
                 'parent' => $firms,
                 'update' => $old_pharmacies,

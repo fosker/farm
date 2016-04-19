@@ -26,6 +26,10 @@ $this->title = $model->name;
         'attributes' => [
             'id',
             'name',
+            [
+                'attribute'=>'producer',
+                'value'=>$model->producer == '1' ? 'да' : 'нет',
+            ],
         ],
     ]) ?>
 

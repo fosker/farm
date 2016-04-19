@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\Survey;
 use common\models\survey\Pharmacy;
 use common\models\survey\City;
+use common\models\survey\Education;
 use yii\db\Query;
 
 class Search extends Survey
@@ -18,12 +19,12 @@ class Search extends Survey
         return [
             [['id', 'status', 'points'], 'integer'],
             [['title'], 'string'],
-            [['city_id', 'firm_id'], 'safe']
+            [['city_id', 'firm_id', 'education_id'], 'safe']
         ];
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(),['city_id', 'firm_id']);
+        return array_merge(parent::attributes(),['city_id', 'firm_id', 'education_id']);
     }
 
     public function scenarios()
@@ -62,8 +63,11 @@ class Search extends Survey
         if($this->getAttribute('firm_id'))
             $firms = Pharmacy::find()->select('survey_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
                 ->joinWith('pharmacy');
+        if($this->getAttribute('education_id'))
+            $education = Education::find()->select('survey_id')->andFilterWhere(['in', 'education_id', $this->getAttribute('education_id')]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['in', Survey::tableName().'.id', $education])
             ->andFilterWhere(['in', Survey::tableName().'.id', $cities])
             ->andFilterWhere(['in', Survey::tableName().'.id', $firms]);
 

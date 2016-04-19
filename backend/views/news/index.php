@@ -29,7 +29,7 @@ $this->title = 'Новости';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '220px'
+                        'width' => '200px'
                     ],
                 ]),
             ],
@@ -46,7 +46,7 @@ $this->title = 'Новости';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '175px'
+                        'width' => '150px'
                     ],
                 ]),
             ],
@@ -63,7 +63,24 @@ $this->title = 'Новости';
                     ],
                     'pluginOptions' => [
                         'allowClear' => true,
-                        'width' => '175px'
+                        'width' => '150px'
+                    ],
+                ])
+            ],
+            [
+                'label'=>'Для образования',
+                'value'=>'educationsView',
+                'filter'=>Select2::widget([
+                    'model' => $searchModel,
+                    'data' => $education,
+                    'attribute'=>'education_id',
+                    'options' => [
+                        'placeholder' => 'Выберите группы ...',
+                        'multiple' => true,
+                    ],
+                    'pluginOptions' => [
+                        'allowClear' => true,
+                        'width' => '150px'
                     ],
                 ])
             ],

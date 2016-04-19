@@ -21,7 +21,6 @@ $this->title = $model->title;
             ],
         ]) ?>
     </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
@@ -31,7 +30,7 @@ $this->title = $model->title;
                 'attribute' => 'link',
                 'format' => 'raw',
                 'value' =>  Html::tag('div', YoutubeWidget::widget([
-                    "code"=> substr($model->link,-11)
+                    "code"=> substr(strstr($model->link, 'v='), 2, 11)
                 ]), ['class' => 'video-container'])
             ],
             'description:html',

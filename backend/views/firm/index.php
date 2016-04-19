@@ -38,6 +38,14 @@ $this->title = 'Фирмы';
                     ],
                 ]),
             ],
+            [
+                'attribute'=>'producer',
+                'value' => function ($model) {
+                    return $model->producer == '1' ? 'да' : 'нет';
+                },
+                'filter'=>array("1"=>"да","0"=>"нет"),
+                'contentOptions'=>['style'=>'width: 200px;'],
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>

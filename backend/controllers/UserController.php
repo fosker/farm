@@ -153,6 +153,14 @@ class UserController extends Controller
             Yii::$app->gcm->sendMulti($android_tokens, $message);
         }
 
+        Yii::$app->mailer->compose('@common/mail/user-verify', [
+            'user' => User::findOne($id),
+        ])
+            ->setFrom('pharmbonus@gmail.com')
+            ->setTo(User::findOne($id)->email)
+            ->setSubject('Ваш аккаунт верифицирован.')
+            ->send();
+
         return $this->redirect(['index']);
     }
 

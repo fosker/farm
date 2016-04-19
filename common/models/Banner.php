@@ -396,6 +396,7 @@ class Banner extends ActiveRecord
 
     public function afterDelete()
     {
+        Education::deleteAll(['banner_id'=>$this->id]);
         City::deleteAll(['banner_id'=>$this->id]);
         Pharmacy::deleteAll(['banner_id'=>$this->id]);
 

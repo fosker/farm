@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\factory\Stock;
 use common\models\factory\City;
 use common\models\factory\Pharmacy;
+use common\models\factory\Education;
 
 class Search extends Stock
 {
@@ -17,7 +18,7 @@ class Search extends Stock
         return [
             [['id', 'factory_id', 'status'], 'integer'],
             ['title', 'string'],
-            [['city_id', 'firm_id'], 'safe'],
+            [['city_id', 'firm_id', 'education_id'], 'safe'],
         ];
     }
 
@@ -27,7 +28,7 @@ class Search extends Stock
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(),['city_id', 'firm_id']);
+        return array_merge(parent::attributes(),['city_id', 'firm_id', 'education_id']);
     }
 
     public function search($params)
@@ -62,8 +63,11 @@ class Search extends Stock
         if($this->getAttribute('firm_id'))
             $firms = Pharmacy::find()->select('stock_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
                 ->joinWith('pharmacy');
+        if($this->getAttribute('education_id'))
+            $education = Education::find()->select('stock_id')->andFilterWhere(['in', 'education_id', $this->getAttribute('education_id')]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
+            ->andFilterWhere(['in', Stock::tableName().'.id', $education])
             ->andFilterWhere(['in', Stock::tableName().'.id', $cities])
             ->andFilterWhere(['in', Stock::tableName().'.id', $firms]);
         

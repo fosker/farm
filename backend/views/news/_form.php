@@ -52,6 +52,19 @@ $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\J
 
     ]);
     Modal::end();
+
+    Modal::begin([
+        'header' => '<h2>Выберите образования</h2>',
+        'toggleButton' => ['label' => 'Для образований', 'class' => 'btn btn-primary'],
+    ]);
+
+    echo $form->field($news_education, 'education')->widget(CheckWidget::className(), [
+        'parent_title' => 'education',
+        'parent' => $education,
+        'update' => $old_education,
+        'height' => '10px'
+    ]);
+    Modal::end();
     ?>
 
     <?= $form->field($model, 'title')->textInput(['maxlength' => true]) ?>

@@ -18,9 +18,11 @@ use common\models\location\City;
 use common\models\agency\Pharmacy;
 use common\models\survey\City as Survey_City;
 use common\models\survey\Pharmacy as Survey_Pharmacy;
+use common\models\survey\Education as Survey_Education;
 use common\models\agency\Firm;
 use backend\models\survey\Search;
 use backend\base\Model;
+use common\models\profile\Education;
 
 
 class SurveyController extends Controller
@@ -59,6 +61,7 @@ class SurveyController extends Controller
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'titles' => ArrayHelper::map(Survey::find()->asArray()->all(),'title','title'),
+            'education' => ArrayHelper::map(Education::find()->asArray()->all(),'id','name'),
             'firms' => ArrayHelper::map(Firm::find()->asArray()->all(),'id','name'),
             'cities'=>ArrayHelper::map(City::find()->asArray()->all(), 'id','name'),
         ]);
@@ -78,6 +81,7 @@ class SurveyController extends Controller
 
         $survey_cities = new Survey_City();
         $survey_pharmacies = new Survey_Pharmacy();
+        $survey_education = new Survey_Education();
 
         $questions = [new Question];
         $options = [[new Option]];
@@ -106,6 +110,7 @@ class SurveyController extends Controller
                 if ($this->saveSurvey($model,$questions,$options)) {
                     $model->loadCities(Yii::$app->request->post('cities'));
                     $model->loadPharmacies(Yii::$app->request->post('pharmacies'));
+                    $model->loadEducation(Yii::$app->request->post('education'));
                     return $this->redirect(['view', 'id'=>$model->id]);
                 }
             }
@@ -118,8 +123,10 @@ class SurveyController extends Controller
             'options' => (empty($options)) ? [new Option] : $options,
             'cities'=>City::find()->asArray()->all(),
             'pharmacies'=>Pharmacy::find()->asArray()->all(),
+            'education' => Education::find()->asArray()->all(),
             'survey_cities' => $survey_cities,
-            'survey_pharmacies' => $survey_pharmacies
+            'survey_pharmacies' => $survey_pharmacies,
+            'survey_education' => $survey_education
         ]);
     }
 
@@ -131,9 +138,11 @@ class SurveyController extends Controller
 
         $survey_cities = new Survey_City();
         $survey_pharmacies = new Survey_Pharmacy();
+        $survey_education = new Survey_Education();
 
         $old_cities = Survey_City::find()->select('city_id')->where(['survey_id' => $id])->asArray()->all();
         $old_pharmacies = Survey_Pharmacy::find()->select('pharmacy_id')->where(['survey_id' => $id])->asArray()->all();
+        $old_education = Survey_Education::find()->select('education_id')->where(['survey_id' => $id])->asArray()->all();
 
         // retrieve existing Question data
         $oldQuestionIds = Question::find()->select('id')
@@ -190,6 +199,7 @@ class SurveyController extends Controller
                 if ($this->saveSurvey($model,$questions,$options)) {
                     $model->updateCities(Yii::$app->request->post('cities'));
                     $model->updatePharmacies(Yii::$app->request->post('pharmacies'));
+                    $model->updateEducation(Yii::$app->request->post('education'));
                     return $this->redirect(['view', 'id'=>$model->id]);
                 }
             }
@@ -200,11 +210,14 @@ class SurveyController extends Controller
             'questions' => (empty($questions)) ? [new Question] : $questions,
             'options' => (empty($options)) ? [new Option] : $options,
             'cities'=>City::find()->asArray()->all(),
+            'education' => Education::find()->asArray()->all(),
             'pharmacies'=>Pharmacy::find()->asArray()->all(),
             'survey_cities' => $survey_cities,
             'survey_pharmacies' => $survey_pharmacies,
+            'survey_education' => $survey_education,
             'old_cities' => $old_cities,
-            'old_pharmacies' => $old_pharmacies
+            'old_pharmacies' => $old_pharmacies,
+            'old_education' => $old_education
         ]);
 
     }
@@ -260,7 +273,7 @@ class SurveyController extends Controller
         if (($model = Survey::findOne($id)) !== null) {
             return $model;
         } else {
-            throw new NotFoundHttpException('�������� �� �������. ');
+            throw new NotFoundHttpException('Анкета не найдена. ');
         }
     }
 

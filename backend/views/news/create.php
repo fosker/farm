@@ -13,8 +13,10 @@ $this->title = 'Добавить новость';
         'model' => $model,
         'cities'=>$cities,
         'pharmacies'=>$pharmacies,
+        'education'=>$education,
         'news_cities' => $news_cities,
-        'news_pharmacies' => $news_pharmacies
+        'news_pharmacies' => $news_pharmacies,
+        'news_education' => $news_education
     ]) ?>
 
 </div>

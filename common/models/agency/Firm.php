@@ -9,6 +9,7 @@ use Yii;
  *
  * @property integer $id
  * @property string $name
+ * @property boolean $producer
  */
 class Firm extends \yii\db\ActiveRecord
 {
@@ -22,6 +23,7 @@ class Firm extends \yii\db\ActiveRecord
     {
         return [
             ['name', 'required'],
+            ['producer', 'integer']
         ];
     }
 
@@ -29,7 +31,8 @@ class Firm extends \yii\db\ActiveRecord
     {
         return [
             'name' => 'Название фирмы',
-            'id' => 'ID'
+            'id' => 'ID',
+            'producer' => 'Производитель'
         ];
     }
 

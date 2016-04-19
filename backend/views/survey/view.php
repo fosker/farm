@@ -63,6 +63,10 @@ $this->title = $model->title;
                 'label'=>'Для фирм',
                 'value'=>$model->getFirmsView(true)
             ],
+            [
+                'label'=>'Для групп',
+                'value'=>$model->getEducationsView(true)
+            ],
             'points',
             [
                 'attribute'=>'status',

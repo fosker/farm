@@ -8,6 +8,7 @@ use yii\data\ActiveDataProvider;
 use common\models\Seminar;
 use common\models\seminar\Pharmacy;
 use common\models\seminar\City;
+use common\models\seminar\Education;
 
 class Search extends Seminar
 {
@@ -17,7 +18,7 @@ class Search extends Seminar
         return [
             [['id', 'status'], 'integer'],
             [['title','email'], 'string'],
-            [['city_id', 'firm_id'], 'safe']
+            [['city_id', 'firm_id', 'education_id'], 'safe']
         ];
     }
 
@@ -27,7 +28,7 @@ class Search extends Seminar
     }
 
     public function attributes() {
-        return array_merge(parent::attributes(),['city_id', 'firm_id']);
+        return array_merge(parent::attributes(),['city_id', 'firm_id', 'education_id']);
     }
 
     public function search($params)
@@ -60,9 +61,12 @@ class Search extends Seminar
         if($this->getAttribute('firm_id'))
             $firms = Pharmacy::find()->select('seminar_id')->where(['in', 'firm_id', $this->getAttribute('firm_id')])
                 ->joinWith('pharmacy');
+        if($this->getAttribute('education_id'))
+            $education = Education::find()->select('seminar_id')->andFilterWhere(['in', 'education_id', $this->getAttribute('education_id')]);
 
         $query->andFilterWhere(['like', 'title', $this->title])
             ->andFilterWhere(['like', 'email', $this->email])
+            ->andFilterWhere(['in', Seminar::tableName().'.id', $education])
             ->andFilterWhere(['in', Seminar::tableName().'.id', $cities])
             ->andFilterWhere(['in', Seminar::tableName().'.id', $firms]);
 
