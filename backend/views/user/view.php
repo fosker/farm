@@ -126,7 +126,7 @@ $this->title = 'Пользователь: '.$model->name;
                 'value'=>Html::a('Подарки',['/users/present', 'Search[user.id]' => $model->id]),
                 'format'=>'html',
             ],
-
+            'details'
         ],
     ]) ?>
 

@@ -42,6 +42,8 @@ $this->registerJsFile('backend/web/js/checkWidget.js', ['depends' => [\yii\web\J
         'toggleButton' => ['label' => 'Для аптек', 'class' => 'btn btn-primary'],
     ]);
     echo $form->field($news_pharmacies, 'pharmacies')->widget(CheckWidget::className(), [
+        'firms' => true,
+        'color' => 'green',
         'parent_title' => 'firms',
         'parent' => $firms,
         'update' => $old_pharmacies,
