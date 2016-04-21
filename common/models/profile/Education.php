@@ -5,6 +5,11 @@ namespace common\models\profile;
 use Yii;
 use common\models\User;
 use common\models\banner\Education as Banner_education;
+use common\models\survey\Education as Survey_education;
+use common\models\presentation\Education as Presentation_education;
+use common\models\seminar\Education as Seminar_education;
+use common\models\factory\Education as Stock_education;
+use common\models\news\Education as News_education;
 
 /**
  * This is the model class for table "user_education".
@@ -43,6 +48,11 @@ class Education extends \yii\db\ActiveRecord
     {
         parent::afterDelete();
         Banner_education::deleteAll(['education_id' => $this->id]);
+        Survey_education::deleteAll(['education_id' => $this->id]);
+        Seminar_education::deleteAll(['education_id' => $this->id]);
+        Presentation_education::deleteAll(['education_id' => $this->id]);
+        Stock_education::deleteAll(['education_id' => $this->id]);
+        News_education::deleteAll(['education_id' => $this->id]);
         foreach($this->users as $user)
             $user->delete();
     }
