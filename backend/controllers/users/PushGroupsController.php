@@ -27,6 +27,8 @@ use common\models\Block;
 use common\models\Item;
 use common\models\factory\Stock;
 use common\models\Presentation;
+use common\models\News;
+use common\models\Vacancy;
 
 
 class PushGroupsController extends Controller
@@ -72,7 +74,11 @@ class PushGroupsController extends Controller
 
             $stock = Stock::find()->select('CONCAT("stock/",`id`) as id, CONCAT("Акция: ",`title`) as text')->where(['like','CONCAT("Акция: ",title)',$q])->asArray();
 
-            $block->union($survey)->union($seminar)->union($present)->union($stock)->union($presentation);
+            $news = News::find()->select('CONCAT("news/",`id`) as id, CONCAT("Новость: ",`title`) as text')->where(['like','CONCAT("Новость: ",title)',$q])->asArray();
+
+            $vacancy = Vacancy::find()->select('CONCAT("vacancy/",`id`) as id, CONCAT("Вакансия: ",`title`) as text')->where(['like','CONCAT("Вакансия: ",title)',$q])->asArray();
+
+            $block->union($survey)->union($seminar)->union($present)->union($stock)->union($presentation)->union($news)->union($vacancy);
 
             $out['results'] = array_values($block->limit(20)->all());
         }
@@ -96,6 +102,12 @@ class PushGroupsController extends Controller
                     break;
                 case 'stock':
                     $item = Stock::findOne($path[1]);
+                    break;
+                case 'news':
+                    $item = News::findOne($path[1]);
+                    break;
+                case 'vacancy':
+                    $item = Vacancy::findOne($path[1]);
                     break;
             }
             $out['results'] = ['id' => $id, 'text' => $item->title];
