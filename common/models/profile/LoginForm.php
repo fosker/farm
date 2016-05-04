@@ -21,11 +21,10 @@ class LoginForm extends Model
     public function rules()
     {
         return [
-            // login and password are both required
             [['login', 'password','device_id'], 'required'],
             [['device_id'],'exist','targetClass'=>Device::className(),'targetAttribute'=>'id'],
             [['login'], 'string','max'=>100],
-            // password is validated by validatePassword()
+            ['password', 'isVerified'],
             ['password', 'validatePassword'],
         ];
     }
@@ -36,6 +35,15 @@ class LoginForm extends Model
             'password'=>'Пароль',
             'device_id'=>'Идентификатор устройства',
         ];
+    }
+
+    public function isVerified($attribute, $params)
+    {
+        if (!$this->hasErrors()) {
+            if (!$this->getUser()) {
+                $this->addError($attribute, 'Невозможно авторизоваться. Аккаунт не активен.');
+            }
+        }
     }
 
     /**
@@ -50,7 +58,7 @@ class LoginForm extends Model
         if (!$this->hasErrors()) {
             $user = $this->getUser();
             if (!$user || !$user->validatePassword($this->password)) {
-                $this->addError($attribute, 'Невозможно авторизоваться. Неккоректные данные или аккаунт не активен.');
+                $this->addError($attribute, 'Невозможно авторизоваться. Неккоректные данные.');
             }
         }
     }
